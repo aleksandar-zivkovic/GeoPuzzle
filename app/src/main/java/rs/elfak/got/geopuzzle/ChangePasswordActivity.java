@@ -1,76 +1,99 @@
 package rs.elfak.got.geopuzzle;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
-
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import rs.elfak.got.geopuzzle.library.DatabaseHandler;
-import rs.elfak.got.geopuzzle.library.UserFunctions;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import java.util.HashMap;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.os.Bundle;
+import android.os.AsyncTask;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Button;
+import android.widget.Toast;
+import android.net.NetworkInfo;
+import android.net.ConnectivityManager;
+import android.support.v7.app.AppCompatActivity;
 
-public class ChangePasswordActivity extends Activity {
+import rs.elfak.got.geopuzzle.library.*;
 
-    private static String KEY_SUCCESS = "success";
-    private static String KEY_ERROR = "error";
-
-    EditText newpass;
-    TextView alert;
-    Button changepass;
-    Button cancel;
+public class ChangePasswordActivity extends AppCompatActivity {
+    private EditText mPasswordEdit;
+    private EditText mConfirmPasswordEdit;
+    private Button mChangePasswordBtn;
+    private Button mCancelBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
 
-        cancel = (Button) findViewById(R.id.btcancel);
-        cancel.setOnClickListener(new View.OnClickListener(){
+        mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
+        mConfirmPasswordEdit = (EditText) findViewById(R.id.confirmPasswordEdit);
+        mChangePasswordBtn = (Button) findViewById(R.id.changePasswordBtn);
+        mCancelBtn = (Button) findViewById(R.id.cancelBtn);
+
+        mChangePasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newPassword = mPasswordEdit.getText().toString();
+                String confirmPassword = mConfirmPasswordEdit.getText().toString();
+                if(newPassword.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Password field empty.", Toast.LENGTH_SHORT).show();
+                    if (mPasswordEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(confirmPassword.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Password confirm field empty.", Toast.LENGTH_SHORT).show();
+                    if (mConfirmPasswordEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(newPassword.equals(confirmPassword)) {
+                    if(newPassword.length() >= 6) {
+                        NetAsync(view);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Password must contain 6 or more characters.", Toast.LENGTH_SHORT).show();
+                        if(mPasswordEdit.requestFocus()) {
+                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        }
+                    }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Passwords doesn't match.", Toast.LENGTH_SHORT).show();
+                    if(mConfirmPasswordEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+            }
+        });
+        mCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View arg0) {
-                Intent login = new Intent(getApplicationContext(), MainActivity.class);
+                Intent login = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(login);
                 finish();
             }
         });
-
-        newpass = (EditText) findViewById(R.id.newpass);
-        alert = (TextView) findViewById(R.id.alertpass);
-        changepass = (Button) findViewById(R.id.btchangepass);
-
-        changepass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NetAsync(view);
-            }
-        });
     }
 
+    // Async Task to check whether internet connection is working
     private class NetCheck extends AsyncTask {
         private ProgressDialog nDialog;
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             super.onPreExecute();
             nDialog = new ProgressDialog(ChangePasswordActivity.this);
-            nDialog.setMessage("Loading..");
+            nDialog.setMessage("Loading...");
             nDialog.setTitle("Checking Network");
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(true);
@@ -78,7 +101,8 @@ public class ChangePasswordActivity extends Activity {
         }
 
         @Override
-        protected Object doInBackground(Object[] params){
+        protected Object doInBackground(Object[] params) {
+            // Gets current device state and checks for working internet connection by trying Google
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (netInfo != null && netInfo.isConnected()) {
@@ -90,11 +114,11 @@ public class ChangePasswordActivity extends Activity {
                     if (urlc.getResponseCode() == 200) {
                         return true;
                     }
-                } catch (MalformedURLException e1) {
-                    // TODO Auto-generated catch block
+                }
+                catch (MalformedURLException e1) {
                     e1.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -102,22 +126,22 @@ public class ChangePasswordActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(Object o){
-
+        protected void onPostExecute(Object o) {
             if((Boolean)o == true){
                 nDialog.dismiss();
-                new ProcessRegister().execute();
+                new ProcessPasswordChange().execute();
             }
             else {
                 nDialog.dismiss();
-                alert.setText("Error in Network Connection");
+                Toast.makeText(getApplicationContext(), "Error in Network Connection.", Toast.LENGTH_LONG).show();
             }
         }
 
-        private class ProcessRegister extends AsyncTask {
+        // Async Task to get and send data to My Sql database through JSON response
+        private class ProcessPasswordChange extends AsyncTask {
             private ProgressDialog pDialog;
+            String email, newPassword;
 
-            String newpas,email;
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -126,7 +150,7 @@ public class ChangePasswordActivity extends Activity {
                 HashMap user = new HashMap();
                 user = db.getUserDetails();
 
-                newpas = newpass.getText().toString();
+                newPassword = mPasswordEdit.getText().toString();
                 email = (String)user.get("email");
 
                 pDialog = new ProgressDialog(ChangePasswordActivity.this);
@@ -140,8 +164,7 @@ public class ChangePasswordActivity extends Activity {
             @Override
             protected Object doInBackground(Object[] params) {
                 UserFunctions userFunction = new UserFunctions();
-                JSONObject json = userFunction.chgPass(newpas, email);
-                Log.d("Button", "Register");
+                JSONObject json = userFunction.chgPass(newPassword, email);
                 return json;
             }
 
@@ -149,26 +172,23 @@ public class ChangePasswordActivity extends Activity {
             protected void onPostExecute(Object o) {
                 JSONObject json = (JSONObject)o;
                 try {
-                    if (json.getString(KEY_SUCCESS) != null) {
-                        alert.setText("");
-                        String res = json.getString(KEY_SUCCESS);
-                        String red = json.getString(KEY_ERROR);
+                    if (json.getString(Cons.KEY_SUCCESS) != null) {
+                        String res = json.getString(Cons.KEY_SUCCESS);
+                        String red = json.getString(Cons.KEY_ERROR);
 
                         if (Integer.parseInt(res) == 1) {
-                            /**
-                             * Dismiss the process dialog
-                             **/
                             pDialog.dismiss();
-                            alert.setText("Your Password is successfully changed.");
-
-                        } else if (Integer.parseInt(red) == 2) {
-                            pDialog.dismiss();
-                            alert.setText("Invalid old Password.");
-                        } else {
-                            pDialog.dismiss();
-                            alert.setText("Error occured in changing Password.");
+                            Toast.makeText(getApplicationContext(), "Your Password is successfully changed.", Toast.LENGTH_LONG).show();
+                            finish();
                         }
-
+                        else if (Integer.parseInt(red) == 2) {
+                            pDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Invalid old Password.", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            pDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Error occured in changing Password.", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
                 catch (JSONException e) {

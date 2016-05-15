@@ -38,19 +38,36 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".LoginActivity">
+            android:label="GeoPuzzle">
+
+        </activity>
+
+        <activity android:name=".ProfileActivity" android:label="Profile">
+
+        </activity>
+
+        <activity android:name=".LoginActivity" android:label="GeoPuzzle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"></activity>
-        <activity android:name=".RegisteredActivity"></activity>
-        <activity android:name=".ChangePasswordActivity"></activity>
-        <activity android:name=".ResetPasswordActivity"></activity>
-    </application>
 
+        <activity android:name=".RegisterActivity" android:label="Register">
+
+        </activity>
+
+        <activity android:name=".RegisteredActivity" android:label="RegistrationSuccessfull">
+
+        </activity>
+
+        <activity android:name=".ChangePasswordActivity" android:label="@string/title_activity_maps">
+
+        </activity>
+
+        <activity android:name=".ResetPasswordActivity" android:label="@string/title_activity_maps">
+
+        </activity>
+    </application>
 </manifest>
