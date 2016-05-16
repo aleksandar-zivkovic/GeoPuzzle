@@ -25,7 +25,7 @@ import rs.elfak.got.geopuzzle.library.*;
 public class LoginActivity extends AppCompatActivity {
     private Button mLoginBtn;
     private Button mRegisterBtn;
-    private Button mPassResetBtn;
+    private Button mPasswordResetBtn;
     private EditText mEmailEdit;
     private EditText mPasswordEdit;
 
@@ -38,22 +38,20 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
         mRegisterBtn = (Button) findViewById(R.id.registerBtn);
         mLoginBtn = (Button) findViewById(R.id.loginBtn);
-        mPassResetBtn = (Button) findViewById(R.id.resetPasswordBtn);
+        mPasswordResetBtn = (Button) findViewById(R.id.resetPasswordBtn);
 
-        mPassResetBtn.setOnClickListener(new View.OnClickListener() {
+        mPasswordResetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), ResetPasswordActivity.class);
-                startActivityForResult(myIntent, 0);
-                //finish();
+                Intent resetPass = new Intent(view.getContext(), ResetPasswordActivity.class);
+                startActivity(resetPass);
             }
         });
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), RegisterActivity.class);
-                startActivityForResult(myIntent, 0);
-                //finish();
+                Intent resetPass = new Intent(view.getContext(), RegisterActivity.class);
+                startActivity(resetPass);
             }
         });
         // A Toast is set to alert when the Email and Password field is empty
@@ -64,13 +62,13 @@ public class LoginActivity extends AppCompatActivity {
                     NetAsync(view);
                 }
                 else if ((!mEmailEdit.getText().toString().equals(""))) {
-                    Toast.makeText(getApplicationContext(), "Password field empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_empty, Toast.LENGTH_SHORT).show();
                 }
                 else if ((!mPasswordEdit.getText().toString().equals(""))) {
-                    Toast.makeText(getApplicationContext(), "Email field empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.msg_email_empty, Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Email and Password fields are empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.msg_email_password_empty, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -78,7 +76,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO: inflate appropriate menu
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
@@ -92,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPreExecute(){
             super.onPreExecute();
             nDialog = new ProgressDialog(LoginActivity.this);
-            nDialog.setTitle("Checking Network");
+            nDialog.setTitle(R.string.msg_checking_network);
             nDialog.setMessage("Loading...");
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(true);
@@ -132,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 nDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Error in Network Connection.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.msg_network_error, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -151,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
             email = mEmailEdit.getText().toString();
             password = mPasswordEdit.getText().toString();
             pDialog = new ProgressDialog(LoginActivity.this);
-            pDialog.setTitle("Contacting Servers");
+            pDialog.setTitle(R.string.msg_contacting_servers);
             pDialog.setMessage("Logging in...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
@@ -161,8 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             UserFunctions userFunction = new UserFunctions();
-            JSONObject json = userFunction.loginUser(email, password);
-            return json;
+            return userFunction.loginUser(email, password);
         }
 
         @Override
@@ -173,10 +169,11 @@ public class LoginActivity extends AppCompatActivity {
                     String res = json.getString(Cons.KEY_SUCCESS);
 
                     if(Integer.parseInt(res) == 1) {
+                        pDialog.setTitle(R.string.msg_getting_data);
                         pDialog.setMessage("Loading User Space");
-                        pDialog.setTitle("Getting Data");
+
                         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-                        JSONObject json_user = json.getJSONObject("user");
+                        JSONObject json_user = json.getJSONObject(Cons.KEY_USER);
 
                         // Clear all previous data in SQlite database.
                         UserFunctions logout = new UserFunctions();
@@ -185,6 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                                 json_user.getString(Cons.KEY_LASTNAME),
                                 json_user.getString(Cons.KEY_EMAIL),
                                 json_user.getString(Cons.KEY_USERNAME),
+                                json_user.getString(Cons.KEY_PHONE_NUMBER),
                                 json_user.getString(Cons.KEY_UID),
                                 json_user.getString(Cons.KEY_CREATED_AT));
 
@@ -199,7 +197,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else {
                         pDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), "Incorrect Username or Password.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.msg_incorrect_username_password, Toast.LENGTH_SHORT).show();
                         if(mEmailEdit.requestFocus()) {
                             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                         }
