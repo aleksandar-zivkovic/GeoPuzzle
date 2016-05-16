@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.AsyncTask;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -45,13 +44,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 String newPassword = mPasswordEdit.getText().toString();
                 String confirmPassword = mConfirmPasswordEdit.getText().toString();
                 if(newPassword.equals("")) {
-                    Toast.makeText(getApplicationContext(), "Password field empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_empty, Toast.LENGTH_SHORT).show();
                     if (mPasswordEdit.requestFocus()) {
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                     }
                 }
                 else if(confirmPassword.equals("")) {
-                    Toast.makeText(getApplicationContext(), "Password confirm field empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_confirm_empty, Toast.LENGTH_SHORT).show();
                     if (mConfirmPasswordEdit.requestFocus()) {
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                     }
@@ -61,14 +60,14 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         NetAsync(view);
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Password must contain 6 or more characters.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.msg_password_length, Toast.LENGTH_SHORT).show();
                         if(mPasswordEdit.requestFocus()) {
                             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                         }
                     }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Passwords doesn't match.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_not_match, Toast.LENGTH_SHORT).show();
                     if(mConfirmPasswordEdit.requestFocus()) {
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                     }
@@ -78,8 +77,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
         mCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent login = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(login);
+//                Intent login = new Intent(getApplicationContext(), ProfileActivity.class);
+//                startActivity(login);
                 finish();
             }
         });
@@ -93,8 +92,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             nDialog = new ProgressDialog(ChangePasswordActivity.this);
-            nDialog.setMessage("Loading...");
-            nDialog.setTitle("Checking Network");
+            nDialog.setTitle(R.string.msg_checking_network);
+            nDialog.setMessage("Loading...");   //TODO: check why this does not accept constant
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(true);
             nDialog.show();
@@ -115,10 +114,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         return true;
                     }
                 }
-                catch (MalformedURLException e1) {
-                    e1.printStackTrace();
-                }
-                catch (IOException e) {
+//                catch (MalformedURLException e1) {
+//                    e1.printStackTrace();
+//                }
+//                catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -127,13 +129,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Object o) {
-            if((Boolean)o == true){
+            if((Boolean)o){
                 nDialog.dismiss();
                 new ProcessPasswordChange().execute();
             }
             else {
                 nDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Error in Network Connection.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.msg_network_error, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -145,17 +147,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 
-                HashMap user = new HashMap();
-                user = db.getUserDetails();
+                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+                HashMap user = db.getUserDetails();
 
                 newPassword = mPasswordEdit.getText().toString();
-                email = (String)user.get("email");
+                email = (String)user.get(Cons.KEY_EMAIL);
 
                 pDialog = new ProgressDialog(ChangePasswordActivity.this);
-                pDialog.setTitle("Contacting Servers");
-                pDialog.setMessage("Getting Data ...");
+                pDialog.setTitle(R.string.msg_contacting_servers);
+                pDialog.setMessage("Getting Data...");
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(true);
                 pDialog.show();
@@ -164,8 +165,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             protected Object doInBackground(Object[] params) {
                 UserFunctions userFunction = new UserFunctions();
-                JSONObject json = userFunction.chgPass(newPassword, email);
-                return json;
+                return userFunction.chgPass(newPassword, email);
             }
 
             @Override
@@ -178,16 +178,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
                         if (Integer.parseInt(res) == 1) {
                             pDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Your Password is successfully changed.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.msg_password_change_success, Toast.LENGTH_SHORT).show();
                             finish();
                         }
                         else if (Integer.parseInt(red) == 2) {
                             pDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Invalid old Password.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.msg_invalid_old_password, Toast.LENGTH_SHORT).show();
                         }
                         else {
                             pDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Error occured in changing Password.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.msg_password_change_error, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

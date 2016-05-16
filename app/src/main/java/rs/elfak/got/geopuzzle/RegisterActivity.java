@@ -1,119 +1,128 @@
 package rs.elfak.got.geopuzzle;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import rs.elfak.got.geopuzzle.library.DatabaseHandler;
-import rs.elfak.got.geopuzzle.library.UserFunctions;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.AsyncTask;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Button;
+import android.widget.Toast;
+import android.net.NetworkInfo;
+import android.net.ConnectivityManager;
+import android.support.v7.app.AppCompatActivity;
+import rs.elfak.got.geopuzzle.library.*;
 
-public class RegisterActivity extends Activity {
-    /**
-     *  JSON Response node names.
-     **/
+public class RegisterActivity extends AppCompatActivity {
+    EditText mFirstNameEdit;
+    EditText mLastNameEdit;
+    EditText mEmailEdit;
+    EditText mUsernameEdit;
+    EditText mPasswordEdit;
+    EditText mConfirmPasswordEdit;
+    EditText mPhoneNumberEdit;
+    Button mUploadPhotoBtn;
+    Button mRegisterBtn;
+    Button mCancelBtn;
 
-    private static String KEY_SUCCESS = "success";
-    private static String KEY_UID = "uid";
-    private static String KEY_FIRSTNAME = "fname";
-    private static String KEY_LASTNAME = "lname";
-    private static String KEY_USERNAME = "uname";
-    private static String KEY_EMAIL = "email";
-    private static String KEY_CREATED_AT = "created_at";
-    private static String KEY_ERROR = "error";
-
-    /**
-     * Defining layout items.
-     **/
-
-    EditText inputFirstName;
-    EditText inputLastName;
-    EditText inputUsername;
-    EditText inputEmail;
-    EditText inputPassword;
-    Button btnRegister;
-    TextView registerErrorMsg;
-
-    EditText mInputPhoneNumber;
-
-    /**
-     * Called when the activity is first created.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        /**
-         * Defining all layout items
-         **/
-        inputFirstName = (EditText) findViewById(R.id.fname);
-        inputLastName = (EditText) findViewById(R.id.lname);
-        inputUsername = (EditText) findViewById(R.id.uname);
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.pword);
-        btnRegister = (Button) findViewById(R.id.register);
-        registerErrorMsg = (TextView) findViewById(R.id.register_error);
+        mFirstNameEdit = (EditText) findViewById(R.id.firstNameEdit);
+        mLastNameEdit = (EditText) findViewById(R.id.lastNameEdit);
+        mEmailEdit = (EditText) findViewById(R.id.emailEdit);
+        mUsernameEdit = (EditText) findViewById(R.id.usernameEdit);
+        mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
+        mConfirmPasswordEdit = (EditText) findViewById(R.id.confirmPasswordEdit);
+        mPhoneNumberEdit = (EditText) findViewById(R.id.phoneNumberEdit);
+        mUploadPhotoBtn = (Button) findViewById(R.id.uploadPhotoBtn);
+        mRegisterBtn = (Button) findViewById(R.id.registerBtn);
+        mCancelBtn = (Button) findViewById(R.id.cancelBtn);
 
-        mInputPhoneNumber = (EditText) findViewById(R.id.phoneNumber);
-
-        /**
-         * Button which Switches back to the login screen on clicked
-         **/
-
-        Button login = (Button) findViewById(R.id.bktologin);
-        login.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
-                startActivityForResult(myIntent, 0);
-                finish();
-            }
-
-        });
-
-        /**
-         * Register Button click event.
-         * A Toast is set to alert when the fields are empty.
-         * Another toast is set to alert Username must be 5 characters.
-         **/
-
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (  ( !inputUsername.getText().toString().equals("")) && ( !inputPassword.getText().toString().equals("")) && ( !inputFirstName.getText().toString().equals("")) && ( !inputLastName.getText().toString().equals("")) && ( !inputEmail.getText().toString().equals("")) && ( !mInputPhoneNumber.getText().toString().equals("")))
-                {
-                    if ( inputUsername.getText().toString().length() > 4 ){
-                        NetAsync(view);
-
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(),
-                                "Username should be minimum 5 characters", Toast.LENGTH_SHORT).show();
+                if(mFirstNameEdit.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_first_name_empty, Toast.LENGTH_SHORT).show();
+                    if (mFirstNameEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                     }
                 }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),
-                            "One or more fields are empty", Toast.LENGTH_SHORT).show();
+                else if(mLastNameEdit.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_last_name_empty, Toast.LENGTH_SHORT).show();
+                    if (mLastNameEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
                 }
+                else if(mEmailEdit.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_email_empty, Toast.LENGTH_SHORT).show();
+                    if (mEmailEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(mUsernameEdit.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_username_empty, Toast.LENGTH_SHORT).show();
+                    if (mUsernameEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(mUsernameEdit.getText().toString().length() < 6) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_username_length, Toast.LENGTH_SHORT).show();
+                    if (mUsernameEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(mPasswordEdit.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_empty, Toast.LENGTH_SHORT).show();
+                    if (mPasswordEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(mPasswordEdit.getText().toString().length() < 6) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_length, Toast.LENGTH_SHORT).show();
+                    if (mPasswordEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(mConfirmPasswordEdit.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_confirm_empty, Toast.LENGTH_SHORT).show();
+                    if (mConfirmPasswordEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(!mConfirmPasswordEdit.getText().toString().equals(mPasswordEdit.getText().toString())) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_not_match, Toast.LENGTH_SHORT).show();
+                    if (mConfirmPasswordEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else if(mPhoneNumberEdit.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_phone_number_empty, Toast.LENGTH_SHORT).show();
+                    if (mPhoneNumberEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else {
+                    NetAsync(view);
+                }
+            }
+        });
+        mCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
+//                startActivityForResult(myIntent, 0);
+                finish();
             }
         });
     }
@@ -125,8 +134,8 @@ public class RegisterActivity extends Activity {
         protected void onPreExecute(){
             super.onPreExecute();
             nDialog = new ProgressDialog(RegisterActivity.this);
-            nDialog.setMessage("Loading..");
-            nDialog.setTitle("Checking Network");
+            nDialog.setTitle(R.string.msg_checking_network);
+            nDialog.setMessage("Loading...");
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(true);
             nDialog.show();
@@ -134,9 +143,7 @@ public class RegisterActivity extends Activity {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            /**
-             * Gets current device state and checks for working internet connection by trying Google.
-             **/
+            // Gets current device state and checks for working internet connection by trying Google.
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (netInfo != null && netInfo.isConnected()) {
@@ -148,11 +155,14 @@ public class RegisterActivity extends Activity {
                     if (urlc.getResponseCode() == 200) {
                         return true;
                     }
-                } catch (MalformedURLException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                }
+//                catch (MalformedURLException e1) {
+//                    e1.printStackTrace();
+//                }
+//                catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -161,38 +171,32 @@ public class RegisterActivity extends Activity {
 
         @Override
         protected void onPostExecute(Object o) {
-            if((Boolean)o == true){
+            if((Boolean)o){
                 nDialog.dismiss();
                 new ProcessRegister().execute();
             }
-            else{
+            else {
                 nDialog.dismiss();
-                registerErrorMsg.setText("Error in Network Connection");
+                Toast.makeText(getApplicationContext(), R.string.msg_network_error, Toast.LENGTH_SHORT).show();
             }
         }
 
         private class ProcessRegister extends AsyncTask {
-            /**
-             * Defining Process dialog
-             **/
             private ProgressDialog pDialog;
-
-            String email,password,fname,lname,uname, phonenumber;
+            String firstName, lastName, email, username, password, phoneNumber;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                inputUsername = (EditText) findViewById(R.id.uname);
-                inputPassword = (EditText) findViewById(R.id.pword);
-                fname = inputFirstName.getText().toString();
-                lname = inputLastName.getText().toString();
-                email = inputEmail.getText().toString();
-                uname= inputUsername.getText().toString();
-                password = inputPassword.getText().toString();
-                phonenumber = mInputPhoneNumber.getText().toString();
+                firstName = mFirstNameEdit.getText().toString();
+                lastName = mLastNameEdit.getText().toString();
+                email = mEmailEdit.getText().toString();
+                username = mUsernameEdit.getText().toString();
+                password = mPasswordEdit.getText().toString();
+                phoneNumber = mPhoneNumberEdit.getText().toString();
 
                 pDialog = new ProgressDialog(RegisterActivity.this);
-                pDialog.setTitle("Contacting Servers");
+                pDialog.setTitle(R.string.msg_contacting_servers);
                 pDialog.setMessage("Registering ...");
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(true);
@@ -202,50 +206,40 @@ public class RegisterActivity extends Activity {
             @Override
             protected Object doInBackground(Object[] params) {
                 UserFunctions userFunction = new UserFunctions();
-                JSONObject json = userFunction.registerUser(fname, lname, email, uname, password, phonenumber);
-
-                return json;
+                return userFunction.registerUser(firstName, lastName, email, username, password, phoneNumber);
             }
 
             @Override
             protected void onPostExecute(Object o) {
                 JSONObject json = (JSONObject)o;
-                /**
-                 * Checks for success message.
-                 **/
                 try {
-                    if (json.getString(KEY_SUCCESS) != null) {
-                        registerErrorMsg.setText("");
-                        String res = json.getString(KEY_SUCCESS);
-
-                        String red = json.getString(KEY_ERROR);
+                    if (json.getString(Cons.KEY_SUCCESS) != null) {
+                        String res = json.getString(Cons.KEY_SUCCESS);
+                        String red = json.getString(Cons.KEY_ERROR);
 
                         if(Integer.parseInt(res) == 1){
-                            pDialog.setTitle("Getting Data");
+                            pDialog.setTitle(R.string.msg_getting_data);
                             pDialog.setMessage("Loading Info");
-
-                            registerErrorMsg.setText("Successfully Registered");
+                            Toast.makeText(getApplicationContext(), R.string.msg_registration_success, Toast.LENGTH_SHORT).show();
 
                             DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-                            JSONObject json_user = json.getJSONObject("user");
+                            JSONObject json_user = json.getJSONObject(Cons.KEY_USER);
 
-                            /**
-                             * Removes all the previous data in the SQlite database
-                             **/
-
+                            // Removes all the previous data in the SQlite database
                             UserFunctions logout = new UserFunctions();
                             logout.logoutUser(getApplicationContext());
-                            db.addUser(json_user.getString(KEY_FIRSTNAME),json_user.getString(KEY_LASTNAME),json_user.getString(KEY_EMAIL),json_user.getString(KEY_USERNAME),json_user.getString(KEY_UID),json_user.getString(KEY_CREATED_AT));
-                            /**
-                             * Stores registered data in SQlite Database
-                             * Launch Registered screen
-                             **/
+                            db.addUser(json_user.getString(Cons.KEY_FIRSTNAME),
+                                    json_user.getString(Cons.KEY_LASTNAME),
+                                    json_user.getString(Cons.KEY_EMAIL),
+                                    json_user.getString(Cons.KEY_USERNAME),
+                                    json_user.getString(Cons.KEY_PHONE_NUMBER),
+                                    json_user.getString(Cons.KEY_UID),
+                                    json_user.getString(Cons.KEY_CREATED_AT));
 
+                            // Stores registered data in SQlite Database
                             Intent registered = new Intent(getApplicationContext(), RegisteredActivity.class);
 
-                            /**
-                             * Close all views before launching Registered screen
-                             **/
+                            // Close all views before launching Registered screen
                             registered.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             pDialog.dismiss();
                             startActivity(registered);
@@ -253,26 +247,24 @@ public class RegisterActivity extends Activity {
                             finish();
                         }
 
-                        else if (Integer.parseInt(red) ==2){
+                        else if (Integer.parseInt(red) == 2){
                             pDialog.dismiss();
-                            registerErrorMsg.setText("User already exists");
+                            Toast.makeText(getApplicationContext(), R.string.msg_user_exist, Toast.LENGTH_SHORT).show();
                         }
-                        else if (Integer.parseInt(red) ==3){
+                        else if (Integer.parseInt(red) == 3){
                             pDialog.dismiss();
-                            registerErrorMsg.setText("Invalid Email id");
+                            Toast.makeText(getApplicationContext(), R.string.msg_invalid_email, Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
-                    else{
+                    else {
                         pDialog.dismiss();
-
-                        registerErrorMsg.setText("Error occured in registration");
+                        Toast.makeText(getApplicationContext(), R.string.msg_registration_error, Toast.LENGTH_SHORT).show();
                     }
 
-                } catch (JSONException e) {
+                }
+                catch (JSONException e) {
                     e.printStackTrace();
-
                 }
             }
         }

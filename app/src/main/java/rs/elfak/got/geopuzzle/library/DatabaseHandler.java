@@ -11,24 +11,9 @@ import java.util.HashMap;
  * Created by Milan on 14.5.2016..
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
-    // All Static variables
-    // Database Version
     private static final int DATABASE_VERSION = 1;
-
-    // Database Name
     private static final String DATABASE_NAME = "geopuzzle";
-
-    // Login table name
     private static final String TABLE_LOGIN = "login";
-
-    // Login Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_FIRSTNAME = "fname";
-    private static final String KEY_LASTNAME = "lname";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_USERNAME = "uname";
-    private static final String KEY_UID = "uid";
-    private static final String KEY_CREATED_AT = "created_at";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,63 +23,59 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_FIRSTNAME + " TEXT,"
-                + KEY_LASTNAME + " TEXT,"
-                + KEY_EMAIL + " TEXT UNIQUE,"
-                + KEY_USERNAME + " TEXT,"
-                + KEY_UID + " TEXT,"
-                + KEY_CREATED_AT + " TEXT" + ")";
+                + Cons.KEY_ID + " INTEGER PRIMARY KEY,"
+                + Cons.KEY_FIRSTNAME + " TEXT,"
+                + Cons.KEY_LASTNAME + " TEXT,"
+                + Cons.KEY_EMAIL + " TEXT UNIQUE,"
+                + Cons.KEY_USERNAME + " TEXT,"
+                + Cons.KEY_PHONE_NUMBER + " TEXT,"
+                + Cons.KEY_UID + " TEXT,"
+                + Cons.KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
     }
 
-    // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
-
-        // Create tables again
         onCreate(db);
     }
 
-    /**
-     * Storing user details in database
-     * */
-    public void addUser(String fname, String lname, String email, String uname, String uid, String created_at) {
+    // Storing user details in database
+    public void addUser(String firstName, String lastName, String email, String username, String phoneNumber, String userId, String createdAt) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_FIRSTNAME, fname); // FirstName
-        values.put(KEY_LASTNAME, lname); // LastName
-        values.put(KEY_EMAIL, email); // Email
-        values.put(KEY_USERNAME, uname); // UserName
-        values.put(KEY_UID, uid); // Email
-        values.put(KEY_CREATED_AT, created_at); // Created At
+        values.put(Cons.KEY_FIRSTNAME, firstName);
+        values.put(Cons.KEY_LASTNAME, lastName);
+        values.put(Cons.KEY_EMAIL, email);
+        values.put(Cons.KEY_USERNAME, username);
+        values.put(Cons.KEY_PHONE_NUMBER, phoneNumber);
+        values.put(Cons.KEY_UID, userId);
+        values.put(Cons.KEY_CREATED_AT, createdAt);
 
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
         db.close(); // Closing database connection
     }
 
-    /**
-     * Getting user data from database
-     * */
-    public HashMap getUserDetails(){
+    // Getting user data from database
+    public HashMap getUserDetails() {
         HashMap user = new HashMap();
         String selectQuery = "SELECT  * FROM " + TABLE_LOGIN;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+
         // Move to first row
         cursor.moveToFirst();
-        if(cursor.getCount() > 0){
-            user.put("fname", cursor.getString(1));
-            user.put("lname", cursor.getString(2));
-            user.put("email", cursor.getString(3));
-            user.put("uname", cursor.getString(4));
-            user.put("uid", cursor.getString(5));
-            user.put("created_at", cursor.getString(6));
+        if(cursor.getCount() > 0) {
+            user.put(Cons.KEY_FIRSTNAME, cursor.getString(1));
+            user.put(Cons.KEY_LASTNAME, cursor.getString(2));
+            user.put(Cons.KEY_EMAIL, cursor.getString(3));
+            user.put(Cons.KEY_USERNAME, cursor.getString(4));
+            user.put(Cons.KEY_PHONE_NUMBER, cursor.getString(5));
+            user.put(Cons.KEY_UID, cursor.getString(6));
+            user.put(Cons.KEY_CREATED_AT, cursor.getString(7));
         }
         cursor.close();
         db.close();
@@ -102,10 +83,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return user;
     }
 
-    /**
-     * Getting user login status
-     * return true if rows are there in table
-     * */
+    // Getting user login status
     public int getRowCount() {
         String countQuery = "SELECT  * FROM " + TABLE_LOGIN;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -118,11 +96,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return rowCount;
     }
 
-    /**
-     * Re create database
-     * Delete all tables and create them again
-     * */
-    public void resetTables(){
+    // Re create database
+    public void resetTables() {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
         db.delete(TABLE_LOGIN, null, null);

@@ -1,4 +1,40 @@
 <resources>
     <string name="app_name">GeoPuzzle</string>
-    <string name="title_activity_maps">Map</string>
+
+    <string name="title_activity_change_password">Change password</string>
+    <string name="title_activity_login">Login to GeoPuzzle</string>
+    <string name="title_activity_map">Map</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_registration_success">Registration successful</string>
+    <string name="title_activity_reset_password">Reset password</string>
+
+    <!-- Toast messages constatns -->
+    <string name="msg_first_name_empty">First name field empty</string>
+    <string name="msg_last_name_empty">Last name field empty</string>
+    <string name="msg_email_empty">Email field empty</string>
+    <string name="msg_username_empty">Username field empty</string>
+    <string name="msg_username_length">Username must contain 6 or more characters</string>
+    <string name="msg_password_empty">Password field empty</string>
+    <string name="msg_password_confirm_empty">Password confirm field empty</string>
+    <string name="msg_password_length">Password must contain 6 or more characters</string>
+    <string name="msg_password_not_match">Passwords doesn\'t match</string>
+    <string name="msg_phone_number_empty">Phone number field empty</string>
+    <string name="msg_loading">Loading...</string>
+    <string name="msg_checking_network">Checking Network</string>
+    <string name="msg_network_error">Error in Network Connection</string>
+    <string name="msg_contacting_servers">Contacting Servers</string>
+    <string name="msg_getting_data">Getting Data...</string>
+    <string name="msg_password_change_success">Your Password is successfully changed</string>
+    <string name="msg_invalid_old_password">Invalid old Password</string>
+    <string name="msg_password_change_error">Error occured in changing Password</string>
+    <string name="msg_password_reset_error">Error occured in reseting Password</string>
+    <string name="msg_email_password_empty">Email and Password fields are empty</string>
+    <string name="msg_incorrect_username_password">Incorrect Username or Password</string>
+    <string name="msg_recovery_mail">A recovery email is sent to you, see it for more details</string>
+    <string name="msg_email_dont_exist">Your email does not exist in our database</string>
+    <string name="msg_registration_success">Successfully Registered</string>
+    <string name="msg_user_exist">User already exists</string>
+    <string name="msg_invalid_email">Invalid Email address</string>
+    <string name="msg_registration_error">Error occured in registration</string>
 </resources>

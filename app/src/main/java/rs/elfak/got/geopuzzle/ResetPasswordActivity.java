@@ -1,59 +1,61 @@
 package rs.elfak.got.geopuzzle;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
-
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import rs.elfak.got.geopuzzle.library.UserFunctions;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.os.Bundle;
+import android.os.AsyncTask;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Button;
+import android.widget.Toast;
+import android.net.NetworkInfo;
+import android.net.ConnectivityManager;
+import android.support.v7.app.AppCompatActivity;
 
-public class ResetPasswordActivity extends Activity {
+import rs.elfak.got.geopuzzle.library.*;
 
-    private static String KEY_SUCCESS = "success";
-    private static String KEY_ERROR = "error";
-
-    EditText email;
-    TextView alert;
-    Button resetpass;
+public class ResetPasswordActivity extends AppCompatActivity {
+    EditText mEmailEdit;
+    Button mResetPasswordBtn;
+    Button mCancelBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        Button login = (Button) findViewById(R.id.bktolog);
-        login.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
-                startActivityForResult(myIntent, 0);
-                finish();
-            }
-        });
+        mEmailEdit = (EditText) findViewById(R.id.emailEdit);
+        mResetPasswordBtn = (Button) findViewById(R.id.resetPasswordBtn);
+        mCancelBtn = (Button) findViewById(R.id.cancelBtn);
 
-        email = (EditText) findViewById(R.id.forpas);
-        alert = (TextView) findViewById(R.id.alert);
-        resetpass = (Button) findViewById(R.id.respass);
-        resetpass.setOnClickListener(new View.OnClickListener() {
+        mResetPasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NetAsync(view);
+                String email = mEmailEdit.getText().toString();
+                if(email.equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_email_empty, Toast.LENGTH_SHORT).show();
+                    if (mEmailEdit.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+                else {
+                    NetAsync(view);
+                }
+            }
+        });
+        mCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
+//                startActivityForResult(myIntent, 0);
+                finish();
             }
         });
     }
@@ -64,8 +66,8 @@ public class ResetPasswordActivity extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
             nDialog = new ProgressDialog(ResetPasswordActivity.this);
-            nDialog.setMessage("Loading..");
-            nDialog.setTitle("Checking Network");
+            nDialog.setTitle(R.string.msg_checking_network);
+            nDialog.setMessage("Loading...");
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(true);
             nDialog.show();
@@ -84,11 +86,14 @@ public class ResetPasswordActivity extends Activity {
                     if (urlc.getResponseCode() == 200) {
                         return true;
                     }
-                } catch (MalformedURLException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                }
+//                catch (MalformedURLException e1) {
+//                    e1.printStackTrace();
+//                }
+//                catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -97,26 +102,27 @@ public class ResetPasswordActivity extends Activity {
 
         @Override
         protected void onPostExecute(Object o) {
-            if ((Boolean) o == true) {
+            if ((Boolean)o) {
                 nDialog.dismiss();
                 new ProcessRegister().execute();
-            } else {
+            }
+            else {
                 nDialog.dismiss();
-                alert.setText("Error in Network Connection");
+                Toast.makeText(getApplicationContext(), R.string.msg_network_error, Toast.LENGTH_LONG).show();
             }
         }
 
         private class ProcessRegister extends AsyncTask {
             private ProgressDialog pDialog;
+            String email;
 
-            String forgotpassword;
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                forgotpassword = email.getText().toString();
+                email = mEmailEdit.getText().toString();
 
                 pDialog = new ProgressDialog(ResetPasswordActivity.this);
-                pDialog.setTitle("Contacting Servers");
+                pDialog.setTitle(R.string.msg_contacting_servers);
                 pDialog.setMessage("Getting Data ...");
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(true);
@@ -126,35 +132,37 @@ public class ResetPasswordActivity extends Activity {
             @Override
             protected Object doInBackground(Object[] params) {
                 UserFunctions userFunction = new UserFunctions();
-                JSONObject json = userFunction.forPass(forgotpassword);
+                JSONObject json = userFunction.forPass(email);
                 return json;
             }
 
             @Override
             protected void onPostExecute(Object o) {
                 JSONObject json = (JSONObject) o;
-                /**
-                 * Checks if the Password Change Process is sucesss
-                 **/
                 try {
-                    if (json.getString(KEY_SUCCESS) != null) {
-                        alert.setText("");
-                        String res = json.getString(KEY_SUCCESS);
-                        String red = json.getString(KEY_ERROR);
+                    if (json.getString(Cons.KEY_SUCCESS) != null) {
+                        String res = json.getString(Cons.KEY_SUCCESS);
+                        String red = json.getString(Cons.KEY_ERROR);
 
                         if (Integer.parseInt(res) == 1) {
                             pDialog.dismiss();
-                            alert.setText("A recovery email is sent to you, see it for more details.");
-
-                        } else if (Integer.parseInt(red) == 2) {
+                            Toast.makeText(getApplicationContext(), R.string.msg_recovery_mail, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        else if (Integer.parseInt(red) == 2) {
                             pDialog.dismiss();
-                            alert.setText("Your email does not exist in our database.");
-                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.msg_email_dont_exist, Toast.LENGTH_SHORT).show();
+                            if(mEmailEdit.requestFocus()) {
+                                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                            }
+                        }
+                        else {
                             pDialog.dismiss();
-                            alert.setText("Error occured in changing Password");
+                            Toast.makeText(getApplicationContext(), R.string.msg_password_reset_error, Toast.LENGTH_SHORT).show();
                         }
                     }
-                } catch (JSONException e) {
+                }
+                catch (JSONException e) {
                     e.printStackTrace();
                 }
             }

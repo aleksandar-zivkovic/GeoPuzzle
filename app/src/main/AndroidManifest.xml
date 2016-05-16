@@ -11,7 +11,7 @@
 
     <!-- Camera -->
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -29,36 +29,47 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="GeoPuzzle">
+            android:name=".ChangePasswordActivity"
+            android:label="@string/title_activity_change_password">
 
         </activity>
 
-        <activity android:name=".ProfileActivity" android:label="Profile">
-
-        </activity>
-
-        <activity android:name=".LoginActivity" android:label="GeoPuzzle">
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".RegisterActivity" android:label="Register">
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_map">
 
         </activity>
 
-        <activity android:name=".RegisteredActivity" android:label="RegistrationSuccessfull">
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile">
 
         </activity>
 
-        <activity android:name=".ChangePasswordActivity" android:label="@string/title_activity_maps">
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/title_activity_register">
 
         </activity>
 
-        <activity android:name=".ResetPasswordActivity" android:label="@string/title_activity_maps">
+        <activity
+            android:name=".RegisteredActivity"
+            android:label="@string/title_activity_registration_success">
+
+        </activity>
+
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:label="@string/title_activity_reset_password">
 
         </activity>
     </application>

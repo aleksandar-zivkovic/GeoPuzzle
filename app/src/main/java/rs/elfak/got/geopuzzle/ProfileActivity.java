@@ -25,11 +25,11 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 
         // Hashmap to load data from the Sqlite database
-        HashMap user = new HashMap();
-        user = db.getUserDetails();
+        HashMap user = db.getUserDetails();
 
         // Logout from the User Panel which clears the data in Sqlite database
         mLogoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View arg0) {
                 UserFunctions logout = new UserFunctions();
                 logout.logoutUser(getApplicationContext());
@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-        // Change Password Activity Started
+        // Start Change Password Activity
         mChangePasswordBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 Intent changePass = new Intent(getApplicationContext(), ChangePasswordActivity.class);
@@ -49,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Sets user first name and last name in text view
         TextView titleText = (TextView) findViewById(R.id.titleText);
-        titleText.setText(user.get("fname") + " " + user.get("lname"));
+        titleText.setText(user.get(Cons.KEY_FIRSTNAME) + " " + user.get(Cons.KEY_LASTNAME));
     }
 
     @Override
