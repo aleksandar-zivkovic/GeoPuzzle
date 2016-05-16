@@ -29,10 +29,7 @@ public class UserFunctions {
         jsonParser = new JSONParser();
     }
 
-    /**
-     * Function to Login
-     **/
-
+    // Function to Login
     public JSONObject loginUser(String email, String password){
         // Building Parameters
         List params = new ArrayList();
@@ -43,10 +40,7 @@ public class UserFunctions {
         return json;
     }
 
-    /**
-     * Function to change password
-     **/
-
+    // Function to change password
     public JSONObject chgPass(String newpas, String email){
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", chgpass_tag));
@@ -57,10 +51,7 @@ public class UserFunctions {
         return json;
     }
 
-    /**
-     * Function to reset the password
-     **/
-
+    // Function to reset the password
     public JSONObject forPass(String forgotpassword){
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", forpass_tag));
@@ -69,9 +60,7 @@ public class UserFunctions {
         return json;
     }
 
-    /**
-     * Function to  Register
-     **/
+    // Function to  Register
     public JSONObject registerUser(String fname, String lname, String email, String uname, String password, String phonenumber){
         // Building Parameters
         List params = new ArrayList();
@@ -88,10 +77,7 @@ public class UserFunctions {
         return json;
     }
 
-    /**
-     * Function to logout user
-     * Resets the temporary data stored in SQLite Database
-     * */
+    // Function to logout user
     public boolean logoutUser(Context context){
         DatabaseHandler db = new DatabaseHandler(context);
         db.resetTables();
