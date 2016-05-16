@@ -117,13 +117,53 @@
         android:layout_alignRight="@+id/textView5"
         android:textSize="15dp"/>
 
+    <TextView
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        android:textColor="#000000"
+        android:text="Phone Number"
+        android:id="@+id/textViewPhoneNumber"
+        android:layout_below="@id/textView6"
+        android:textSize="15dp"/>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:textColor="#000000"
+        android:id="@+id/phoneNumber"
+        android:hint="Phone Number"
+        android:layout_below="@id/pword"
+        android:layout_alignParentRight="true"
+        android:textSize="15dp"/>
+
+    <TextView
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        android:textColor="#000000"
+        android:text="Take Photo"
+        android:id="@+id/textViewTakePhoto"
+        android:layout_below="@id/textViewPhoneNumber"
+        android:textSize="15dp"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:textColor="#000000"
+        android:text="Take Photo"
+        android:id="@+id/takePhoto"
+        android:layout_below="@+id/textViewPhoneNumber"
+        android:layout_toRightOf="@+id/textViewTakePhoto"
+        android:layout_alignRight="@+id/phoneNumber"
+        android:textSize="13dp"/>
+
+
     <Button
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:textColor="#000000"
         android:text="Register"
         android:id="@+id/register"
-        android:layout_below="@+id/textView6"
+        android:layout_below="@+id/textViewTakePhoto"
         android:layout_alignRight="@+id/textView2"
         android:textSize="13dp"/>
 
@@ -133,7 +173,7 @@
         android:textColor="#000000"
         android:text="Back To Login"
         android:id="@+id/bktologin"
-        android:layout_below="@+id/pword"
+        android:layout_below="@+id/textViewTakePhoto"
         android:layout_alignParentRight="true"
         android:textSize="13dp"/>
 
