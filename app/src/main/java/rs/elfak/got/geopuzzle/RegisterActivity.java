@@ -50,6 +50,8 @@ public class RegisterActivity extends Activity {
     Button btnRegister;
     TextView registerErrorMsg;
 
+    EditText mInputPhoneNumber;
+
     /**
      * Called when the activity is first created.
      */
@@ -68,6 +70,8 @@ public class RegisterActivity extends Activity {
         inputPassword = (EditText) findViewById(R.id.pword);
         btnRegister = (Button) findViewById(R.id.register);
         registerErrorMsg = (TextView) findViewById(R.id.register_error);
+
+        mInputPhoneNumber = (EditText) findViewById(R.id.phoneNumber);
 
         /**
          * Button which Switches back to the login screen on clicked
@@ -93,7 +97,7 @@ public class RegisterActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                if (  ( !inputUsername.getText().toString().equals("")) && ( !inputPassword.getText().toString().equals("")) && ( !inputFirstName.getText().toString().equals("")) && ( !inputLastName.getText().toString().equals("")) && ( !inputEmail.getText().toString().equals("")) )
+                if (  ( !inputUsername.getText().toString().equals("")) && ( !inputPassword.getText().toString().equals("")) && ( !inputFirstName.getText().toString().equals("")) && ( !inputLastName.getText().toString().equals("")) && ( !inputEmail.getText().toString().equals("")) && ( !mInputPhoneNumber.getText().toString().equals("")))
                 {
                     if ( inputUsername.getText().toString().length() > 4 ){
                         NetAsync(view);
@@ -173,7 +177,7 @@ public class RegisterActivity extends Activity {
              **/
             private ProgressDialog pDialog;
 
-            String email,password,fname,lname,uname;
+            String email,password,fname,lname,uname, phonenumber;
 
             @Override
             protected void onPreExecute() {
@@ -185,6 +189,8 @@ public class RegisterActivity extends Activity {
                 email = inputEmail.getText().toString();
                 uname= inputUsername.getText().toString();
                 password = inputPassword.getText().toString();
+                phonenumber = mInputPhoneNumber.getText().toString();
+
                 pDialog = new ProgressDialog(RegisterActivity.this);
                 pDialog.setTitle("Contacting Servers");
                 pDialog.setMessage("Registering ...");
@@ -196,7 +202,7 @@ public class RegisterActivity extends Activity {
             @Override
             protected Object doInBackground(Object[] params) {
                 UserFunctions userFunction = new UserFunctions();
-                JSONObject json = userFunction.registerUser(fname, lname, email, uname, password);
+                JSONObject json = userFunction.registerUser(fname, lname, email, uname, password, phonenumber);
 
                 return json;
             }
