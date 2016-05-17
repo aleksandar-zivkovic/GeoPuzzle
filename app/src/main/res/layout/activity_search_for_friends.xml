@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="rs.elfak.got.geopuzzle.SearchForFriendsActivity">
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/buttonOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Turn On"
+            android:onClick="on"
+            />
+        <Button
+            android:id="@+id/buttonOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="turn off"
+            android:onClick="off"
+            />
+
+        <TextView
+            android:id="@+id/textViewPairedDevices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Paired devices:"
+            android:textColor="#068fff"
+            android:textSize="25dp"
+            android:layout_marginTop="20dp"
+            />
+
+        <ListView
+            android:id="@+id/userListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/buttonVisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get visible"
+            android:onClick="visible"
+            />
+
+        <Button
+            android:id="@+id/buttonList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="List devices"
+            android:onClick="list"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
