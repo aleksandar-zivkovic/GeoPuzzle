@@ -8,6 +8,8 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_registration_success">Registration successful</string>
     <string name="title_activity_reset_password">Reset password</string>
+    <string name="title_activity_search_friends">Search people</string>
+    <string name="title_activity_friends">Friends</string>
 
     <!-- Toast messages constatns -->
     <string name="msg_first_name_empty">First name field empty</string>
