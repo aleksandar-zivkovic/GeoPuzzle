@@ -15,4 +15,7 @@ public class Cons {
     public static final String KEY_PHONE_NUMBER = "phonenumber";
     public static final String KEY_ID = "id";
     public static final String KEY_CREATED_AT = "created_at";
+
+    public static final int DIALOG_DOWNLOAD_JSON_PROGRESS = 0;
+
 }
