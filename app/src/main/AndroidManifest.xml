@@ -36,32 +36,43 @@
         <activity
             android:name=".ChangePasswordActivity"
             android:label="@string/title_activity_change_password" />
+
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_map" />
+
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile" />
+
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register" />
+
         <activity
             android:name=".RegisteredActivity"
             android:label="@string/title_activity_registration_success" />
+
         <activity
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password" />
-        <activity android:name=".SearchForFriendsActivity" />
-        <activity android:name=".MyFriendsActivity"></activity>
+
+        <activity
+            android:name=".SearchForFriendsActivity"
+            android:label="@string/title_activity_search_friends"/>
+
+        <activity
+            android:name=".MyFriendsActivity"
+            android:label="@string/title_activity_friends" />
     </application>
 
 </manifest>
