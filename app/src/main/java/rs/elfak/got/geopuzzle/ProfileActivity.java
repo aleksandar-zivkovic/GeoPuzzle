@@ -34,22 +34,11 @@ import rs.elfak.got.geopuzzle.library.*;
 public class ProfileActivity extends AppCompatActivity {
     private Button mLogoutBtn;
     private Button mChangePasswordBtn;
+    private Button mViewMyFriendsBtn;
+    private Button mSearchForFriendsBtn;
     private ImageView mUserImageView;
 
     private String mEmail;
-    int[] flags;
-    String strImageName;
-    int n = 10000;
-    String[] mySecondStringArray = new String[n];
-    String[] strArray;
-
-    HashMap<String, String> hm;
-    List<HashMap<String, String>> aList;
-    InputStream is = null;
-    String result = "";
-    JSONObject jArray = null;
-    private String Qrimage;
-    private Bitmap bmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +47,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         mLogoutBtn = (Button) findViewById(R.id.logoutBtn);
         mChangePasswordBtn = (Button) findViewById(R.id.changePasswordBtn);
+        mViewMyFriendsBtn = (Button) findViewById(R.id.viewMyFriendsBtn);
+        mSearchForFriendsBtn = (Button) findViewById(R.id.searchForFriendsBtn);
         mUserImageView = (ImageView) findViewById(R.id.userImg);
 
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
@@ -65,6 +56,27 @@ public class ProfileActivity extends AppCompatActivity {
         // Hashmap to load data from the Sqlite database
         HashMap user = db.getUserDetails();
 
+        // Start Search For Friends Activity
+        mSearchForFriendsBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent searchForFriends = new Intent(getApplicationContext(), SearchForFriendsActivity.class);
+                startActivity(searchForFriends);
+            }
+        });
+        // Start My Friends Activity
+        mViewMyFriendsBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent myFriends = new Intent(getApplicationContext(), MyFriendsActivity.class);
+                startActivity(myFriends);
+            }
+        });
+        // Start Change Password Activity
+        mChangePasswordBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent changePass = new Intent(getApplicationContext(), ChangePasswordActivity.class);
+                startActivity(changePass);
+            }
+        });
         // Logout from the User Panel which clears the data in Sqlite database
         mLogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,13 +87,6 @@ public class ProfileActivity extends AppCompatActivity {
                 login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(login);
                 finish();
-            }
-        });
-        // Start Change Password Activity
-        mChangePasswordBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                Intent changePass = new Intent(getApplicationContext(), ChangePasswordActivity.class);
-                startActivity(changePass);
             }
         });
 
