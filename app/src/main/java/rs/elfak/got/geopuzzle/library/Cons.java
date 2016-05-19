@@ -19,5 +19,8 @@ public class Cons {
     public static final int REQUEST_ENABLE_BT = 100;
     public static final int SELECT_SERVER = 200;
 
-
+    // used for key-value pairs in values table
+    public static final String KEY_KEY_NAME = "key";
+    public static final String KEY_KEY_VALUE = "value";
+    public static final String KEY_LOGGED_IN = "loggedIn";
 }

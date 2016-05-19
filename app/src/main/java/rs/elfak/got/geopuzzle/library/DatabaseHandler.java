@@ -14,6 +14,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "geopuzzle";
     private static final String TABLE_LOGIN = "login";
+    private static final String TABLE_VALUES = "val";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,6 +33,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + Cons.KEY_UID + " TEXT,"
                 + Cons.KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
+
+        String CREATE_KEY_VALUE_TABLE = "CREATE TABLE " + TABLE_VALUES + "("
+                + Cons.KEY_ID + " INTEGER PRIMARY KEY,"
+                + Cons.KEY_KEY_NAME + " TEXT,"
+                + Cons.KEY_KEY_VALUE + " TEXT" + ")";
+        db.execSQL(CREATE_KEY_VALUE_TABLE);
+
+        db.execSQL("INSERT INTO " + TABLE_VALUES + " VALUES(null, 'loggedIn', 'false')");
     }
 
     @Override
@@ -55,7 +64,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
-        db.close(); // Closing database connection
+        //db.close(); // Closing database connection
     }
 
     // Getting user data from database
@@ -78,9 +87,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             user.put(Cons.KEY_CREATED_AT, cursor.getString(7));
         }
         cursor.close();
-        db.close();
+        //db.close();
         // return user
         return user;
+    }
+
+    // Storing key-value pair in database
+    public void addValue(String key, String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Cons.KEY_KEY_NAME, key);
+        values.put(Cons.KEY_KEY_VALUE, value);
+
+        // Inserting Row
+        db.insert(TABLE_VALUES, null, values);
+        //db.close(); // Closing database connection
+    }
+
+    // Getting key-value data from database
+    public HashMap getKeyValue(String key) {
+        HashMap keyValuePair = new HashMap();
+        String selectQuery = "SELECT * FROM " + TABLE_VALUES+ " WHERE " + Cons.KEY_KEY_NAME + "='" + key + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // Move to first row
+        cursor.moveToFirst();
+        if(cursor.getCount() > 0) {
+            keyValuePair.put(cursor.getString(1), cursor.getString(2));
+        }
+        cursor.close();
+        //db.close();
+
+        // return key-value pair
+        return keyValuePair;
+    }
+
+    // Sett key-value pair in database
+    public void setValue(String key, String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        HashMap keyValue = getKeyValue(key);
+
+        if(keyValue.size() > 0) {
+            db.execSQL("UPDATE " + TABLE_VALUES + " SET " + Cons.KEY_KEY_VALUE + "= '" + value + "' WHERE " + Cons.KEY_KEY_NAME + "='" + key + "'");
+        }
+        else {
+            ContentValues values = new ContentValues();
+            values.put(Cons.KEY_KEY_NAME, key);
+            values.put(Cons.KEY_KEY_VALUE, value);
+
+            // Inserting Row
+            db.insert(TABLE_VALUES, null, values);
+        }
+
+        //db.close(); // Closing database connection
     }
 
     // Getting user login status
@@ -89,7 +152,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int rowCount = cursor.getCount();
-        db.close();
+        //db.close();
         cursor.close();
 
         // return row count
@@ -101,6 +164,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
         db.delete(TABLE_LOGIN, null, null);
-        db.close();
+        //db.close();
     }
 }
