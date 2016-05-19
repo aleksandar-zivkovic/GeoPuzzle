@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
@@ -185,6 +186,12 @@ public class LoginActivity extends AppCompatActivity {
                                 json_user.getString(Cons.KEY_PHONE_NUMBER),
                                 json_user.getString(Cons.KEY_UID),
                                 json_user.getString(Cons.KEY_CREATED_AT));
+
+                        CheckBox loggedInChk = (CheckBox) findViewById(R.id.keepLoggedInChk);
+                        if (loggedInChk.isChecked())
+                            db.setValue(Cons.KEY_LOGGED_IN, "true");
+                        else
+                            db.setValue(Cons.KEY_LOGGED_IN, "false");
 
                         // If JSON array details are stored in SQlite it launches the User Panel.
                         Intent upanel = new Intent(getApplicationContext(), ProfileActivity.class);

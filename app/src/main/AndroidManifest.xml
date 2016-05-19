@@ -40,10 +40,11 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
         <activity
@@ -68,11 +69,21 @@
 
         <activity
             android:name=".SearchForFriendsActivity"
-            android:label="@string/title_activity_search_friends"/>
+            android:label="@string/title_activity_search_friends" />
 
         <activity
             android:name=".MyFriendsActivity"
             android:label="@string/title_activity_friends" />
+
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/app_name"
+            android:launchMode = "singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
