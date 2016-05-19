@@ -16,6 +16,8 @@ public class Cons {
     public static final String KEY_ID = "id";
     public static final String KEY_CREATED_AT = "created_at";
 
-    public static final int DIALOG_DOWNLOAD_JSON_PROGRESS = 0;
+    public static final int REQUEST_ENABLE_BT = 100;
+    public static final int SELECT_SERVER = 200;
+
 
 }
