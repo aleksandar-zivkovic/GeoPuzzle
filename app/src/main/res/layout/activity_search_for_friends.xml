@@ -68,9 +68,34 @@
             android:id="@+id/buttonList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List devices"
+            android:text="List Paired devices"
             android:onClick="list"
             />
+
+        <Button
+            android:id="@+id/buttonDiscoverDevices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Discover New Devices"
+            android:onClick="discover"
+            />
+
+        <Button
+            android:id="@+id/buttonStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Listening"
+            android:onClick="start"
+            />
+
+        <Button
+            android:id="@+id/buttonSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send"
+            android:onClick="send"
+            />
+
     </LinearLayout>
 
 
