@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,7 +54,8 @@ public class SearchForFriendsActivity extends AppCompatActivity {
     private OutputStream outputStream, mOutStream;
     private InputStream inStream, mInStream;
 
-    BluetoothSocket mServerSocket, mBluetoothSocket;
+    BluetoothSocket mBluetoothSocket;
+    BluetoothServerSocket mServerSocket;
     BluetoothDevice mDevice;
 
     Handler mHandler;
@@ -63,6 +65,8 @@ public class SearchForFriendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_for_friends);
+
+        mHandler = new Handler();
 
         mListView = (ListView)findViewById(R.id.userListView);
 
@@ -95,6 +99,38 @@ public class SearchForFriendsActivity extends AppCompatActivity {
         }
         else {
             Toast.makeText(getApplicationContext(),"Already on", Toast.LENGTH_LONG).show();
+        }
+
+        // Create bluetooth server socket to listen for connections
+        AcceptThread acceptThread = new AcceptThread(mHandler);
+        acceptThread.run();
+    }
+
+    class AcceptThread extends Thread {
+        public AcceptThread(Handler handler) {
+
+            try {
+
+                mServerSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("friendRequest", DEFAULT_UUID);
+            }
+            catch (IOException e) {
+                e.getMessage();
+            }
+        }
+
+        public void run() {
+            while (true) {
+                try {
+                    mBluetoothSocket = mServerSocket.accept();
+                    manageConnectedSocket();
+                    mServerSocket.close();
+                    break;
+                } catch (IOException e1) {
+                }
+            }
+        }
+        public void manageConnectedSocket() {
+            Toast.makeText(getApplicationContext(),"Message received!" ,Toast.LENGTH_LONG).show();
         }
     }
 
@@ -194,134 +230,5 @@ public class SearchForFriendsActivity extends AppCompatActivity {
             }
         }
     }
-
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if(requestCode == Cons.REQUEST_ENABLE_BT && resultCode== Activity.RESULT_OK) {
-//            BluetoothAdapter BT = BluetoothAdapter.getDefaultAdapter();
-//            String address = BT.getAddress();
-//            String name = BT.getName();
-//            String toastText = name + " : " + address;
-//            Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
-//        }
-//    }
-//
-////    public class ShowDevices extends ListActivity {
-////
-////
-////        protected void onCreate(Bundle savedInstanceState) {
-////
-////            // search for more devices
-////            mBluetoothAdapter.startDiscovery();
-////
-////            // user selects one device
-////            BluetoothDevice device =
-////                    mBluetoothAdapter.getRemoteDevice(/* mac addr String */);
-////            Intent data = new Intent();
-////            data.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
-////            setResult(RESULT_OK, data);
-////            finish();
-////
-////        }
-////    }
-//
-//    public class DataTransferActivity extends Activity {
-//
-//
-//
-//        @Override
-//        public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-//            super.onCreate(savedInstanceState, persistentState);
-//
-//            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//            if (mBluetoothAdapter == null) {
-//                // No Bluetooth support
-//                finish();
-//            }
-//            if (!mBluetoothAdapter.isEnabled()) {
-//                Intent enableBluetoothIntent =
-//                        new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//                startActivityForResult(
-//                        enableBluetoothIntent, Cons.REQUEST_ENABLE_BT);
-//            }
-//        }
-//    }
-//
-//    // Listen for connection
-//    class AcceptThread extends Thread {
-//        public AcceptThread(Handler handler) {
-//
-//            try {
-//                mServerSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("test", DEFAULT_UUID);
-//            }
-//            catch (IOException e) {}
-//        }
-//
-//        public void run() {
-//            while (true) {
-//                try {
-//
-//                    mBluetoothSocket = mServerSocket.accept();
-//                    manageConnectedSocket();
-//                    mServerSocket.close();
-//                    break;
-//                }
-//                catch (IOException e1) {
-//                    e1.getMessage();
-//                }
-//            }
-//        }
-//    }
-//
-//    public class ConnectThread extends Thread {
-//
-//        public ConnectThread(String deviceID, Handler handler) {
-//            mDevice = mBluetoothAdapter.getRemoteDevice(deviceID);
-//            try {
-//                mBluetoothSocket = mDevice.createRfcommSocketToServiceRecord(
-//                        DEFAULT_UUID);
-//            }
-//            catch (IOException e) {
-//                e.getMessage();
-//            }
-//        }
-//    }
-//
-//    public class ConnectionThread extends Thread {
-//
-//        ConnectionThread(BluetoothSocket socket, Handler handler) {
-//            super();
-//            mBluetoothSocket = socket;
-//            mHandler = handler;
-//            try {
-//                mInStream = mBluetoothSocket.getInputStream();
-//                mOutStream = mBluetoothSocket.getOutputStream();
-//            } catch (IOException e) {
-//
-//            }
-//        }
-//
-//        public void run() {
-//            byte[] buffer = new byte[1024];
-//            int bytes;
-//            while (true) {
-//                try {
-//                    bytes = mInStream.read(buffer);
-//                    String data = new String(buffer, 0, bytes);
-//                    mHandler.obtainMessage(
-//                            DataTransferActivity.DATA_RECEIVED, data).sendToTarget();
-//                } catch (IOException e) {
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//
-//    public void write(byte[] bytes) {
-//        try {
-//            mOutStream.write(bytes);
-//        } catch (IOException e) {
-//            e.getMessage();
-//        }
-//    }
 
 }
