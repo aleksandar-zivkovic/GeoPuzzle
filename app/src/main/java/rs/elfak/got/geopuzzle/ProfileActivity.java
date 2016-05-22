@@ -45,60 +45,77 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        mUserImageView = (ImageView) findViewById(R.id.userImg);
         mLogoutBtn = (Button) findViewById(R.id.logoutBtn);
         mChangePasswordBtn = (Button) findViewById(R.id.changePasswordBtn);
         mViewMyFriendsBtn = (Button) findViewById(R.id.viewMyFriendsBtn);
         mSearchForFriendsBtn = (Button) findViewById(R.id.searchForFriendsBtn);
-        mUserImageView = (ImageView) findViewById(R.id.userImg);
+        TextView titleText = (TextView) findViewById(R.id.titleText);
 
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 
-        // Hashmap to load data from the Sqlite database
-        HashMap user = db.getUserDetails();
+        // Hashmap to load data from the Sqlite database or server
+        HashMap user;
 
-        // Start Search For Friends Activity
-        mSearchForFriendsBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                Intent searchForFriends = new Intent(getApplicationContext(), SearchForFriendsActivity.class);
-                startActivity(searchForFriends);
-            }
-        });
-        // Start My Friends Activity
-        mViewMyFriendsBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                Intent myFriends = new Intent(getApplicationContext(), MyFriendsActivity.class);
-                startActivity(myFriends);
-            }
-        });
-        // Start Change Password Activity
-        mChangePasswordBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                Intent changePass = new Intent(getApplicationContext(), ChangePasswordActivity.class);
-                startActivity(changePass);
-            }
-        });
-        // Logout from the User Panel which clears the data in Sqlite database
-        mLogoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                UserFunctions logout = new UserFunctions();
-                logout.logoutUser(getApplicationContext());
-                Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(login);
-                finish();
-            }
-        });
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null && bundle.getString(Cons.KEY_EMAIL) != null) {
+            mLogoutBtn.setVisibility(View.INVISIBLE);
+            mChangePasswordBtn.setVisibility(View.INVISIBLE);
+            mViewMyFriendsBtn.setVisibility(View.INVISIBLE);
+            mSearchForFriendsBtn.setVisibility(View.INVISIBLE);
 
-        // Sets user first name and last name in text view
-        TextView titleText = (TextView) findViewById(R.id.titleText);
-        titleText.setText(user.get(Cons.KEY_FIRSTNAME) + " " + user.get(Cons.KEY_LASTNAME));
+            // Sets user first name and last name in text view
+            titleText.setText(bundle.getString(Cons.KEY_FULLNAME));
 
-        // Gets email
-        mEmail = user.get(Cons.KEY_EMAIL).toString();
+            mEmail = bundle.getString(Cons.KEY_EMAIL);
 
+            this.setTitle(R.string.title_activity_friend);
+        }
+        else {
+            user = db.getUserDetails();
 
-        new DownloadImageTask().execute("http://vasic.ddns.net/geopuzzle_login_api/uploads/" + mEmail + ".jpg");
+            // Start Search For Friends Activity
+            mSearchForFriendsBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    Intent searchForFriends = new Intent(getApplicationContext(), SearchForFriendsActivity.class);
+                    startActivity(searchForFriends);
+                }
+            });
+            // Start My Friends Activity
+            mViewMyFriendsBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    Intent myFriends = new Intent(getApplicationContext(), MyFriendsActivity.class);
+                    startActivity(myFriends);
+                }
+            });
+            // Start Change Password Activity
+            mChangePasswordBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    Intent changePass = new Intent(getApplicationContext(), ChangePasswordActivity.class);
+                    startActivity(changePass);
+                }
+            });
+            // Logout from the User Panel which clears the data in Sqlite database
+            mLogoutBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    UserFunctions logout = new UserFunctions();
+                    logout.logoutUser(getApplicationContext());
+                    Intent login = new Intent(getApplicationContext(), LoginActivity.class);
+                    login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(login);
+                    finish();
+                }
+            });
+
+            // Sets user first name and last name in text view
+            titleText.setText(user.get(Cons.KEY_FIRSTNAME) + " " + user.get(Cons.KEY_LASTNAME));
+
+            // Gets email
+            mEmail = user.get(Cons.KEY_EMAIL).toString();
+        }
+
+        new DownloadImageTask().execute(Cons.KEY_UPLOADS_URL + mEmail + ".jpg");
     }
 
     @Override
@@ -117,8 +134,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Object o) {
-
-            mUserImageView.setImageBitmap((Bitmap) o);
+            if(o != null)
+                mUserImageView.setImageBitmap((Bitmap) o);
         }
 
         private Bitmap loadImageFromNetwork(String url){
