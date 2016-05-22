@@ -1,5 +1,7 @@
 package rs.elfak.got.geopuzzle.library;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +9,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 /**
  * Created by Milan on 14.5.2016..
@@ -99,5 +103,17 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("email", email));
         JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
         return json;
+    }
+
+    // Loads bitmap from network resource
+    public static Bitmap loadImageFromNetwork(String url){
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
+            return bitmap;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

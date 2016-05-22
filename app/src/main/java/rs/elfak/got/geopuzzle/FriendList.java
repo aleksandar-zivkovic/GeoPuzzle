@@ -66,12 +66,18 @@ public class FriendList extends ArrayAdapter<String> {
         protected Object doInBackground(Object[] params) {
             imageView = (ImageView) params[1];
             return (Bitmap) loadImageFromNetwork((String) params[0]);
-
         }
 
         @Override
         protected void onPostExecute(Object o) {
-            imageView.setImageBitmap((Bitmap) o);
+            final Bitmap image = (Bitmap)o;
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(image != null)
+                        imageView.setImageBitmap((Bitmap) image);
+                }
+            });
         }
 
         private Bitmap loadImageFromNetwork(String url){
