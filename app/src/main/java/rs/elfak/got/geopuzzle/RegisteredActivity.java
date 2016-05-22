@@ -17,6 +17,8 @@ public class RegisteredActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registered);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         HashMap user = db.getUserDetails();

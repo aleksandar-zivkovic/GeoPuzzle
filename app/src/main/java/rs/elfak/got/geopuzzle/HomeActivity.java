@@ -18,6 +18,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         HashMap keyValue = db.getKeyValue(Cons.KEY_LOGGED_IN);

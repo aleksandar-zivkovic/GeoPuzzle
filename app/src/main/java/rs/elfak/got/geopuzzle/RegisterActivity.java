@@ -67,6 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         mFirstNameEdit = (EditText) findViewById(R.id.firstNameEdit);
         mLastNameEdit = (EditText) findViewById(R.id.lastNameEdit);

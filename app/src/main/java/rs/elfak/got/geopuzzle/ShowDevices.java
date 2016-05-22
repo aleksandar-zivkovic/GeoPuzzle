@@ -18,7 +18,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class ShowDevices extends Activity {
+public class ShowDevices extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private ListView mListView;
@@ -47,6 +47,8 @@ public class ShowDevices extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_devices);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 

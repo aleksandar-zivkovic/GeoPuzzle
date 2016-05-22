@@ -37,6 +37,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         pDialog = new ProgressDialog(ProfileActivity.this);
         pDialog.setTitle(R.string.msg_contacting_servers);

@@ -32,6 +32,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
         mConfirmPasswordEdit = (EditText) findViewById(R.id.confirmPasswordEdit);
