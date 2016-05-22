@@ -187,17 +187,18 @@ public class LoginActivity extends AppCompatActivity {
                                 json_user.getString(Cons.KEY_UID),
                                 json_user.getString(Cons.KEY_CREATED_AT));
 
-                        CheckBox loggedInChk = (CheckBox) findViewById(R.id.keepLoggedInChk);
-                        if (loggedInChk.isChecked())
-                            db.setValue(Cons.KEY_LOGGED_IN, "true");
+                        CheckBox keepLoggedInChk = (CheckBox) findViewById(R.id.keepLoggedInChk);
+                        if (keepLoggedInChk.isChecked())
+                            db.setValue(Cons.KEY_KEEP_LOGGED_IN, "true");
                         else
-                            db.setValue(Cons.KEY_LOGGED_IN, "false");
+                            db.setValue(Cons.KEY_KEEP_LOGGED_IN, "false");
+                        db.setValue(Cons.KEY_LOGGED_IN, "true");
 
                         // If JSON array details are stored in SQlite it launches the User Panel.
-                        Intent upanel = new Intent(getApplicationContext(), HomeActivity.class);
-                        upanel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                        home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         pDialog.dismiss();
-                        startActivity(upanel);
+                        startActivity(home);
 
                         // Close Login Screen
                         finish();

@@ -22,21 +22,34 @@ public class HomeActivity extends AppCompatActivity {
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         HashMap keyValue = db.getKeyValue(Cons.KEY_LOGGED_IN);
 
-        String loggedIn = keyValue.get(Cons.KEY_LOGGED_IN).toString();
-
-        if(loggedIn.equals("false")) {
+        if(keyValue.size() == 0  || keyValue.get(Cons.KEY_LOGGED_IN).toString().equals("false")) {
             Intent login = new Intent(getApplicationContext(), LoginActivity.class);
             login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(login);
         }
+        else {
+            mMyProfileBtn = (Button) findViewById(R.id.myProfileBtn);
+            mMyProfileBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent myProfile = new Intent(view.getContext(), ProfileActivity.class);
+                    startActivity(myProfile);
+                }
+            });
+        }
+    }
 
-        mMyProfileBtn = (Button) findViewById(R.id.myProfileBtn);
-        mMyProfileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myProfile = new Intent(view.getContext(), ProfileActivity.class);
-                startActivity(myProfile);
-            }
-        });
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+        HashMap keyValue = db.getKeyValue(Cons.KEY_KEEP_LOGGED_IN);
+
+        if(keyValue.size() > 0) {
+            String keepLoggedIn = keyValue.get(Cons.KEY_KEEP_LOGGED_IN).toString();
+            if(keepLoggedIn.equals("false"))
+                new UserFunctions().logoutUser(getApplicationContext());
+        }
     }
 }
