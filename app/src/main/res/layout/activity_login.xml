@@ -82,7 +82,7 @@
     <Button
         android:id="@+id/loginBtn"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:textSize="15dp"
         android:text="Login"
         android:layout_marginLeft="50dp"
@@ -93,7 +93,7 @@
     <Button
         android:id="@+id/resetPasswordBtn"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:textSize="15dp"
         android:text="Reset password"
         android:layout_marginLeft="50dp"
@@ -119,7 +119,7 @@
         <Button
             android:id="@+id/registerBtn"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textSize="15dp"
             android:text="Register here"
             android:layout_marginLeft="50dp"

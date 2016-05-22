@@ -194,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                             db.setValue(Cons.KEY_LOGGED_IN, "false");
 
                         // If JSON array details are stored in SQlite it launches the User Panel.
-                        Intent upanel = new Intent(getApplicationContext(), ProfileActivity.class);
+                        Intent upanel = new Intent(getApplicationContext(), HomeActivity.class);
                         upanel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         pDialog.dismiss();
                         startActivity(upanel);

@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Random;
 
@@ -14,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -23,7 +25,9 @@ import android.os.Bundle;
 import android.os.AsyncTask;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -57,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
     String imagepath = "";
     String fname;
     File file;
+    private Uri mImageUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
         mConfirmPasswordEdit = (EditText) findViewById(R.id.confirmPasswordEdit);
         mPhoneNumberEdit = (EditText) findViewById(R.id.phoneNumberEdit);
-        mUploadPhotoBtn = (Button) findViewById(R.id.uploadPhotoBtn);
+        //mUploadPhotoBtn = (Button) findViewById(R.id.uploadPhotoBtn);
         mRegisterBtn = (Button) findViewById(R.id.registerBtn);
         mCancelBtn = (Button) findViewById(R.id.cancelBtn);
 
@@ -144,12 +149,12 @@ public class RegisterActivity extends AppCompatActivity {
                     if (cd.isConnectingToInternet()) {
                         if (!upflag) {
                             Toast.makeText(RegisterActivity.this, "Image Not Captured..!", Toast.LENGTH_LONG).show();
-                        } else {
-                            saveFile(bitmapRotate, file);
                         }
-                    } else {
+                    }
+                    else {
                         Toast.makeText(RegisterActivity.this, "No Internet Connection !", Toast.LENGTH_LONG).show();
                     }
+
                     NetAsync(view);
                 }
             }
@@ -162,14 +167,42 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mUploadPhotoBtn.setOnClickListener(new View.OnClickListener() {
+        ivImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cameraIntent = new Intent(
+                /*Intent cameraIntent = new Intent(
                         android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 101);
+                startActivityForResult(cameraIntent, 101);*/
+
+                Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+                File photo;
+                try
+                {
+                    // place where to store camera taken picture
+                    photo = createTemporaryFile("picture", ".jpg");
+                    photo.delete();
+
+                    mImageUri = Uri.fromFile(photo);
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+                    //start camera intent
+                    startActivityForResult(cameraIntent, 101);
+                }
+                catch(Exception e)
+                {
+                    Toast.makeText(getApplicationContext(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_SHORT);
+                }
             }
         });
+    }
+
+    private File createTemporaryFile(String part, String ext) throws Exception
+    {
+        File tempDir = Environment.getExternalStorageDirectory();
+        tempDir = new File(tempDir.getAbsolutePath()+"/.temp/");
+        if(!tempDir.exists()) {
+            tempDir.mkdirs();
+        }
+        return File.createTempFile(part, ext, tempDir);
     }
 
     private class NetCheck extends AsyncTask {
@@ -201,12 +234,6 @@ public class RegisterActivity extends AppCompatActivity {
                         return true;
                     }
                 }
-//                catch (MalformedURLException e1) {
-//                    e1.printStackTrace();
-//                }
-//                catch (IOException e) {
-//                    e.printStackTrace();
-//                }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -242,7 +269,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 pDialog = new ProgressDialog(RegisterActivity.this);
                 pDialog.setTitle(R.string.msg_contacting_servers);
-                pDialog.setMessage("Registering ...");
+                pDialog.setMessage("Registering...");
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(true);
                 pDialog.show();
@@ -251,6 +278,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             protected Object doInBackground(Object[] params) {
                 UserFunctions userFunction = new UserFunctions();
+                saveFile(bitmapRotate, file);
                 return userFunction.registerUser(firstName, lastName, email, username, password, phoneNumber);
             }
 
@@ -321,48 +349,53 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         try {
-            switch (requestCode) {
-                case 101:
-                    if (resultCode == Activity.RESULT_OK) {
-                        if (data != null) {
-                            selectedImage = data.getData(); // the uri of the image taken
-                            if (String.valueOf((Bitmap) data.getExtras().get("data")).equals("null")) {
-                                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                            } else {
-                                bitmap = (Bitmap) data.getExtras().get("data");
-                            }
-                            if (Float.valueOf(getImageOrientation()) >= 0) {
-                                //bitmapRotate = rotateImage(bitmap, Float.valueOf(getImageOrientation()));
-                                bitmapRotate = bitmap;
-                            } else {
-                                bitmapRotate = bitmap;
-                                bitmap.recycle();
-                            }
+            if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+                this.getContentResolver().notifyChange(mImageUri, null);
+                bitmap = android.provider.MediaStore.Images.Media.getBitmap(getContentResolver(), mImageUri);
 
-                            ivImage.setVisibility(View.VISIBLE);
-                            ivImage.setImageBitmap(bitmapRotate);
+                if (Float.valueOf(getImageOrientation()) >= 0) {
+                    //bitmapRotate = rotateImage(bitmap, Float.valueOf(getImageOrientation()));
+                    bitmapRotate = bitmap;
+                }
+                else {
+                    bitmapRotate = bitmap;
+                    bitmap.recycle();
+                }
 
-                            //Saving image to mobile internal memory for sometime
-                            String root = getApplicationContext().getFilesDir().toString();
-                            File myDir = new File(root + "/androidlift");
-                            myDir.mkdirs();
+                ivImage.setVisibility(View.VISIBLE);
+                ivImage.setImageBitmap(bitmapRotate);
 
-                            Random generator = new Random();
-                            int n = 10000;
-                            n = generator.nextInt(n);
+                //Saving image to mobile internal memory for sometime
+                String root = getApplicationContext().getFilesDir().toString();
+                File myDir = new File(root + "/androidlift");
+                myDir.mkdirs();
 
-                            //Give the file name that u want
-                            fname = mEmailEdit.getText().toString() + ".jpg";
+                Random generator = new Random();
+                int n = 10000;
+                n = generator.nextInt(n);
 
-                            imagepath = root + "/androidlift/" + fname;
-                            file = new File(myDir, fname);
-                            upflag = true;
-                        }
-                    }
+                //Give the file name that u want
+                fname = mEmailEdit.getText().toString() + ".jpg";
+
+                imagepath = root + "/androidlift/" + fname;
+                file = new File(myDir, fname);
+                upflag = true;
+
+//                if (data != null) {
+//                    selectedImage = data.getData(); // the uri of the image taken
+//                    if (String.valueOf((Bitmap) data.getExtras().get("data")).equals("null")) {
+//                        //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+//                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(getContentResolver(), mImageUri);
+//                    }
+//                    else {
+//                        bitmap = (Bitmap) data.getExtras().get("data");
+//                    }
+//
+//                }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -390,7 +423,8 @@ public class RegisterActivity extends AppCompatActivity {
             System.out.println("orientation===" + orientation);
             cursor.close();
             return orientation;
-        } else {
+        }
+        else {
             return 0;
         }
     }
@@ -404,22 +438,36 @@ public class RegisterActivity extends AppCompatActivity {
             out.flush();
             out.close();
             if (cd.isConnectingToInternet()) {
-                new DoFileUpload().execute();
-            } else {
+//                new DoFileUpload().execute();
+
+                try {
+                    // Set your file path here
+                    FileInputStream fstrm = new FileInputStream(imagepath);
+                    // Set your server page url (and the file title/description)
+                    HttpFileUpload hfu = new HttpFileUpload("http://vasic.ddns.net/geopuzzle_login_api/file_upload.php", "ftitle", "fdescription", fname);
+                    upflag = hfu.Send_Now(fstrm);
+                }
+                catch (FileNotFoundException e) {
+                    // Error: File not found
+                    e.printStackTrace();
+                }
+            }
+            else {
                 Toast.makeText(RegisterActivity.this, "No Internet Connection..", Toast.LENGTH_LONG).show();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    class DoFileUpload extends AsyncTask<String, String, String> {
+    // Unnecessary because execution of this task is already called from AsyncTask ProcessRegister
+    /*class DoFileUpload extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
-
             pDialog = new ProgressDialog(RegisterActivity.this);
-            pDialog.setMessage("wait uploading Image..");
+            pDialog.setMessage("Wait uploading Image..");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
@@ -434,7 +482,8 @@ public class RegisterActivity extends AppCompatActivity {
                 // Set your server page url (and the file title/description)
                 HttpFileUpload hfu = new HttpFileUpload("http://vasic.ddns.net/geopuzzle_login_api/file_upload.php", "ftitle", "fdescription", fname);
                 upflag = hfu.Send_Now(fstrm);
-            } catch (FileNotFoundException e) {
+            }
+            catch (FileNotFoundException e) {
                 // Error: File not found
                 e.printStackTrace();
             }
@@ -448,10 +497,10 @@ public class RegisterActivity extends AppCompatActivity {
             }
             if (upflag) {
                 Toast.makeText(getApplicationContext(), "Uploading Complete", Toast.LENGTH_LONG).show();
-            } else {
+            }
+            else {
                 Toast.makeText(getApplicationContext(), "Unfortunately file is not Uploaded..", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
+    }*/
 }

@@ -1,6 +1,7 @@
 package rs.elfak.got.geopuzzle.library;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -18,11 +19,13 @@ public class UserFunctions {
     private static String registerURL = "http://vasic.ddns.net/geopuzzle_login_api/";
     private static String forpassURL = "http://vasic.ddns.net/geopuzzle_login_api/";
     private static String chgpassURL = "http://vasic.ddns.net/geopuzzle_login_api/";
+    private static String serverURL = "http://vasic.ddns.net/geopuzzle_login_api/";
 
     private static String login_tag = "login";
     private static String register_tag = "register";
     private static String forpass_tag = "forpass";
     private static String chgpass_tag = "chgpass";
+    private static String fetchfriends_tag = "fetchfriends";
 
     // constructor
     public UserFunctions() {
@@ -30,7 +33,7 @@ public class UserFunctions {
     }
 
     // Function to Login
-    public JSONObject loginUser(String email, String password){
+    public JSONObject loginUser(String email, String password) {
         // Building Parameters
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", login_tag));
@@ -41,7 +44,7 @@ public class UserFunctions {
     }
 
     // Function to change password
-    public JSONObject chgPass(String newpas, String email){
+    public JSONObject chgPass(String newpas, String email) {
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", chgpass_tag));
 
@@ -52,7 +55,7 @@ public class UserFunctions {
     }
 
     // Function to reset the password
-    public JSONObject forPass(String forgotpassword){
+    public JSONObject forPass(String forgotpassword) {
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", forpass_tag));
         params.add(new BasicNameValuePair("forgotpassword", forgotpassword));
@@ -61,7 +64,7 @@ public class UserFunctions {
     }
 
     // Function to  Register
-    public JSONObject registerUser(String fname, String lname, String email, String uname, String password, String phonenumber){
+    public JSONObject registerUser(String fname, String lname, String email, String uname, String password, String phonenumber) {
         // Building Parameters
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", register_tag));
@@ -78,9 +81,23 @@ public class UserFunctions {
     }
 
     // Function to logout user
-    public boolean logoutUser(Context context){
+    public boolean logoutUser(Context context) {
         DatabaseHandler db = new DatabaseHandler(context);
         db.resetTables();
         return true;
+    }
+
+    // Function to fetch friends
+    public JSONObject fetchFriends(Context context) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        HashMap user = db.getUserDetails();
+        String email = user.get(Cons.KEY_EMAIL).toString();
+
+        // Building Parameters
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", fetchfriends_tag));
+        params.add(new BasicNameValuePair("email", email));
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
+        return json;
     }
 }
