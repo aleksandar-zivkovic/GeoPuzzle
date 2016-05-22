@@ -34,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         mEmailEdit = (EditText) findViewById(R.id.emailEdit);
         mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
