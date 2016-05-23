@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MapActivity extends AppCompatActivity {
-
     public static final int SHOW_MAP = 0;
     public static final int CENTER_PLACE_ON_MAP = 1;
     public static final int SELECT_COORDINATES = 2;
@@ -39,6 +38,7 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
 
         try {
             Intent mapIntent = getIntent();
@@ -56,25 +56,24 @@ public class MapActivity extends AppCompatActivity {
             Log.d("Error", "Error reading state");
         }
 
-        setContentView(R.layout.activity_map);
         map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-       if(state == SHOW_MAP)
-           map.setMyLocationEnabled(true);
+        if(state == SHOW_MAP)
+               map.setMyLocationEnabled(true);
         else if(state == SELECT_COORDINATES)
-           map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-               @Override
-               public void onMapClick(LatLng latLng) {
-                  if(state == SELECT_COORDINATES && selCoordsEnabled) {
-                      String lon = Double.toString(latLng.longitude);
-                      String lat = Double.toString(latLng.latitude);
-                      Intent locationIntent = new Intent();
-                      locationIntent.putExtra("lon", lon);
-                      locationIntent.putExtra("lat", lat);
-                      setResult(Activity.RESULT_OK, locationIntent);
-                      finish();
-                  }
-               }
-           });
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    if(state == SELECT_COORDINATES && selCoordsEnabled) {
+                        String lon = Double.toString(latLng.longitude);
+                        String lat = Double.toString(latLng.latitude);
+                        Intent locationIntent = new Intent();
+                        locationIntent.putExtra("lon", lon);
+                        locationIntent.putExtra("lat", lat);
+                        setResult(Activity.RESULT_OK, locationIntent);
+                        finish();
+                    }
+                }
+            });
         else
            map.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLoc, 15));
 

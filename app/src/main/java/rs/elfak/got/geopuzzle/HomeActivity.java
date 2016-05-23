@@ -13,6 +13,7 @@ import rs.elfak.got.geopuzzle.library.*;
 public class HomeActivity extends AppCompatActivity {
     Button mMyProfileBtn;
     Button mShowMapBtn;
+    Button mUploadPuzzleBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,15 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent map = new Intent(view.getContext(), MapActivity.class);
                     startActivity(map);
+                }
+            });
+
+            mUploadPuzzleBtn = (Button) findViewById(R.id.uploadPuzzleBtn);
+            mUploadPuzzleBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent upload = new Intent(view.getContext(), CreatePuzzle.class);
+                    startActivity(upload);
                 }
             });
         }

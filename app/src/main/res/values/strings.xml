@@ -11,6 +11,7 @@
     <string name="title_activity_search_friends">Search people</string>
     <string name="title_activity_friends">My Friends</string>
     <string name="title_activity_friend">Friend</string>
+    <string name="title_activity_create_puzzle">Create puzzle</string>
 
     <!-- Toast messages constatns -->
     <string name="msg_first_name_empty">First name field empty</string>
@@ -41,6 +42,7 @@
     <string name="msg_invalid_email">Invalid Email address</string>
     <string name="msg_registration_error">Error occured in registration</string>
     <string name="msg_friends_list_empty">Friends list empty</string>
+
     <string name="enter_new_password">Enter new password</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
@@ -60,6 +62,7 @@
     <string name="search_for_friends">Search For Friends</string>
     <string name="logout">Logout</string>
     <string name="fill_form">Please fill form to register</string>
+    <string name="fill_puzzle">Please fill form to create puzzle</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="enter_lastname">Enter lastname</string>
@@ -74,4 +77,8 @@
     <string name="registration_successful">Registration successful!</string>
     <string name="registred_at">Registred at</string>
     <string name="go_to_login">Go to Login</string>
+
+    <string name="puzzle_name_new">Puzzle name</string>
+    <string name="enter_puzzle_name">Enter puzzle name</string>
+    <string name="puzzle_pattern">Choose puzzle pattern</string>
 </resources>
