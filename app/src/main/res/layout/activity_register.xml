@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="rs.elfak.got.geopuzzle.RegisterActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -11,22 +14,14 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <TextView android:text="Register to GeoPuzzle"
+            <TextView
+                android:text="@string/fill_form"
                 android:layout_height="40dp"
                 android:layout_width="match_parent"
                 android:textColor="#000000"
-                android:textSize="30dp"
-                android:gravity="center"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"/>
-
-            <TextView android:text="Please fill form to register:"
-                android:layout_height="40dp"
-                android:layout_width="match_parent"
-                android:textColor="#000000"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginTop="20dp"
                 android:typeface="normal" />
@@ -37,21 +32,23 @@
                 android:gravity="center"
                 android:layout_marginRight="25dp">
 
-                <TextView android:text="First Name"
+                <TextView
+                    android:text="@string/first_name"
                     android:layout_height="40dp"
                     android:layout_width="100dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="5dp"/>
 
-                <EditText android:id="@+id/firstNameEdit"
+                <EditText
+                    android:id="@+id/firstNameEdit"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:inputType="text"
-                    android:hint="Enter firstname"/>
+                    android:hint="@string/enter_firstname"/>
             </LinearLayout>
 
             <LinearLayout
@@ -60,21 +57,23 @@
                 android:gravity="center"
                 android:layout_marginRight="25dp">
 
-                <TextView android:text="Last Name"
+                <TextView
+                    android:text="@string/last_name"
                     android:layout_height="40dp"
                     android:layout_width="100dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="5dp"/>
 
-                <EditText android:id="@+id/lastNameEdit"
+                <EditText
+                    android:id="@+id/lastNameEdit"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:inputType="text"
-                    android:hint="Enter lastname"/>
+                    android:hint="@string/enter_lastname"/>
             </LinearLayout>
 
             <LinearLayout
@@ -83,11 +82,12 @@
                 android:gravity="center"
                 android:layout_marginRight="25dp">
 
-                <TextView android:text="Email"
+                <TextView
+                    android:text="@string/email"
                     android:layout_height="40dp"
                     android:layout_width="100dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="5dp"/>
 
@@ -95,9 +95,9 @@
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:inputType="textEmailAddress"
-                    android:hint="Enter email"/>
+                    android:hint="@string/enter_email"/>
             </LinearLayout>
 
             <LinearLayout
@@ -106,11 +106,11 @@
                 android:gravity="center"
                 android:layout_marginRight="25dp">
 
-                <TextView android:text="Username"
+                <TextView android:text="@string/username"
                     android:layout_height="40dp"
                     android:layout_width="100dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="5dp"/>
 
@@ -118,9 +118,9 @@
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:inputType="text"
-                    android:hint="Enter username"/>
+                    android:hint="@string/enter_username"/>
             </LinearLayout>
 
             <LinearLayout
@@ -129,20 +129,20 @@
                 android:gravity="center"
                 android:layout_marginRight="25dp">
 
-                <TextView android:text="Password"
+                <TextView android:text="@string/password"
                     android:layout_height="40dp"
                     android:layout_width="100dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="5dp"/>
 
                 <EditText android:id="@+id/passwordEdit"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:inputType="textPassword"
-                    android:hint="Enter password"/>
+                    android:hint="@string/enter_password"/>
             </LinearLayout>
 
             <LinearLayout
@@ -151,20 +151,20 @@
                 android:gravity="center"
                 android:layout_marginRight="25dp">
 
-                <TextView android:text="Confirm password"
+                <TextView android:text="@string/confirm_password"
                     android:layout_height="40dp"
                     android:layout_width="100dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="5dp"/>
 
                 <EditText android:id="@+id/confirmPasswordEdit"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:inputType="textPassword"
-                    android:hint="Confirm password"/>
+                    android:hint="@string/confirm_password"/>
             </LinearLayout>
 
             <LinearLayout
@@ -173,20 +173,20 @@
                 android:gravity="center"
                 android:layout_marginRight="25dp">
 
-                <TextView android:text="Phone number"
+                <TextView android:text="@string/phone_number"
                     android:layout_height="40dp"
                     android:layout_width="100dp"
                     android:textColor="#000000"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="5dp"/>
 
                 <EditText android:id="@+id/phoneNumberEdit"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
-                    android:textSize="15dp"
-                    android:inputType="number"
-                    android:hint="Enter phone number"/>
+                    android:textSize="15sp"
+                    android:inputType="phone"
+                    android:hint="@string/enter_phone_number"/>
             </LinearLayout>
 
             <LinearLayout
@@ -195,16 +195,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp">
-
-                <!--<Button
-                    android:id="@+id/uploadPhotoBtn"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Capture Image"
-                    android:visibility="gone"/>
-
-                -->
 
                 <RelativeLayout
                     android:layout_width="210dp"
@@ -217,7 +207,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|center_horizontal"
-                        android:text="Click to capture image"/>
+                        android:text="@string/tap_to_capture_image"/>
 
                     <ImageView
                         android:id="@+id/ivImage"
@@ -234,17 +224,16 @@
                     android:id="@+id/registerBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Register"
+                    android:text="@string/register"
                     android:layout_marginTop="10dp"/>
 
                 <Button
                     android:id="@+id/cancelBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Cancel"
+                    android:text="@string/cancel"
                     android:layout_marginTop="10dp"/>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

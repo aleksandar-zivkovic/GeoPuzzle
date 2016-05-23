@@ -11,8 +11,8 @@ import java.util.HashMap;
 import rs.elfak.got.geopuzzle.library.*;
 
 public class HomeActivity extends AppCompatActivity {
-
     Button mMyProfileBtn;
+    Button mShowMapBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,15 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent myProfile = new Intent(view.getContext(), ProfileActivity.class);
                     startActivity(myProfile);
+                }
+            });
+
+            mShowMapBtn = (Button) findViewById(R.id.showMapBtn);
+            mShowMapBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent map = new Intent(view.getContext(), MapActivity.class);
+                    startActivity(map);
                 }
             });
         }
