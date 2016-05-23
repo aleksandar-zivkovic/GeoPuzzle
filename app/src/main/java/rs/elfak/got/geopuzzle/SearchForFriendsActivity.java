@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.DataInputStream;
@@ -35,51 +36,67 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import rs.elfak.got.geopuzzle.library.Cons;
+import rs.elfak.got.geopuzzle.library.DatabaseHandler;
 
 public class SearchForFriendsActivity extends AppCompatActivity {
-
-    public static final int SOCKET_CONNECTED = 1;
-    public static final int DATA_RECEIVED = 2;
 
     private UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothServerSocket mServerSocket;
-    private BluetoothSocket mBluetoothSocket;
-    private BluetoothDevice mDevice;
     private BluetoothDevice mSelectedDevice;
     private Set<BluetoothDevice> mPairedDevices;
+    // check this
+    private BluetoothDevice mRemoteDevice;
+    private ArrayList<String> pairedDeviceStrings;
 
-    private InputStream mInStream;
-    private OutputStream mOutStream;
-
+    private ConnectThread mConnectThread;
     private AcceptThread mAcceptThread;
-//    private ConnectThread mConnectThread;
-//    private ConnectionThread mBluetoothConnection;
+    private ConnectionThread mConnectionThread;
 
     public Handler mHandler;
 
     private ListView mListView;
+    private ListView mListViewPendingFriendRequests;
 
+    private boolean mPositionSet;
     private int mPosition;
+    private int mPositionRemoteEmail;
+    private ArrayList<String> mPendingFriendRequestList;
+    private HashMap mUser;
+    private String mEmail;
+    private String mRemoteEmail;
+    private DatabaseHandler db;
+    private BroadcastReceiver discoveryResult;
 
-    private BluetoothDevice mRemoteDevice;
-    private ArrayList<String> pairedDeviceStrings;
-    private DataOutputStream os;
-    private DataInputStream is;
+    private AlertDialog mDialog;
+    private final boolean[] mAnswer = new boolean[1];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_for_friends);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.mipmap.logo);
+
+        mPendingFriendRequestList = new ArrayList<String>();
+
+        // boolean to ensure that position is always set before starting bluetooth connection
+        mPositionSet = false;
+
+        mDialog = new AlertDialog.Builder(this).create();
+
+        // get my email to send it as a friend request
+        db = new DatabaseHandler(getApplicationContext());
+        mUser = db.getUserDetails();
+        mEmail = (String)mUser.get(Cons.KEY_EMAIL);
 
         mListView = (ListView) findViewById(R.id.userListView);
+        mListViewPendingFriendRequests = (ListView) findViewById(R.id.listViewPendingFriendRequests);
 
         // Enable adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -88,90 +105,124 @@ public class SearchForFriendsActivity extends AppCompatActivity {
             finish();
         }
 
-        mHandler = new Handler();
+        // turn on Bluetooth on startup
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(turnOn, Cons.REQUEST_ENABLE_BT);
+            Toast.makeText(getApplicationContext(),"Bluetooth turned on",Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(),"Bluetooth already turned on", Toast.LENGTH_LONG).show();
+        }
+    }
 
-        // Handler in DataTransferActivity
-//        mHandler = new Handler() {
-//            public void handleMessage(Message msg) {
-//                switch (msg.what) {
-//                    case SOCKET_CONNECTED: {
-//                        mBluetoothConnection = (ConnectionThread) msg.obj;
-//                        mBluetoothConnection.write("EMAIL SENT!!!".getBytes());
-//                        break;
-//                    }
-//                    case DATA_RECEIVED: {
-//                        String data = (String) msg.obj;
-//                        Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
-//                        //mBluetoothConnection.write(data.getBytes());
-//                    }
-//
-//                }
-//            }
-//        };
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case Cons.SOCKET_CONNECTED: {
+                        //mConnectionThread = (ConnectionThread) msg.obj;
+                        //mConnectionThread.write("EMAIL SENT!!!".getBytes());
+                        break;
+                    }
+                    case Cons.DATA_RECEIVED: {
+                        String data = (String) msg.obj;
+
+                        //TODO:
+                        // Check if friend request already pending
+                        if (mPendingFriendRequestList.contains(data.toString())) {
+                            break;
+                        }
+                        // Check if you are already friend with the sender
+                        // my email = mEmail, remote device email = data
+
+
+
+                        mPendingFriendRequestList.add(data);
+                        // add it to pending friend request list
+                        final ArrayAdapter adapter = new ArrayAdapter(SearchForFriendsActivity.this , android.R.layout.simple_list_item_1, mPendingFriendRequestList);
+                        mListViewPendingFriendRequests.setAdapter(adapter);
+
+                        break;
+                    }
+                }
+            }
+        };
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mPosition = position;
-
+                mPositionSet = true;
                 Toast.makeText(getApplicationContext(), "mPosition set to: " + mPosition, Toast.LENGTH_LONG).show();
             }
         });
 
-        BroadcastReceiver discoveryResult = new BroadcastReceiver() {
+        mListViewPendingFriendRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mPositionRemoteEmail = position;
+                String selectedEmail = mPendingFriendRequestList.get(mPositionRemoteEmail);
+                Toast.makeText(getApplicationContext(), "Selected friend request from: " + selectedEmail, Toast.LENGTH_LONG).show();
+
+                // Open a dialog which prompts you to "Accept" or "Decline" friend request
+                mDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Accept", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int buttonId) {
+                        mAnswer[0] = true;
+                    }
+                });
+
+                mDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Decline", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int buttonId) {
+                        mAnswer[0] = false;
+                    }
+                });
+
+                mDialog.show();
+
+                //BlockingConfirmDialog mBlockingConformDialog = new BlockingConfirmDialog(SearchForFriendsActivity.this);
+                //mAnswer[0] = mBlockingConformDialog.confirm("Friend Request", "Accept or decline friend request from " + selectedEmail);
+
+                if (mAnswer[0] == true) {
+                    Toast.makeText(getApplicationContext(), "You have accepted friend request from " + selectedEmail, Toast.LENGTH_LONG).show();
+
+                    //TODO:
+                    // Send POSITIVE response back to the device which sent you friend request
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "You have declined friend request from " + selectedEmail, Toast.LENGTH_LONG).show();
+
+                    //TODO:
+                    // Send NEGATIVE response back to the device which sent you friend request
+
+                }
+
+
+
+
+
+
+
+
+            }
+        });
+
+        discoveryResult = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
-
-
                 String remoteDeviceName = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
                 BluetoothDevice remoteDevice;
-
                 remoteDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
                 Toast.makeText(getApplicationContext(), "Discovered: " + remoteDeviceName + " address " + remoteDevice.getAddress(), Toast.LENGTH_SHORT).show();
-
-                try {
-                    BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(remoteDevice.getAddress());
-
-                    Method m = device.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-
-                    BluetoothSocket clientSocket = (BluetoothSocket) m.invoke(device, 2);
-
-                    clientSocket.connect();
-
-                    os = new DataOutputStream(clientSocket.getOutputStream());
-                    is = new DataInputStream(clientSocket.getInputStream());
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("BLUETOOTH", e.getMessage());
-                }
             }
         };
-
         registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
 
+        // Start listening
         mAcceptThread = new AcceptThread();
         mAcceptThread.start();
-
-    }
-
-    public class ClientSock extends Thread {
-        public void run () {
-            try {
-                os.writeBytes("anything you want"); // anything you want
-                os.flush();
-
-//                Intent intent = new Intent("email");
-//                intent.putExtra("email", "test@elfak.com");
-//                sendBroadcast(intent);
-
-
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                return;
-            }
-        }
     }
 
     public void on(View v){
@@ -183,10 +234,6 @@ public class SearchForFriendsActivity extends AppCompatActivity {
         else {
             Toast.makeText(getApplicationContext(),"Already on", Toast.LENGTH_LONG).show();
         }
-
-        // Create bluetooth server socket to listen for connections
-//        AcceptThread acceptThread = new AcceptThread(mHandler);
-//        acceptThread.run();
     }
 
     public void off(View v){
@@ -204,7 +251,7 @@ public class SearchForFriendsActivity extends AppCompatActivity {
         pairedDeviceStrings = new ArrayList();
 
         for(BluetoothDevice bt : mPairedDevices)
-            pairedDeviceStrings.add(bt.getAddress());
+            pairedDeviceStrings.add(bt.getName() + "\n" + bt.getAddress());
         Toast.makeText(getApplicationContext(),"Showing Paired Devices",Toast.LENGTH_SHORT).show();
 
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pairedDeviceStrings);
@@ -212,63 +259,6 @@ public class SearchForFriendsActivity extends AppCompatActivity {
     }
 
     public void discover(View v) {
-        selectServer();
-    }
-
-    public void send(View v) {
-        String address = pairedDeviceStrings.get(mPosition);
-        mRemoteDevice =  mBluetoothAdapter.getRemoteDevice(address);
-
-//        try {
-//
-//            Method m = mRemoteDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class});
-//            BluetoothSocket clientSocket =  (BluetoothSocket) m.invoke(mRemoteDevice, 2);
-//            clientSocket.connect();
-//            os = new DataOutputStream(clientSocket.getOutputStream());
-//        }
-//        catch (Exception e) {
-//            e.getMessage();
-//        }
-
-        UUID SERIAL_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); // bluetooth serial port service
-        //UUID SERIAL_UUID = device.getUuids()[0].getUuid(); //if you don't know the UUID of the bluetooth device service, you can get it like this from android cache
-
-        BluetoothSocket socket = null;
-
-        try {
-            socket = mRemoteDevice.createRfcommSocketToServiceRecord(SERIAL_UUID);
-        }
-        catch (Exception e) {
-            Log.e("","Error creating socket");
-        }
-
-        try {
-            socket.connect();
-            Log.e("","Connected");
-        }
-        catch (IOException e) {
-            Log.e("",e.getMessage());
-            try {
-                Log.e("","trying fallback...");
-
-                socket =(BluetoothSocket) mRemoteDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mRemoteDevice,2);
-                socket.connect();
-
-                Log.e("","Connected");
-            }
-            catch (Exception e2) {
-                Log.e("", "Couldn't establish Bluetooth connection!");
-            }
-        }
-
-        new ClientSock().start();
-
-    }
-
-
-
-
-    private void selectServer() {
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         ArrayList<String> pairedDeviceStrings = new ArrayList<String>();
         if (pairedDevices.size() > 0) {
@@ -281,7 +271,77 @@ public class SearchForFriendsActivity extends AppCompatActivity {
         startActivityForResult(showDevicesIntent, Cons.SELECT_SERVER);
     }
 
-    // Read data about local adapter
+    public void send(View v) {
+        if (!mPositionSet) {
+            Toast.makeText(this, "You have to choose a device!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // get just the address, not the name
+        String nameAndAddress = pairedDeviceStrings.get(mPosition);
+        String[] split = nameAndAddress.split("\n");
+        String address = split[1];
+        mRemoteDevice =  mBluetoothAdapter.getRemoteDevice(address);
+
+        mConnectThread = new ConnectThread(mRemoteDevice);
+        mConnectThread.start();
+    }
+
+    private class ConnectThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final BluetoothDevice mmDevice;
+
+        public ConnectThread(BluetoothDevice device) {
+            // Use a temporary object that is later assigned to mmSocket, because mmSocket is final
+            BluetoothSocket tmp = null;
+            mmDevice = device;
+
+            // Get a BluetoothSocket to connect with the given BluetoothDevice
+            try {
+                // MY_UUID is the app's UUID string, also used by the server code
+                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+            }
+            catch (IOException e) {
+                e.getMessage();
+            }
+            mmSocket = tmp;
+
+        }
+
+        public void run() {
+            // Cancel discovery because it will slow down the connection
+            mBluetoothAdapter.cancelDiscovery();
+
+            try {
+                // Connect the device through the socket. This will block until it succeeds or throws an exception
+                mmSocket.connect();
+                mConnectionThread = new ConnectionThread(mmSocket);
+            } catch (IOException connectException) {
+                // Unable to connect; close the socket and get out
+                try {
+                    mmSocket.close();
+                }
+                catch (IOException closeException) {
+                    closeException.getMessage();
+                }
+                return;
+            }
+
+            // Do work to manage the connection (in a separate thread)
+            //manageConnectedSocket(mmSocket);
+            //mConnectionThread.start();
+            String stringToSend = mEmail;
+            mConnectionThread.write(stringToSend.getBytes());
+        }
+
+        /** Will cancel an in-progress connection, and close the socket */
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) { }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -330,18 +390,21 @@ public class SearchForFriendsActivity extends AppCompatActivity {
         private final BluetoothServerSocket mmServerSocket;
 
         public AcceptThread() {
-            // Use a temporary object that is later assigned to mmServerSocket,
-            // because mmServerSocket is final
+            // Use a temporary object that is later assigned to mmServerSocket, because mmServerSocket is final
             BluetoothServerSocket tmp = null;
             try {
                 // MY_UUID is the app's UUID string, also used by the client code
-                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("email", MY_UUID);
-            } catch (IOException e) { }
+                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("friendRequest", MY_UUID);
+            }
+            catch (IOException e) { }
             mmServerSocket = tmp;
         }
 
         public void run() {
             BluetoothSocket socket = null;
+            byte[] buffer = new byte[1024];
+            int bytes;
+
             // Keep listening until exception occurs or a socket is returned
             while (true) {
                 try {
@@ -352,124 +415,108 @@ public class SearchForFriendsActivity extends AppCompatActivity {
                 // If a connection was accepted
                 if (socket != null) {
                     // Do work to manage the connection (in a separate thread)
-
-                    //manageConnectedSocket(socket);
-                    Toast.makeText(getApplicationContext(),"RECEIVED!!!!!!!!!",Toast.LENGTH_SHORT).show();
-
                     try {
+                        bytes = socket.getInputStream().read(buffer);
+                        String data = new String(buffer, 0, bytes);
+
+                        // this message cannot be handled here, because this is worker thread
+                        // so we use this handler to send it to send it as message to main thread
+                        mHandler.obtainMessage(Cons.DATA_RECEIVED, data).sendToTarget();
                         mmServerSocket.close();
                     }
                     catch (Exception e) {
                         e.getMessage();
                     }
-
-
                     break;
                 }
             }
         }
+    }
 
-        /** Will cancel the listening socket, and cause the thread to finish */
+    private class ConnectionThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+
+        public ConnectionThread(BluetoothSocket socket) {
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+            // Get the input and output streams, using temp objects because
+            // member streams are final
+            try {
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) { }
+
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+        }
+
+        /* Call this from the main activity to send data to the remote device */
+        public void write(byte[] bytes) {
+            try {
+                mmOutStream.write(bytes);
+            } catch (IOException e) { }
+        }
+
+        /* Call this from the main activity to shutdown the connection */
         public void cancel() {
             try {
-                mmServerSocket.close();
+                mmSocket.close();
             } catch (IOException e) { }
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(discoveryResult);
+    }
 
-//    class AcceptThread extends Thread {
-//        public AcceptThread(Handler handler) {
+//    public static class BlockingConfirmDialog {
 //
-//            try {
+//        private Activity context;
 //
-//                mServerSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("friendRequest", MY_UUID);
-//            } catch (IOException e) {
-//                e.getMessage();
-//            }
-//        }
+//        BlockingQueue<Boolean> blockingQueue;
 //
-//        public void run() {
-//            while (true) {
-//                try {
-//                    mBluetoothSocket = mServerSocket.accept();
-//                    manageConnectedSocket();
-//                    mServerSocket.close();
-//                    break;
-//                } catch (IOException e1) {
-//                    e1.getMessage();
-//                }
-//            }
-//        }
-//
-//        public void manageConnectedSocket() {
-//
-//        }
-//    }
-
-//    public class ConnectThread extends Thread {
-//        public ConnectThread(String deviceID, Handler handler) {
-//            mDevice = mBluetoothAdapter.getRemoteDevice(deviceID);
-//            try {
-//                mBluetoothSocket = mDevice.createRfcommSocketToServiceRecord(MY_UUID);
-//            } catch (IOException e) {
-//                e.getMessage();
-//            }
-//        }
-//
-//        public void run() {
-//            mBluetoothAdapter.cancelDiscovery();
-//            try {
-//                mBluetoothSocket.connect();
-//                manageConnectedSocket();
-//            } catch (IOException connectException) {
-//                connectException.getMessage();
-//            }
-//        }
-//
-//        private void manageConnectedSocket() {
-//            ConnectionThread conn = new ConnectionThread(mBluetoothSocket, mHandler);
-//            mHandler.obtainMessage(SOCKET_CONNECTED, conn).sendToTarget();
-//            conn.start();
-//        }
-//    }
-//
-//    public class ConnectionThread extends Thread {
-//
-//        ConnectionThread(BluetoothSocket socket, Handler handler) {
+//        public BlockingConfirmDialog(Activity activity) {
 //            super();
-//            mBluetoothSocket = socket;
-//            mHandler = handler;
-//            try {
-//                mInStream = mBluetoothSocket.getInputStream();
-//                mOutStream = mBluetoothSocket.getOutputStream();
-//            } catch (IOException e) {
-//
-//            }
+//            this.context = activity;
+//            blockingQueue = new ArrayBlockingQueue<Boolean>(1);
 //        }
 //
-//        public void run() {
-//            byte[] buffer = new byte[1024];
-//            int bytes;
-//            while (true) {
-//                try {
-//                    bytes = mInStream.read(buffer);
-//                    String data = new String(buffer, 0, bytes);
-//                    mHandler.obtainMessage(DATA_RECEIVED, data).sendToTarget();
-//                } catch (IOException e) {
-//                    break;
+//        public boolean confirm(final String title, final String message){
+//
+//            context.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    new AlertDialog.Builder(context)
+//                            .setTitle(title)
+//                            .setMessage(message)
+//                            .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    blockingQueue.add(true);
+//                                }
+//                            })
+//                            .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    blockingQueue.add(false);
+//                                }
+//                            })
+//                            .show();
 //                }
-//            }
-//        }
-//        public void write(byte[] bytes) {
-//            try {
-//                mOutStream.write(bytes);
-//            } catch (IOException e) {
+//            });
 //
+//            try {
+//                return blockingQueue.take();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//                return false;
 //            }
 //        }
 //    }
-
-
 
 }
