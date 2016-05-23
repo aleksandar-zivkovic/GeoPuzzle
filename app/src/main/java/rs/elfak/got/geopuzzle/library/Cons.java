@@ -19,8 +19,7 @@ public class Cons {
 
     public static final String KEY_FRIENDS_NUM = "friendsNum";
 
-    public static final int REQUEST_ENABLE_BT = 100;
-    public static final int SELECT_SERVER = 200;
+
 
     // used for key-value pairs in values table
     public static final String KEY_KEY_NAME = "key";
@@ -30,4 +29,10 @@ public class Cons {
 
 
     public static final String KEY_UPLOADS_URL = "http://vasic.ddns.net/geopuzzle_login_api/uploads/";
+
+    public static final int REQUEST_ENABLE_BT = 100;
+    public static final int SELECT_SERVER = 200;
+    public static final int KEY_MESSAGE_READ = 300;
+    public static final int SOCKET_CONNECTED = 400;
+    public static final int DATA_RECEIVED = 500;
 }

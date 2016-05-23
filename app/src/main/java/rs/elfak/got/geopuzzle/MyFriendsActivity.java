@@ -127,12 +127,12 @@ public class MyFriendsActivity extends AppCompatActivity {
 
                     if(Integer.parseInt(res) == 1) {
                         pDialog.setTitle(R.string.msg_getting_data);
-                        pDialog.setMessage("Loading friends list...");
 
                         int friendsNum = json.getInt(Cons.KEY_FRIENDS_NUM);
                         if(friendsNum == 0)
                             Toast.makeText(getApplicationContext(), R.string.msg_friends_list_empty, Toast.LENGTH_SHORT).show();
                         else {
+                        pDialog.setMessage("Loading friends list...");
                             ArrayList<String> friendNames = new ArrayList<String>();
                             ArrayList<String> friendEmails = new ArrayList<String>();
                             for(int i = 1; i <= friendsNum; i++) {
