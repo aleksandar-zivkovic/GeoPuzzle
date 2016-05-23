@@ -45,7 +45,7 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"/>
         <activity
-            android:name=".MapsActivity"
+            android:name=".MapActivity"
             android:label="@string/title_activity_map" />
         <activity
             android:name=".ProfileActivity"

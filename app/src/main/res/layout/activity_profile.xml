@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="rs.elfak.got.geopuzzle.ProfileActivity">
 
     <RelativeLayout
         android:layout_width="210dp"
@@ -29,7 +32,7 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:textColor="#000000"
-        android:textSize="25dp"/>
+        android:textSize="25sp"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -37,33 +40,30 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginTop="40dp">
-
+        android:layout_marginTop="20dp">
 
         <Button
             android:id="@+id/viewMyFriendsBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="My Friends"/>
+            android:text="@string/title_activity_friends"/>
 
         <Button
             android:id="@+id/searchForFriendsBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search For Friends"/>
+            android:text="@string/search_for_friends"/>
 
         <Button
             android:id="@+id/changePasswordBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Change Password"/>
+            android:text="@string/title_activity_change_password"/>
 
         <Button
             android:id="@+id/logoutBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout"/>
-
+            android:text="@string/logout"/>
     </LinearLayout>
-
 </LinearLayout>

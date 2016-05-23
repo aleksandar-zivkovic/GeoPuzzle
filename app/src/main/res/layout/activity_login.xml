@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    ><!--android:background="@drawable/android"-->
+    tools:context="rs.elfak.got.geopuzzle.LoginActivity">
 
-    <TextView android:text="Welcome to GeoPuzzle"
+    <TextView
+        android:text="@string/welcome_to_geopuzzle"
         android:layout_height="40dp"
         android:layout_width="match_parent"
         android:textColor="#000000"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:gravity="center"
         android:layout_marginTop="20dp"/>
 
-    <TextView android:text="Enter your credentials to login:"
+    <TextView
+        android:text="@string/enter_credentials"
         android:layout_height="40dp"
         android:layout_width="match_parent"
         android:textColor="#000000"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:gravity="center"
         android:layout_marginTop="20dp"
         android:typeface="normal" />
@@ -29,21 +32,23 @@
         android:gravity="center"
         android:layout_marginRight="25dp">
 
-        <TextView android:text="Email"
+        <TextView
+            android:text="@string/email"
             android:layout_height="40dp"
             android:layout_width="100dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
 
-        <EditText android:id="@+id/emailEdit"
+        <EditText
+            android:id="@+id/emailEdit"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:inputType="textEmailAddress"
-            android:hint="Enter email"/>
+            android:hint="@string/enter_email"/>
     </LinearLayout>
 
     <LinearLayout
@@ -52,28 +57,30 @@
         android:gravity="center"
         android:layout_marginRight="25dp">
 
-        <TextView android:text="Password"
+        <TextView
+            android:text="@string/password"
             android:layout_height="40dp"
             android:layout_width="100dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
 
-        <EditText android:id="@+id/passwordEdit"
+        <EditText
+            android:id="@+id/passwordEdit"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:inputType="textPassword"
-            android:hint="Enter password"/>
+            android:hint="@string/enter_password"/>
     </LinearLayout>
 
     <CheckBox
         android:id="@+id/keepLoggedInChk"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:text="Keep me logged in"
+        android:text="@string/keep_logged_in"
         android:gravity="center_vertical|center"
         android:layout_marginLeft="110dp"
         android:layout_marginRight="110dp"
@@ -83,8 +90,8 @@
         android:id="@+id/loginBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text="Login"
+        android:textSize="15sp"
+        android:text="@string/login"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="20dp"
@@ -94,8 +101,8 @@
         android:id="@+id/resetPasswordBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text="Reset password"
+        android:textSize="15sp"
+        android:text="@string/reset_password"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
@@ -108,11 +115,12 @@
         android:orientation="vertical"
         android:layout_marginBottom="50dp">
 
-        <TextView android:text="You dont have account?"
+        <TextView
+            android:text="@string/dont_have_account"
             android:layout_height="35dp"
             android:layout_width="match_parent"
             android:textColor="#000000"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_marginTop="20dp"/>
 
@@ -120,11 +128,10 @@
             android:id="@+id/registerBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:text="Register here"
+            android:textSize="15sp"
+            android:text="@string/register_here"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:gravity="center_vertical|center"/>
     </LinearLayout>
-
 </LinearLayout>

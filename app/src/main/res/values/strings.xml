@@ -5,11 +5,11 @@
     <string name="title_activity_login">Login to GeoPuzzle</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_register">Register</string>
+    <string name="title_activity_register">Register to GeoPuzzle</string>
     <string name="title_activity_registration_success">Registration successful</string>
     <string name="title_activity_reset_password">Reset password</string>
     <string name="title_activity_search_friends">Search people</string>
-    <string name="title_activity_friends">Friends</string>
+    <string name="title_activity_friends">My Friends</string>
     <string name="title_activity_friend">Friend</string>
 
     <!-- Toast messages constatns -->
@@ -41,4 +41,37 @@
     <string name="msg_invalid_email">Invalid Email address</string>
     <string name="msg_registration_error">Error occured in registration</string>
     <string name="msg_friends_list_empty">Friends list empty</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="cancel">Cancel</string>
+    <string name="my_profile">My Profile</string>
+    <string name="show_map">Show map</string>
+    <string name="welcome_to_geopuzzle">Welcome to GeoPuzzle</string>
+    <string name="enter_credentials">Enter your credentials to login</string>
+    <string name="email">Email</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="keep_logged_in">Keep me logged in</string>
+    <string name="login">Login</string>
+    <string name="reset_password">Reset password</string>
+    <string name="register_here">Register here</string>
+    <string name="dont_have_account">You dont have account?</string>
+    <string name="search_for_friends">Search For Friends</string>
+    <string name="logout">Logout</string>
+    <string name="fill_form">Please fill form to register</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="enter_lastname">Enter lastname</string>
+    <string name="username">Username</string>
+    <string name="enter_username">Enter username</string>
+    <string name="phone_number">Phone number</string>
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="tap_to_capture_image">Tap to capture image</string>
+    <string name="register">Register</string>
+    <string name="enter_firstname">Enter firstname</string>
+    <string name="registration_details">Your Registration Details</string>
+    <string name="registration_successful">Registration successful!</string>
+    <string name="registred_at">Registred at</string>
+    <string name="go_to_login">Go to Login</string>
 </resources>

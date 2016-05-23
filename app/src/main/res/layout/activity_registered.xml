@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    ><!--android:background="@drawable/android"-->
+    tools:context="rs.elfak.got.geopuzzle.RegisteredActivity">
 
-    <TextView android:text="Registration successful!"
+    <TextView
+        android:text="@string/registration_details"
         android:layout_height="40dp"
         android:layout_width="match_parent"
         android:textColor="#000000"
-        android:textSize="30dp"
-        android:gravity="center"
-        android:layout_marginTop="20dp"/>
-
-    <TextView android:text="Your Registration Details:"
-        android:layout_height="40dp"
-        android:layout_width="match_parent"
-        android:textColor="#000000"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:gravity="center"
         android:layout_marginTop="20dp"
         android:typeface="normal" />
@@ -28,19 +23,21 @@
         android:gravity="center"
         android:layout_marginRight="25dp">
 
-        <TextView android:text="First Name:"
+        <TextView
+            android:text="@string/first_name"
             android:layout_height="40dp"
             android:layout_width="100dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
 
-        <TextView android:id="@+id/firstNameText"
+        <TextView
+            android:id="@+id/firstNameText"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical"
             android:inputType="none"/>
     </LinearLayout>
@@ -51,19 +48,21 @@
         android:gravity="center"
         android:layout_marginRight="25dp">
 
-        <TextView android:text="Last Name:"
+        <TextView
+            android:text="@string/last_name"
             android:layout_height="40dp"
             android:layout_width="100dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
 
-        <TextView android:id="@+id/lastNameText"
+        <TextView
+            android:id="@+id/lastNameText"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical"
             android:inputType="none"/>
     </LinearLayout>
@@ -74,11 +73,12 @@
         android:gravity="center"
         android:layout_marginRight="25dp">
 
-        <TextView android:text="Email:"
+        <TextView
+            android:text="@string/email"
             android:layout_height="40dp"
             android:layout_width="100dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
 
@@ -86,7 +86,7 @@
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical"
             android:inputType="none"/>
     </LinearLayout>
@@ -97,19 +97,21 @@
         android:gravity="center"
         android:layout_marginRight="25dp">
 
-        <TextView android:text="Username:"
+        <TextView
+            android:text="@string/username"
             android:layout_height="40dp"
             android:layout_width="100dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
 
-        <TextView android:id="@+id/usernameText"
+        <TextView
+            android:id="@+id/usernameText"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical"
             android:inputType="none"/>
     </LinearLayout>
@@ -120,19 +122,21 @@
         android:gravity="center"
         android:layout_marginRight="25dp">
 
-        <TextView android:text="Phone number:"
+        <TextView
+            android:text="@string/phone_number"
             android:layout_height="40dp"
             android:layout_width="100dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
 
-        <TextView android:id="@+id/phoneNumberText"
+        <TextView
+            android:id="@+id/phoneNumberText"
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical"
             android:inputType="none" />
     </LinearLayout>
@@ -143,11 +147,11 @@
         android:gravity="center"
         android:layout_marginRight="25dp">
 
-        <TextView android:text="Registred at:"
+        <TextView android:text="@string/registred_at"
             android:layout_height="40dp"
             android:layout_width="100dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
 
@@ -155,7 +159,7 @@
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical"
             android:inputType="none"/>
     </LinearLayout>
@@ -171,8 +175,7 @@
             android:id="@+id/goToLoginBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Go to Login"
+            android:text="@string/go_to_login"
             android:layout_marginTop="10dp"/>
     </LinearLayout>
-
 </LinearLayout>
