@@ -10,21 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5e0f21-5072-4c05-a379-712d84789b38" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pattern22.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pattern22checked.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pattern23.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pattern23checked.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pattern33.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pattern33checked.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/rs/elfak/got/geopuzzle/CreatePuzzle.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_create_puzzle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/rs/elfak/got/geopuzzle/HomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/rs/elfak/got/geopuzzle/HomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/rs/elfak/got/geopuzzle/MapActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/rs/elfak/got/geopuzzle/MapActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
     </list>
     <ignored path="GeoPuzzle.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,8 +52,8 @@
       <file leaf-file-name="CreatePuzzle.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/rs/elfak/got/geopuzzle/CreatePuzzle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38636363">
-              <caret line="23" column="41" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.3090909">
+              <caret line="19" column="49" selection-start-line="19" selection-start-column="49" selection-end-line="19" selection-end-column="49" />
               <folding>
                 <element signature="e#959#1262#0" expanded="true" />
                 <element signature="e#1261#1262#0" expanded="true" />
@@ -2576,7 +2562,13 @@
       <option name="project" value="LOCAL" />
       <updated>1464011930106</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Started working on geolocation and puzzle upload and placement on map.">
+      <created>1464016343071</created>
+      <option name="number" value="00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1464016343071</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -2674,7 +2666,8 @@
     <MESSAGE value="Updated friend list..." />
     <MESSAGE value="Bluetooth..." />
     <MESSAGE value="Layout updated, added MapActivity." />
-    <option name="LAST_COMMIT_MESSAGE" value="Layout updated, added MapActivity." />
+    <MESSAGE value="Started working on geolocation and puzzle upload and placement on map." />
+    <option name="LAST_COMMIT_MESSAGE" value="Started working on geolocation and puzzle upload and placement on map." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3170,8 +3163,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/rs/elfak/got/geopuzzle/CreatePuzzle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38636363">
-          <caret line="23" column="41" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+        <state vertical-scroll-proportion="0.3090909">
+          <caret line="19" column="49" selection-start-line="19" selection-start-column="49" selection-end-line="19" selection-end-column="49" />
           <folding>
             <element signature="e#959#1262#0" expanded="true" />
             <element signature="e#1261#1262#0" expanded="true" />
