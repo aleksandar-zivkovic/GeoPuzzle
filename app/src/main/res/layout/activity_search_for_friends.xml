@@ -19,15 +19,23 @@
             android:id="@+id/buttonOn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Turn On"
+            android:text="Turn On Bluetooth"
             android:onClick="on"
             />
         <Button
             android:id="@+id/buttonOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="turn off"
+            android:text="Turn Off Bluetooth"
             android:onClick="off"
+            />
+
+        <Button
+            android:id="@+id/buttonVisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get visible"
+            android:onClick="visible"
             />
 
         <TextView
@@ -57,14 +65,6 @@
         android:layout_marginTop="20dp">
 
         <Button
-            android:id="@+id/buttonVisible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get visible"
-            android:onClick="visible"
-            />
-
-        <Button
             android:id="@+id/buttonList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,20 +81,29 @@
             />
 
         <Button
-            android:id="@+id/buttonStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Listening"
-            android:onClick="start"
-            />
-
-        <Button
             android:id="@+id/buttonSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send"
+            android:text="Send Friend Request"
             android:onClick="send"
             />
+
+        <TextView
+            android:id="@+id/textViewPendingFriendRequests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pending Friend Requests:"
+            android:textColor="#068fff"
+            android:textSize="25dp"
+            android:layout_marginTop="20dp"
+            />
+
+        <ListView
+            android:id="@+id/listViewPendingFriendRequests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        </ListView>
 
     </LinearLayout>
 
