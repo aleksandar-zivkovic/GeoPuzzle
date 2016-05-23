@@ -164,8 +164,6 @@ public class RegisterActivity extends AppCompatActivity {
         mCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
-//                startActivityForResult(myIntent, 0);
                 finish();
             }
         });
@@ -280,7 +278,9 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             protected Object doInBackground(Object[] params) {
                 UserFunctions userFunction = new UserFunctions();
-                saveFile(bitmapRotate, file);
+                float aspect = ((float)bitmapRotate.getWidth())/((float)bitmapRotate.getHeight());
+                Bitmap resized = Bitmap.createScaledBitmap(bitmapRotate, Cons.KEY_MAX_WIDTH, (int)(Cons.KEY_MAX_WIDTH/aspect), false);
+                saveFile(resized, file);
                 return userFunction.registerUser(firstName, lastName, email, username, password, phoneNumber);
             }
 
@@ -366,7 +366,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 ivImage.setVisibility(View.VISIBLE);
-                ivImage.setImageBitmap(bitmapRotate);
+                float aspect = ((float)bitmapRotate.getWidth())/((float)bitmapRotate.getHeight());
+                ivImage.setImageBitmap(Bitmap.createScaledBitmap(bitmapRotate, Cons.KEY_MAX_WIDTH, (int)(Cons.KEY_MAX_WIDTH/aspect), false));
 
                 //Saving image to mobile internal memory for sometime
                 String root = getApplicationContext().getFilesDir().toString();

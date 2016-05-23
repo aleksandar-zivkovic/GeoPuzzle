@@ -28,6 +28,7 @@ public class Cons {
     public static final String KEY_LOGGED_IN = "loggedIn";
     public static final String KEY_KEEP_LOGGED_IN = "keepLoggedIn";
 
+    public static final int KEY_MAX_WIDTH = 600;
 
     public static final String KEY_UPLOADS_URL = "http://vasic.ddns.net/geopuzzle_login_api/uploads/";
 }

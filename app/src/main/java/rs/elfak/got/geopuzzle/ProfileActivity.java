@@ -62,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null && bundle.getString(Cons.KEY_EMAIL) != null) {
             state = STATE_FRIEND_PROFILE;
+            this.setTitle(R.string.title_activity_friend);
 
             mLogoutBtn.setVisibility(View.INVISIBLE);
             mChangePasswordBtn.setVisibility(View.INVISIBLE);
@@ -70,10 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             // Sets user first name and last name in text view
             titleText.setText(bundle.getString(Cons.KEY_FULLNAME));
-
             mEmail = bundle.getString(Cons.KEY_EMAIL);
-
-            this.setTitle(R.string.title_activity_friend);
         }
         else {
             state = STATE_USER_PROFILE;
@@ -136,7 +134,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            return (Bitmap) loadImageFromNetwork((String) params[0]);
+            return (Bitmap) UserFunctions.loadImageFromNetwork((String) params[0]);
         }
 
         @Override
@@ -145,17 +143,6 @@ public class ProfileActivity extends AppCompatActivity {
                 mUserImageView.setImageBitmap((Bitmap) o);
 
             pDialog.dismiss();
-        }
-
-        private Bitmap loadImageFromNetwork(String url){
-            try {
-                Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
-                return bitmap;
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
         }
     }
 }
