@@ -1,3 +1,6 @@
 keytool -list -alias androiddebugkey -keystore C:/Users/Milan/.android/debug.keystore -storepass android -keypass android –v
 
 AIzaSyDy3ey8VptsAlLw0vk0E3uDKAtNZurko9o
+
+OAuth ClientID: 613497862690-n2m2n77kf33slihr0s0lhbi8plcraugc.apps.googleusercontent.com
+Secret: kgd8FdOxAAfL5Xnj63raWL4b

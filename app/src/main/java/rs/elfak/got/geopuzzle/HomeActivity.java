@@ -14,6 +14,7 @@ public class HomeActivity extends AppCompatActivity {
     Button mMyProfileBtn;
     Button mShowMapBtn;
     Button mUploadPuzzleBtn;
+    Button mGeoPuzzleServiceBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,15 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent upload = new Intent(view.getContext(), CreatePuzzle.class);
                     startActivity(upload);
+                }
+            });
+
+            mGeoPuzzleServiceBtn = (Button) findViewById(R.id.geoPuzzleServiceBtn);
+            mGeoPuzzleServiceBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent service = new Intent(view.getContext(), ServiceActivity.class);
+                    startActivity(service);
                 }
             });
         }

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 
 /**
  * Created by Milan on 14.5.2016..
@@ -30,6 +31,7 @@ public class UserFunctions {
     private static String forpass_tag = "forpass";
     private static String chgpass_tag = "chgpass";
     private static String fetchfriends_tag = "fetchfriends";
+    private static String update_location_tag = "updatelocation";
 
     // constructor
     public UserFunctions() {
@@ -101,6 +103,22 @@ public class UserFunctions {
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", fetchfriends_tag));
         params.add(new BasicNameValuePair("email", email));
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
+        return json;
+    }
+
+    // Function to update user location on server
+    public JSONObject updateLocation(Context context, Location location) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        HashMap user = db.getUserDetails();
+        String email = user.get(Cons.KEY_EMAIL).toString();
+
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", update_location_tag));
+        params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("latitude", String.valueOf(location.getLatitude())));
+        params.add(new BasicNameValuePair("longitude", String.valueOf(location.getLongitude())));
+
         JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
         return json;
     }

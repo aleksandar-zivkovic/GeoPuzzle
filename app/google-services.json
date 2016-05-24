@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "574898370431",
+    "project_id": "geopuzzle-7d9f1"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574898370431:android:b4eede9f7ec95dd9",
+        "android_client_info": {
+          "package_name": "rs.elfak.got.geopuzzle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574898370431-35hl1tgfj05c1njtn9sbilil75c1rjos.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "rs.elfak.got.geopuzzle",
+            "certificate_hash": "A5555E83151F95ADDEEB60770C9C45BF1F01D9B6"
+          }
+        },
+        {
+          "client_id": "574898370431-u8shn6uaodbejgimevqa33opfreg7e7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpau4HC6imRPreVdncORAidQxZWKTWUZE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
