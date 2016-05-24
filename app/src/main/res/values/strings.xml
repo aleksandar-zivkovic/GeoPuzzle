@@ -81,4 +81,9 @@
     <string name="puzzle_name_new">Puzzle name</string>
     <string name="enter_puzzle_name">Enter puzzle name</string>
     <string name="puzzle_pattern">Choose puzzle pattern</string>
+    <string name="start_service">Start service</string>
+    <string name="stop_service">Stop service</string>
+    <string name="geopuzzle_service">GeoPuzzle service</string>
+    <string name="google_app_id">1:574898370431:android:b4eede9f7ec95dd9</string>
+    <string name="server_client_id">613497862690-n2m2n77kf33slihr0s0lhbi8plcraugc.apps.googleusercontent.com</string>
 </resources>
