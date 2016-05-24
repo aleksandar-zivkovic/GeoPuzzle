@@ -1,6 +1,9 @@
 package rs.elfak.got.geopuzzle;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
@@ -14,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import java.io.IOException;
 import android.widget.Toast;
@@ -31,7 +35,7 @@ import rs.elfak.got.geopuzzle.library.UserFunctions;
  * Created by Milan on 24.5.2016..
  */
 public class GeoPuzzleService extends Service {
-    private static final int LOCATION_REFRESH_TIME = 5*60*1000; // 5 mins
+    private static final int LOCATION_REFRESH_TIME = 5; //5*60*1000; // 5 mins
     private static final float LOCATION_REFRESH_DISTANCE = 100; // in meters
     private Location loc;
 
@@ -52,6 +56,30 @@ public class GeoPuzzleService extends Service {
         public void onLocationChanged(final Location location) {
             loc = location;
             new UpdateLocation().execute();
+
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            int icon = R.mipmap.logo;
+            CharSequence notiText = "Your notification from the service";
+            long meow = System.currentTimeMillis();
+
+            Notification notification = new Notification(icon, notiText, meow);
+
+            Context context = getApplicationContext();
+            CharSequence contentTitle = "GeoPuzzle";
+            CharSequence contentText = "Location changed...";
+            Intent notificationIntent = new Intent(getApplicationContext(), HomeActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+            builder.setContentIntent(contentIntent)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(contentTitle);
+            notification = builder.build();
+
+
+            int SERVER_DATA_RECEIVED = 1;
+            notificationManager.notify(SERVER_DATA_RECEIVED, notification);
         }
 
         @Override

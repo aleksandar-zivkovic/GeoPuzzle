@@ -16,6 +16,8 @@ public class ServiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
 
+        final AppCompatActivity act = this;
+
         mStartServiceBtn = (Button) findViewById(R.id.startServiceBtn);
 
         if(GeoPuzzleService.mState == GeoPuzzleService.STOPPED)
