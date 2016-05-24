@@ -43,7 +43,7 @@
             android:label="@string/title_activity_change_password" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"/>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
@@ -66,6 +66,9 @@
             android:name=".MyFriendsActivity"
             android:label="@string/title_activity_friends" />
         <activity
+            android:name=".CreatePuzzle"
+            android:label="@string/title_activity_create_puzzle"/>
+        <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
@@ -75,7 +78,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShowDevices"/>
+        <activity android:name=".ShowDevices" />
     </application>
 
 </manifest>

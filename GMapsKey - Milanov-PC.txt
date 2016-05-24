@@ -1,0 +1,3 @@
+keytool -list -alias androiddebugkey -keystore C:/Users/Milan/.android/debug.keystore -storepass android -keypass android –v
+
+AIzaSyDy3ey8VptsAlLw0vk0E3uDKAtNZurko9o
