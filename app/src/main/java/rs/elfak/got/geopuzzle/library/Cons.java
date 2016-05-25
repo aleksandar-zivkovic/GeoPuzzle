@@ -31,7 +31,8 @@ public class Cons {
 
     public static final int REQUEST_ENABLE_BT = 100;
     public static final int SELECT_SERVER = 200;
-    public static final int KEY_MESSAGE_READ = 300;
-    public static final int SOCKET_CONNECTED = 400;
     public static final int DATA_RECEIVED = 500;
+    public static final int DATA_RESPONSE = 600;
+    public static final int DATA_ACCEPTED = 700;
+    public static final int DATA_DECLINED = 800;
 }
