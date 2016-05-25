@@ -32,6 +32,7 @@ public class UserFunctions {
     private static String chgpass_tag = "chgpass";
     private static String fetchfriends_tag = "fetchfriends";
     private static String update_location_tag = "updatelocation";
+    private static String addfriendship_tag = "addfriendship";
 
     // constructor
     public UserFunctions() {
@@ -120,6 +121,19 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("longitude", String.valueOf(location.getLongitude())));
 
         JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
+        return json;
+    }
+
+    // Function to add Friendship
+    public JSONObject addFriendship(String email1, String email2) {
+        // Building Parameters
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", addfriendship_tag));
+        params.add(new BasicNameValuePair("email1", email1));
+        params.add(new BasicNameValuePair("email2", email2));
+
+
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL,params);
         return json;
     }
 

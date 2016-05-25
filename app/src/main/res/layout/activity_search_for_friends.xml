@@ -15,29 +15,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp">
 
-        <Button
-            android:id="@+id/buttonOn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Turn On Bluetooth"
-            android:onClick="on"
-            />
-        <Button
-            android:id="@+id/buttonOff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Turn Off Bluetooth"
-            android:onClick="off"
-            />
-
-        <Button
-            android:id="@+id/buttonVisible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get visible"
-            android:onClick="visible"
-            />
-
         <TextView
             android:id="@+id/textViewPairedDevices"
             android:layout_width="wrap_content"
@@ -86,6 +63,25 @@
             android:layout_height="wrap_content"
             android:text="Send Friend Request"
             android:onClick="send"
+            android:enabled="false"
+            />
+
+        <Button
+            android:id="@+id/buttonAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accept Friend Request"
+            android:onClick="acceptFriendRequest"
+            android:enabled="false"
+            />
+
+        <Button
+            android:id="@+id/buttonDecline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Decline Friend Request"
+            android:onClick="declineFriendRequest"
+            android:enabled="false"
             />
 
         <TextView
@@ -93,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pending Friend Requests:"
-            android:textColor="#068fff"
+            android:textColor="#ff7606"
             android:textSize="25dp"
             android:layout_marginTop="20dp"
             />
