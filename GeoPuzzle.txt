@@ -1,0 +1,98 @@
+Hmm... Odradio sam spliting...
+Par dosetki... 
+
+- ogranicio bih puzle pattern samo na brojke koje su simetricne I iz kojih moze da se izvuce koren: 2,4,9
+
+- skalirati ih uvek na istu velicinu (koja se deli lepo) - da ne bi bilo razlike u puzlama
+
+Zapamti u bazi:
+- title puzle
+- num of pieces
+- autora
+
+Upload to server:
+For example:
+/puzzles/*puzzle_title*/pieceNum1.jpg
+/puzzles/*puzzle_title*/pieceNum2.jpg
+...
+
+Exception kad je velika rezolucija:
+android.os.TransactionTooLargeException
+
+----------------
+
+add to user database:
+puzzles created: 2
+puzzle chunks collected: 5
+puzzles solved: 1
+
+when puzzle chunk collected --> (+1 point)
+when puzzle solved --> congrats! (+10 points)
+
+rang lista po *puzzle solved*
+
+-----------------------------------
+
+Edit Profile* - photo, phone number
+
+Upload photo from camera / gallery option (najbolje dva razlicita button-a)
+
+--------------------
+
+Tasks:
+1. Upload puzzle image
+2. List my puzzles
+3. Click on puzzle --> Puzzle Activity
+
+----------------------
+
+ispeglati:
+*image rotation
+*image/phone edit
+*email verifikacija
+*bluetooth
+*velicina puzli
+*prikaz prijatelja/puzli na mapi
+*cuvanje chunked puzzli u bazi
+*klik na puzzle list item vodi na chunked puzzlu
+*save lokacije ostavljene puzle
+*pokupljanje puzli
+*smestanje pokupljene puzle
+*klik na marker - friend or puzzle?
+
+-------------------------
+
+send chunk title to map activity
+load chunk image from server
+upload chunk title, latitude and longitude to server
+load chunks from database / chunks and show on map
+
+------------
+
+added camera / gallery
+fixed ".jpg" bug
+
+-------------
+
+1. proveri bug: "klik na puzlu na mapi odmah nakon postavljanja! hashmapa je nesto tu u pitanju." -> FIXED
+2. custom markers -> DONE
+3. rangiranje -> DONE
+
+----------------------------------
+
+TODO:
+
+1. puzzle collecting logic -> DONE
+2. pretraga po kriterijumu (nearby, author, puzzle title, ...) -> IMPORTANT
+3. email verifikacija ?
+4. log in pomocu username-a i emaila
+5. razlicit broj poena u odnosu na velicinu puzle
+6. PROVERI DOUBLE UPLOAD
+7. notifikacija od strane servera -> IMPORTANT
+
+
+
+------------------------------
+
+
+
