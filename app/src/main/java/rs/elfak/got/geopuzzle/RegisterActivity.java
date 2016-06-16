@@ -16,9 +16,12 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,12 +30,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.net.NetworkInfo;
 import android.net.ConnectivityManager;
@@ -58,10 +64,15 @@ public class RegisterActivity extends AppCompatActivity {
     private Uri selectedImage = null;
     private Bitmap bitmap, bitmapRotate;
     private ProgressDialog pDialog;
-    String imagepath = "";
-    String fname;
-    File file;
+    private File photo;
+    private String imagepath = "";
+    private String fname;
+    private File file;
     private Uri mImageUri;
+    private String selectedImagePath;
+    private String filemanagerstring;
+
+    private Bitmap bitmapToShow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,6 +168,14 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "No Internet Connection !", Toast.LENGTH_LONG).show();
                     }
 
+                    //Saving image to mobile internal memory for sometime
+                    String root = getApplicationContext().getFilesDir().toString();
+                    File myDir = new File(root + "/androidlift");
+                    myDir.mkdirs();
+                    fname = mEmailEdit.getText().toString() + ".jpg";
+                    imagepath = root + "/androidlift/" + fname;
+                    file = new File(myDir, fname);
+
                     NetAsync(view);
                 }
             }
@@ -167,30 +186,57 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         ivImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent cameraIntent = new Intent(
-                        android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 101);*/
 
-                Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-                File photo;
-                try
-                {
-                    // place where to store camera taken picture
-                    photo = createTemporaryFile("picture", ".jpg");
-                    photo.delete();
+                final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
 
-                    mImageUri = Uri.fromFile(photo);
-                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-                    //start camera intent
-                    startActivityForResult(cameraIntent, 101);
-                }
-                catch(Exception e)
-                {
-                    Toast.makeText(getApplicationContext(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_SHORT);
-                }
+                TextView title = new TextView(getApplicationContext());
+                title.setText("Add Photo!");
+                title.setBackgroundColor(Color.BLACK);
+                title.setPadding(10, 15, 15, 10);
+                title.setGravity(Gravity.CENTER);
+                title.setTextColor(Color.WHITE);
+                title.setTextSize(22);
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                builder.setCustomTitle(title);
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (items[item].equals("Take Photo")) {
+                            Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+                            try
+                            {
+                                // place where to store camera taken picture
+                                photo = createTemporaryFile("picture", ".jpg");
+                                photo.delete();
+
+                                mImageUri = Uri.fromFile(photo);
+                                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+                                //start camera intent
+                                startActivityForResult(cameraIntent, 101);
+                            }
+                            catch(Exception e)
+                            {
+                                Toast.makeText(getApplicationContext(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_SHORT);
+                            }
+                        }
+                        else if (items[item].equals("Choose from Gallery")) {
+                            // in onCreate or any event where your want the user to
+                            // select a file
+                            Intent intent = new Intent();
+                            intent.setType("image/*");
+                            intent.setAction(Intent.ACTION_GET_CONTENT);
+                            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 102);
+                        }
+                        else if (items[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
             }
         });
     }
@@ -278,9 +324,9 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             protected Object doInBackground(Object[] params) {
                 UserFunctions userFunction = new UserFunctions();
-                float aspect = ((float)bitmapRotate.getWidth())/((float)bitmapRotate.getHeight());
-                Bitmap resized = Bitmap.createScaledBitmap(bitmapRotate, Cons.KEY_MAX_WIDTH, (int)(Cons.KEY_MAX_WIDTH/aspect), false);
-                saveFile(resized, file);
+
+
+                saveFile(bitmapToShow, file);
                 return userFunction.registerUser(firstName, lastName, email, username, password, phoneNumber);
             }
 
@@ -351,57 +397,78 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
-                this.getContentResolver().notifyChange(mImageUri, null);
-                bitmap = android.provider.MediaStore.Images.Media.getBitmap(getContentResolver(), mImageUri);
 
-                if (Float.valueOf(getImageOrientation()) >= 0) {
-                    //bitmapRotate = rotateImage(bitmap, Float.valueOf(getImageOrientation()));
-                    bitmapRotate = bitmap;
+            if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+                try {
+                    this.getContentResolver().notifyChange(mImageUri, null);
+                    bitmap = android.provider.MediaStore.Images.Media.getBitmap(getContentResolver(), mImageUri);
+
+                    if (Float.valueOf(getImageOrientation()) >= 0) {
+                        bitmapRotate = rotateImage(bitmap, Float.valueOf(getImageOrientation()));
+                        //bitmapRotate = bitmap;
+                    }
+                    else {
+                        bitmapRotate = bitmap;
+                        bitmap.recycle();
+                    }
+
+                    ivImage.setVisibility(View.VISIBLE);
+                    float aspect = ((float)bitmapRotate.getWidth())/((float)bitmapRotate.getHeight());
+                    ivImage.setImageBitmap(Bitmap.createScaledBitmap(bitmapRotate, Cons.KEY_MAX_WIDTH, (int)(Cons.KEY_MAX_WIDTH/aspect), false));
+
+                    upflag = true;
+
+                    bitmapToShow = bitmapRotate;
                 }
-                else {
-                    bitmapRotate = bitmap;
-                    bitmap.recycle();
+                catch (Exception e) {
+                    e.getMessage();
+                }
+            }
+            else if (requestCode == 102 && resultCode == Activity.RESULT_OK) {
+                Uri selectedImageUri = data.getData();
+                selectedImagePath = getPath(selectedImageUri);
+
+                Bitmap bitmap = null;
+
+                if (selectedImagePath != null){
+                    File f= new File(selectedImagePath);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    try {
+                        bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 ivImage.setVisibility(View.VISIBLE);
-                float aspect = ((float)bitmapRotate.getWidth())/((float)bitmapRotate.getHeight());
-                ivImage.setImageBitmap(Bitmap.createScaledBitmap(bitmapRotate, Cons.KEY_MAX_WIDTH, (int)(Cons.KEY_MAX_WIDTH/aspect), false));
+                float aspect = ((float)bitmap.getWidth())/((float)bitmap.getHeight());
+                ivImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, Cons.KEY_MAX_WIDTH, (int)(Cons.KEY_MAX_WIDTH/aspect), false));
 
-                //Saving image to mobile internal memory for sometime
-                String root = getApplicationContext().getFilesDir().toString();
-                File myDir = new File(root + "/androidlift");
-                myDir.mkdirs();
-
-                Random generator = new Random();
-                int n = 10000;
-                n = generator.nextInt(n);
-
-                //Give the file name that u want
-                fname = mEmailEdit.getText().toString() + ".jpg";
-
-                imagepath = root + "/androidlift/" + fname;
-                file = new File(myDir, fname);
                 upflag = true;
 
-//                if (data != null) {
-//                    selectedImage = data.getData(); // the uri of the image taken
-//                    if (String.valueOf((Bitmap) data.getExtras().get("data")).equals("null")) {
-//                        //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-//                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(getContentResolver(), mImageUri);
-//                    }
-//                    else {
-//                        bitmap = (Bitmap) data.getExtras().get("data");
-//                    }
-//
-//                }
+                bitmapToShow = bitmap;
             }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * helper to retrieve the path of an image URI
+     */
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if(cursor!=null)
+        {
+            //HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+            //THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        else
+            return null;
     }
 
     public static Bitmap rotateImage(Bitmap source, float angle) {
@@ -414,7 +481,7 @@ public class RegisterActivity extends AppCompatActivity {
         return retVal;
     }
 
-    //    In some mobiles image will get rotate so to correting that this code will help us
+    //    In some mobiles image will get rotate - > so this solves that
     private int getImageOrientation() {
         final String[] imageColumns = {MediaStore.Images.Media._ID, MediaStore.Images.ImageColumns.ORIENTATION};
         final String imageOrderBy = MediaStore.Images.Media._ID + " DESC";
@@ -432,7 +499,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    //    Saving file to the mobile internal memory
+    //    Saves image to the mobile internal memory
     private void saveFile(Bitmap sourceUri, File destination) {
         if (destination.exists()) destination.delete();
         try {
@@ -463,47 +530,4 @@ public class RegisterActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-    // Unnecessary because execution of this task is already called from AsyncTask ProcessRegister
-    /*class DoFileUpload extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressDialog(RegisterActivity.this);
-            pDialog.setMessage("Wait uploading Image..");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                // Set your file path here
-                FileInputStream fstrm = new FileInputStream(imagepath);
-                // Set your server page url (and the file title/description)
-                HttpFileUpload hfu = new HttpFileUpload("http://vasic.ddns.net/geopuzzle_login_api/file_upload.php", "ftitle", "fdescription", fname);
-                upflag = hfu.Send_Now(fstrm);
-            }
-            catch (FileNotFoundException e) {
-                // Error: File not found
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String file_url) {
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-            if (upflag) {
-                Toast.makeText(getApplicationContext(), "Uploading Complete", Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "Unfortunately file is not Uploaded..", Toast.LENGTH_LONG).show();
-            }
-        }
-    }*/
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="rs.elfak.got.geopuzzle.CreatePuzzle">
+    tools:context=".CreatePuzzleActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -68,6 +68,28 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/pattern21Img"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/pattern21"/>
+
+                    <ImageView
+                        android:id="@+id/pattern21ChkImg"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/pattern21checked"
+                        android:visibility="invisible"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
                         android:id="@+id/pattern22Img"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -82,28 +104,6 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/pattern22checked"
-                        android:visibility="invisible"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/pattern23Img"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/pattern23"/>
-
-                    <ImageView
-                        android:id="@+id/pattern23ChkImg"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/pattern23checked"
                         android:visibility="invisible"/>
                 </RelativeLayout>
 
@@ -129,6 +129,36 @@
                         android:visibility="invisible"/>
                 </RelativeLayout>
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="210dp"
+                android:layout_height="210dp"
+                android:layout_gravity="center"
+                android:background="#cecece"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="Tap to upload puzzle"/>
+
+                <ImageView
+                    android:id="@+id/uploadPuzzleImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/publishPuzzleBtn"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:text="Publish puzzle"
+                android:layout_gravity="center"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

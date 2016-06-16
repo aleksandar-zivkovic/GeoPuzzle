@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+@SuppressWarnings("deprecation")
 public class ConnectionDetector {
 
     private Context _context;

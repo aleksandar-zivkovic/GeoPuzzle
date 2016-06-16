@@ -5,10 +5,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="rs.elfak.got.geopuzzle.MyFriendsActivity">
+    tools:context="rs.elfak.got.geopuzzle.MyPuzzlesActivity">
 
     <ListView
-        android:id="@+id/friendsListView"
+        android:id="@+id/puzzlesListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"

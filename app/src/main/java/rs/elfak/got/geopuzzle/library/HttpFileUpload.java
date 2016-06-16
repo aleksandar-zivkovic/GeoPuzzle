@@ -39,7 +39,7 @@ public class HttpFileUpload implements Runnable{
 
     Boolean Sending(){
 
-        System.out.println("file Name is :"+fileName);
+        System.out.println("file Name is :" + fileName);
 
         String iFileName = fileName;
         String lineEnd = "\r\n";
@@ -114,7 +114,7 @@ public class HttpFileUpload implements Runnable{
 
             dos.flush();
 
-            Log.e(Tag,"File Sent, Response: "+String.valueOf(conn.getResponseCode()));
+            Log.e(Tag,"File Sent, Response: " + String.valueOf(conn.getResponseCode()));
 
             InputStream is = conn.getInputStream();
 
@@ -130,7 +130,8 @@ public class HttpFileUpload implements Runnable{
             if(String.valueOf(conn.getResponseCode()).equals("200"))
             {
                 return true;
-            }else{
+            }
+            else{
                 return false;
             }
         }

@@ -36,7 +36,7 @@ import rs.elfak.got.geopuzzle.library.UserFunctions;
  */
 public class GeoPuzzleService extends Service {
     private static final int LOCATION_REFRESH_TIME = 5; //5*60*1000; // 5 mins
-    private static final float LOCATION_REFRESH_DISTANCE = 100; // in meters
+    private static final float LOCATION_REFRESH_DISTANCE = 5; // in meters
     private Location loc;
 
     public static final int STOPPED = 0;
@@ -64,6 +64,7 @@ public class GeoPuzzleService extends Service {
             long meow = System.currentTimeMillis();
 
             Notification notification = new Notification(icon, notiText, meow);
+            //notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
             Context context = getApplicationContext();
             CharSequence contentTitle = "GeoPuzzle";
@@ -74,7 +75,8 @@ public class GeoPuzzleService extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
             builder.setContentIntent(contentIntent)
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(contentTitle);
+                    .setContentTitle(contentTitle)
+                    .setAutoCancel(true);
             notification = builder.build();
 
 
@@ -112,8 +114,13 @@ public class GeoPuzzleService extends Service {
             @Override
             public void run() {
                 mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME,
-                        LOCATION_REFRESH_DISTANCE, mLocationListener);
+                try {
+                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
+                }
+                catch(SecurityException e) {
+                    e.getMessage(); // user did not give permission
+                }
+
             }
         });
 

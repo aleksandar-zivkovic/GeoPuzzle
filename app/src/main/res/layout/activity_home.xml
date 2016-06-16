@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:text="@string/my_profile"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:gravity="center_vertical|center"/>
 
         <Button
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:text="@string/show_map"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical|center"/>
 
         <Button
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:text="@string/title_activity_create_puzzle"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical|center"/>
 
         <Button
@@ -53,8 +53,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:text="@string/geopuzzle_service"
-            android:layout_marginTop="10dp"
+            android:text="GeoPuzzle Service"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical|center"/>
+
+        <Button
+            android:id="@+id/leaderBoardBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/leaderboard"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical|center"/>
+
     </LinearLayout>
 </LinearLayout>

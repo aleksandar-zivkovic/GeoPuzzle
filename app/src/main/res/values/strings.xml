@@ -10,6 +10,7 @@
     <string name="title_activity_reset_password">Reset password</string>
     <string name="title_activity_search_friends">Search people</string>
     <string name="title_activity_friends">My Friends</string>
+    <string name="title_activity_puzzles">My Puzzles</string>
     <string name="title_activity_friend">Friend</string>
     <string name="title_activity_create_puzzle">Create puzzle</string>
 
@@ -41,7 +42,9 @@
     <string name="msg_user_exist">User already exists</string>
     <string name="msg_invalid_email">Invalid Email address</string>
     <string name="msg_registration_error">Error occured in registration</string>
-    <string name="msg_friends_list_empty">Friends list empty</string>
+    <string name="msg_friends_list_empty">No friends to load</string>
+    <string name="msg_puzzle_chunks_list_empty">No puzzles to load</string>
+    <string name="msg_puzzle_list_empty">Puzzle list empty</string>
 
     <string name="enter_new_password">Enter new password</string>
     <string name="password">Password</string>
@@ -84,6 +87,7 @@
     <string name="start_service">Start service</string>
     <string name="stop_service">Stop service</string>
     <string name="geopuzzle_service">GeoPuzzle service</string>
+    <string name="leaderboard">Leaderboard</string>
     <string name="google_app_id">1:574898370431:android:b4eede9f7ec95dd9</string>
     <string name="server_client_id">613497862690-n2m2n77kf33slihr0s0lhbi8plcraugc.apps.googleusercontent.com</string>
 </resources>
