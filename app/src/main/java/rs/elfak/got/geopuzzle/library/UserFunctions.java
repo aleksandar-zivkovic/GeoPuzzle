@@ -16,6 +16,7 @@ import android.location.Location;
 /**
  * Created by Milan on 14.5.2016..
  */
+@SuppressWarnings("deprecation")
 public class UserFunctions {
     private JSONParser jsonParser;
 
@@ -70,7 +71,7 @@ public class UserFunctions {
         return json;
     }
 
-    // Function to  Register
+    // Function to Register
     public JSONObject registerUser(String fname, String lname, String email, String uname, String password, String phonenumber) {
         // Building Parameters
         List params = new ArrayList();

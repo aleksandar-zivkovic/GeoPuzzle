@@ -69,7 +69,7 @@
             android:name=".MyFriendsActivity"
             android:label="@string/title_activity_friends" />
         <activity
-            android:name=".CreatePuzzle"
+            android:name=".CreatePuzzleActivity"
             android:label="@string/title_activity_create_puzzle" />
         <activity android:name=".ServiceActivity"
             android:label="@string/geopuzzle_service"/>

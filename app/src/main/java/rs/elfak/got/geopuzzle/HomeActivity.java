@@ -54,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
             mUploadPuzzleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent upload = new Intent(view.getContext(), CreatePuzzle.class);
+                    Intent upload = new Intent(view.getContext(), CreatePuzzleActivity.class);
                     startActivity(upload);
                 }
             });
