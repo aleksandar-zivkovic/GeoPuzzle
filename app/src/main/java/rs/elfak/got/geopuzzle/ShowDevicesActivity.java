@@ -18,7 +18,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class ShowDevices extends AppCompatActivity {
+public class ShowDevicesActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private ListView mListView;

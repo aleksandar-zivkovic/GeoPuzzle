@@ -8,30 +8,24 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -246,7 +240,7 @@ public class SearchForFriendsActivity extends AppCompatActivity {
                 pairedDeviceStrings.add(device.getAddress());
             }
         }
-        Intent showDevicesIntent = new Intent(this, ShowDevices.class);
+        Intent showDevicesIntent = new Intent(this, ShowDevicesActivity.class);
         showDevicesIntent.putStringArrayListExtra("devices", pairedDeviceStrings);
         startActivityForResult(showDevicesIntent, Cons.SELECT_SERVER);
     }
