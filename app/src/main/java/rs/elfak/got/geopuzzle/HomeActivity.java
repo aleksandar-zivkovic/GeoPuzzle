@@ -16,6 +16,7 @@ public class HomeActivity extends AppCompatActivity {
     Button mUploadPuzzleBtn;
     Button mGeoPuzzleServiceBtn;
     Button mLeaderBoardBtn;
+    Button mSearchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,15 @@ public class HomeActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent leaderBoard = new Intent(view.getContext(), LeaderboardActivity.class);
                     startActivity(leaderBoard);
+                }
+            });
+
+            mSearchBtn = (Button) findViewById(R.id.searchBtn);
+            mSearchBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent search = new Intent(view.getContext(), SearchActivity.class);
+                    startActivity(search);
                 }
             });
         }

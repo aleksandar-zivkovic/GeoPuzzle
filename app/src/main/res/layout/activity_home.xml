@@ -7,64 +7,80 @@
     android:orientation="vertical"
     tools:context="rs.elfak.got.geopuzzle.HomeActivity">
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/geopuzzle"
-        android:layout_gravity="center_horizontal"/>
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/myProfileBtn"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="@string/my_profile"
-            android:layout_marginTop="15dp"
-            android:gravity="center_vertical|center"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/showMapBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="@string/show_map"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical|center"/>
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/geopuzzle"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp"/>
 
-        <Button
-            android:id="@+id/uploadPuzzleBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="@string/title_activity_create_puzzle"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical|center"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:paddingBottom="50dp">
 
-        <Button
-            android:id="@+id/geoPuzzleServiceBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="GeoPuzzle Service"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical|center"/>
+                <Button
+                    android:id="@+id/myProfileBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/my_profile"
+                    android:gravity="center_vertical|center"/>
 
-        <Button
-            android:id="@+id/leaderBoardBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="@string/leaderboard"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical|center"/>
+                <Button
+                    android:id="@+id/showMapBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/show_map"
+                    android:gravity="center_vertical|center"/>
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/uploadPuzzleBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/title_activity_create_puzzle"
+                    android:gravity="center_vertical|center"/>
+
+                <Button
+                    android:id="@+id/geoPuzzleServiceBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="GeoPuzzle Service"
+                    android:gravity="center_vertical|center"/>
+
+                <Button
+                    android:id="@+id/leaderBoardBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/leaderboard"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical|center"/>
+
+                <Button
+                    android:id="@+id/searchBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/search"
+                    android:gravity="center_vertical|center"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

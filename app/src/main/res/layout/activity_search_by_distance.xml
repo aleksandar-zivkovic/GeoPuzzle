@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="rs.elfak.got.geopuzzle.SearchByDistanceActivity">
+
+    <ImageView
+        android:id="@+id/showSeekImg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/arrow_down"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:rotation="180"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/seekPartLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="@string/enter_distance"
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_marginTop="20dp"/>
+
+            <SeekBar
+                android:id="@+id/distanceSeek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:max="2000"/>
+
+            <TextView
+                android:id="@+id/distanceTxt"
+                android:text="500m"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"/>
+        </LinearLayout>
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
+    </LinearLayout>
+</RelativeLayout>

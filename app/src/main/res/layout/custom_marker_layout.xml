@@ -14,18 +14,13 @@
             android:layout_height="match_parent"
             android:src="@drawable/custom_marker"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            />
+            android:layout_alignParentTop="true"/>
 
         <ImageView
             android:id="@+id/markerImage"
             android:layout_width="41dp"
             android:layout_height="40dp"
             android:layout_marginTop="7dp"
-            android:layout_marginLeft="14dp"
-            />
-
+            android:layout_marginLeft="14dp"/>
     </RelativeLayout>
-
-
 </RelativeLayout>

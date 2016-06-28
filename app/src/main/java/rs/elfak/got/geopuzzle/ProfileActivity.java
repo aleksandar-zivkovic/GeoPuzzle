@@ -44,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button mSearchForFriendsBtn;
     private Button mViewMyPuzzlesBtn;
     private ImageView mUserImageView;
+    private ImageView mChangeImageView;
     private ProgressDialog pDialog;
     private int state;
 
@@ -78,6 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
         pDialog.show();
 
         mUserImageView = (ImageView) findViewById(R.id.userImg);
+        mChangeImageView = (ImageView) findViewById(R.id.changeImg);
         mLogoutBtn = (Button) findViewById(R.id.logoutBtn);
         mChangePasswordBtn = (Button) findViewById(R.id.changePasswordBtn);
         mViewMyFriendsBtn = (Button) findViewById(R.id.viewMyFriendsBtn);
@@ -100,6 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
             mViewMyFriendsBtn.setVisibility(View.INVISIBLE);
             mViewMyPuzzlesBtn.setVisibility(View.INVISIBLE);
             mSearchForFriendsBtn.setVisibility(View.INVISIBLE);
+            mChangeImageView.setVisibility(View.INVISIBLE);
 
             // Sets user first name and last name in text view
             titleText.setText(bundle.getString(Cons.KEY_FULLNAME));
@@ -150,6 +153,61 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
 
+            mChangeImageView.setVisibility(View.VISIBLE);
+            mChangeImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+
+                    TextView title = new TextView(getApplicationContext());
+                    title.setText("Change Profile Photo?");
+                    title.setBackgroundColor(Color.BLACK);
+                    title.setPadding(10, 15, 15, 10);
+                    title.setGravity(Gravity.CENTER);
+                    title.setTextColor(Color.WHITE);
+                    title.setTextSize(22);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setCustomTitle(title);
+
+                    builder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int item) {
+                            if (items[item].equals("Take Photo")) {
+                                Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+                                try
+                                {
+                                    // place where to store camera taken picture
+                                    photo = createTemporaryFile("picture", ".jpg");
+                                    photo.delete();
+
+                                    mImageUri = Uri.fromFile(photo);
+                                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+                                    //start camera intent
+                                    startActivityForResult(cameraIntent, 101);
+                                }
+                                catch(Exception e)
+                                {
+                                    Toast.makeText(getApplicationContext(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_SHORT);
+                                }
+                            }
+                            else if (items[item].equals("Choose from Gallery")) {
+                                // in onCreate or any event where your want the user to
+                                // select a file
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 102);
+                            }
+                            else if (items[item].equals("Cancel")) {
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+            });
+
             // Sets user first name and last name in text view
             titleText.setText(user.get(Cons.KEY_FIRSTNAME) + " " + user.get(Cons.KEY_LASTNAME));
 
@@ -158,61 +216,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         new DownloadImageTask().execute(Cons.KEY_UPLOADS_URL + mEmail + ".jpg");
-
-
-        mUserImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
-
-                TextView title = new TextView(getApplicationContext());
-                title.setText("Change Profile Photo?");
-                title.setBackgroundColor(Color.BLACK);
-                title.setPadding(10, 15, 15, 10);
-                title.setGravity(Gravity.CENTER);
-                title.setTextColor(Color.WHITE);
-                title.setTextSize(22);
-                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
-                builder.setCustomTitle(title);
-
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-                        if (items[item].equals("Take Photo")) {
-                            Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-                            try
-                            {
-                                // place where to store camera taken picture
-                                photo = createTemporaryFile("picture", ".jpg");
-                                photo.delete();
-
-                                mImageUri = Uri.fromFile(photo);
-                                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-                                //start camera intent
-                                startActivityForResult(cameraIntent, 101);
-                            }
-                            catch(Exception e)
-                            {
-                                Toast.makeText(getApplicationContext(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_SHORT);
-                            }
-                        }
-                        else if (items[item].equals("Choose from Gallery")) {
-                            // in onCreate or any event where your want the user to
-                            // select a file
-                            Intent intent = new Intent();
-                            intent.setType("image/*");
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 102);
-                        }
-                        else if (items[item].equals("Cancel")) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-                builder.show();
-            }
-        });
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="rs.elfak.got.geopuzzle.SearchActivity">
+
+    <TextView
+        android:text="@string/search"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/searchCriteriumEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:inputType="text"
+        android:hint="@string/enter_search_criterium"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:paddingBottom="50dp"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/searchFriendsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/search_friends"
+            android:gravity="center_vertical|center"/>
+
+        <Button
+            android:id="@+id/searchPuzzlesBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/search_puzzles"
+            android:gravity="center_vertical|center"/>
+
+        <Button
+            android:id="@+id/searchByDistanceBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/search_by_distance"
+            android:gravity="center_vertical|center"/>
+    </LinearLayout>
+</LinearLayout>

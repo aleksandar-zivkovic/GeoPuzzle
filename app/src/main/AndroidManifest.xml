@@ -93,7 +93,9 @@
 
         <activity android:name=".ChunkedImageActivity" />
         <activity android:name=".MyPuzzlesActivity" />
-        <activity android:name=".LeaderboardActivity"></activity>
+        <activity android:name=".LeaderboardActivity" />
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".SearchByDistanceActivity"></activity>
     </application>
 
 </manifest>

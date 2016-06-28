@@ -193,8 +193,8 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp">
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp">
 
                 <RelativeLayout
                     android:layout_width="210dp"
@@ -225,14 +225,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/register"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="20dp"/>
 
                 <Button
                     android:id="@+id/cancelBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/cancel"
-                    android:layout_marginTop="10dp"/>
+                    android:text="@string/cancel"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

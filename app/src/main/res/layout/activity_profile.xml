@@ -2,73 +2,93 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="rs.elfak.got.geopuzzle.ProfileActivity">
 
-    <RelativeLayout
-        android:layout_width="210dp"
-        android:layout_height="210dp"
-        android:layout_gravity="center"
-        android:background="#cecece"
-        android:layout_marginTop="20dp">
-
-        <ImageView
-            android:id="@+id/userImg"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:src="@drawable/user"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"/>
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/titleText"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="25sp"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp">
-
-        <Button
-            android:id="@+id/viewMyFriendsBtn"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title_activity_friends"/>
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/viewMyPuzzlesBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title_activity_puzzles"/>
+            <RelativeLayout
+                android:layout_width="210dp"
+                android:layout_height="210dp"
+                android:layout_gravity="center"
+                android:background="#cecece"
+                android:layout_marginTop="20dp">
 
-        <Button
-            android:id="@+id/searchForFriendsBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/search_for_friends"/>
+                <ImageView
+                    android:id="@+id/userImg"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/user"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"/>
 
-        <Button
-            android:id="@+id/changePasswordBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title_activity_change_password"/>
+                <ImageView
+                    android:id="@+id/changeImg"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="165dp"
+                    android:layout_marginLeft="160dp"
+                    android:src="@drawable/camera"
+                    android:visibility="invisible"/>
+            </RelativeLayout>
 
-        <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/logout"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="25sp"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:paddingBottom="50dp">
+
+                <Button
+                    android:id="@+id/viewMyFriendsBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_activity_friends"/>
+
+                <Button
+                    android:id="@+id/viewMyPuzzlesBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_activity_puzzles"/>
+
+                <Button
+                    android:id="@+id/searchForFriendsBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_for_friends"/>
+
+                <Button
+                    android:id="@+id/changePasswordBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_activity_change_password"/>
+
+                <Button
+                    android:id="@+id/logoutBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/logout"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
