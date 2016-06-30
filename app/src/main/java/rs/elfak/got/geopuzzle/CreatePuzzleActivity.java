@@ -173,8 +173,6 @@ public class CreatePuzzleActivity extends AppCompatActivity {
                                 // insert PUZZLE into puzzles
                                 ProcessPuzzleImageUpload processPuzzleImageUpload = new ProcessPuzzleImageUpload();
                                 processPuzzleImageUpload.execute();
-
-                                Toast.makeText(getApplicationContext(), "Puzzle successfully published!", Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 Toast.makeText(getApplicationContext(), "Puzzle title can only contain numbers and/or letters!", Toast.LENGTH_SHORT).show();

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,8 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -33,6 +37,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import rs.elfak.got.geopuzzle.library.Cons;
+import rs.elfak.got.geopuzzle.library.DatabaseHandler;
 import rs.elfak.got.geopuzzle.library.UserFunctions;
 
 public class SearchByDistanceActivity extends AppCompatActivity {
@@ -56,7 +61,13 @@ public class SearchByDistanceActivity extends AppCompatActivity {
         frameImageView = (ImageView) markerLayout.findViewById(R.id.frame);
 
         map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-        map.setMyLocationEnabled(true);
+        try {
+            map.setMyLocationEnabled(true);
+        }
+        catch (SecurityException e) {
+            e.getMessage();
+        }
+
 
         final TextView distanceTxt = (TextView) findViewById(R.id.distanceTxt);
 
@@ -74,8 +85,14 @@ public class SearchByDistanceActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+
+                float distance = 0.0f;
+                String distanceString = distanceTxt.getText().toString();
+                String[] split = distanceString.split("m");
+                distanceString = split[0];
+                distance = Float.valueOf(distanceString);
                 //  contact server here
-                addFriendsMarkers();
+                addFriendsMarkers(distance);
             }
         });
 
@@ -100,13 +117,16 @@ public class SearchByDistanceActivity extends AppCompatActivity {
         });
     }
 
-    private void addFriendsMarkers() {
+    private void addFriendsMarkers(float distance) {
 
         ProcessMyFriends processMyFriends = new ProcessMyFriends();
-        processMyFriends.execute();
+        Object[] params = new Object[1];
+        params[0] = distance;
+        processMyFriends.execute(params);
     }
 
     private class ProcessMyFriends extends AsyncTask {
+        private float distance;
         private ProgressDialog pDialog;
 
         @Override
@@ -124,6 +144,7 @@ public class SearchByDistanceActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             UserFunctions userFunction = new UserFunctions();
+            distance = (float) params[0];
             return userFunction.fetchFriends(getApplicationContext());
         }
 
@@ -145,8 +166,21 @@ public class SearchByDistanceActivity extends AppCompatActivity {
                             markerFriendEmailMap = new HashMap<Marker, String>((int)((double) friendsNum * 1.2));
                             for(int i = 1; i <= friendsNum; i++) {
                                 JSONObject friend = json.getJSONObject("friend" + i);
+                                String latitude = friend.getString(Cons.KEY_LATITUDE);
+                                String longitude = friend.getString(Cons.KEY_LONGITUDE);
 
-                                new DownloadImageTask().execute(friend);
+                                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+                                HashMap user = db.getUserDetails();
+                                String mEmail = user.get(Cons.KEY_EMAIL).toString();
+
+                                ProcessMyLocation processMyLocation = new ProcessMyLocation();
+                                Object[] params = new Object[5];
+                                params[0] = mEmail;
+                                params[1] = latitude;
+                                params[2] = longitude;
+                                params[3] = distance;
+                                params[4] = friend;
+                                processMyLocation.execute(params);
                             }
                         }
 
@@ -227,4 +261,91 @@ public class SearchByDistanceActivity extends AppCompatActivity {
 
         return bitmap;
     }
+
+    private class ProcessMyLocation extends AsyncTask {
+        private ProgressDialog pDialog;
+        String mEmail;
+        String friendLatitude;
+        String friendLongitude;
+        float distance;
+        Double myLatitude;
+        Double myLongitude;
+        JSONObject friend;
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(SearchByDistanceActivity.this);
+            pDialog.setTitle(R.string.msg_contacting_servers);
+            pDialog.setMessage("Fetching my location...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            UserFunctions userFunction = new UserFunctions();
+            mEmail = (String) params[0];
+            friendLatitude = (String) params[1];
+            friendLongitude = (String) params[2];
+            distance = (float) params[3];
+            friend = (JSONObject) params[4];
+            return userFunction.fetchUser(mEmail);
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            JSONObject json = (JSONObject)o;
+            try {
+                if (json.getString(Cons.KEY_SUCCESS) != null) {
+
+                    String res = json.getString(Cons.KEY_SUCCESS);
+                    if(Integer.parseInt(res) == 1) {
+                        // success
+                        JSONObject selectedUser = json.getJSONObject("user");
+                        String latitude = selectedUser.getString("latitude");
+                        String longitude = selectedUser.getString("longitude");
+
+                        myLatitude = Double.valueOf(latitude);
+                        myLongitude = Double.valueOf(longitude);
+
+                        // it can be optimized to be called only once, but it is here because of myLatitude and myLongitude values
+                        Circle circle = map.addCircle(new CircleOptions()
+                                .center(new LatLng(myLatitude, myLongitude))
+                                .radius(distance)
+                                .strokeColor(Color.RED)
+                                .fillColor(Color.BLUE));
+
+                        Location myLocation = new Location("point A");
+                        myLocation.setLatitude(myLatitude);
+                        myLocation.setLongitude(myLongitude);
+
+                        Location friendLocation = new Location("point B");
+                        friendLocation.setLatitude(Double.parseDouble(friendLatitude));
+                        friendLocation.setLongitude(Double.parseDouble(friendLongitude));
+
+                        float dist = myLocation.distanceTo(friendLocation);
+
+                        if (dist < distance) {
+                            new DownloadImageTask().execute(friend);
+                        }
+
+                        pDialog.dismiss();
+                    }
+                    else {
+                        // error
+                        pDialog.dismiss();
+                    }
+                }
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
+
+
