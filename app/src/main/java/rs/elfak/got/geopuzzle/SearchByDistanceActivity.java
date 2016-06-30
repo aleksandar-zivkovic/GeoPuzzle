@@ -22,9 +22,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -51,6 +54,8 @@ public class SearchByDistanceActivity extends AppCompatActivity {
     private ImageView frameImageView;
     private View markerLayout;
 
+    private boolean mDrawCircle = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +67,7 @@ public class SearchByDistanceActivity extends AppCompatActivity {
 
         map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         try {
-            map.setMyLocationEnabled(true);
+            map.setMyLocationEnabled(false);
         }
         catch (SecurityException e) {
             e.getMessage();
@@ -85,18 +90,14 @@ public class SearchByDistanceActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
-                float distance = 0.0f;
-                String distanceString = distanceTxt.getText().toString();
-                String[] split = distanceString.split("m");
-                distanceString = split[0];
-                distance = Float.valueOf(distanceString);
-                //  contact server here
-                addFriendsMarkers(distance);
+                updateSeekBarValue(seekBar);
             }
         });
+        updateSeekBarValue(mDistanceSeek);
 
         mShowSeekImg = (ImageView) findViewById(R.id.showSeekImg);
+        mShowSeekImg.bringToFront();
+        mShowSeekImg.setRotation(0);
         mShowSeekImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +116,22 @@ public class SearchByDistanceActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void updateSeekBarValue(SeekBar seekBar)
+    {
+        final TextView distanceTxt = (TextView) findViewById(R.id.distanceTxt);
+
+        map.clear();
+        mDrawCircle = true;
+
+        float distance = 0.0f;
+        String distanceString = distanceTxt.getText().toString();
+        String[] split = distanceString.split("m");
+        distanceString = split[0];
+        distance = Float.valueOf(distanceString);
+        //  contact server here
+        addFriendsMarkers(distance);
     }
 
     private void addFriendsMarkers(float distance) {
@@ -313,11 +330,26 @@ public class SearchByDistanceActivity extends AppCompatActivity {
                         myLongitude = Double.valueOf(longitude);
 
                         // it can be optimized to be called only once, but it is here because of myLatitude and myLongitude values
-                        Circle circle = map.addCircle(new CircleOptions()
-                                .center(new LatLng(myLatitude, myLongitude))
-                                .radius(distance)
-                                .strokeColor(Color.RED)
-                                .fillColor(Color.BLUE));
+                        if(mDrawCircle)
+                        {
+                            Circle circle = map.addCircle(new CircleOptions()
+                                    .center(new LatLng(myLatitude, myLongitude))
+                                    .radius(distance)
+                                    .strokeColor(Color.RED)
+                                    .fillColor(0x330000FF));
+
+                            mDrawCircle = false;
+
+                            int zoom = distance <= 600 ? 15 : distance <= 1200 ? 14 : distance <= 2400 ? 13 : 12;
+
+                            CameraPosition cameraPosition = new CameraPosition.Builder()
+                                    .target(new LatLng(myLatitude, myLongitude))      // Sets the center of the map to Mountain View
+                                    .zoom(zoom)                   // Sets the zoom
+                                    //.bearing(90)                // Sets the orientation of the camera to east
+                                    //.tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                                    .build();                   // Creates a CameraPosition from the builder
+                            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        }
 
                         Location myLocation = new Location("point A");
                         myLocation.setLatitude(myLatitude);

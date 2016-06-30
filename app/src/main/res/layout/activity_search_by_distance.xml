@@ -25,7 +25,8 @@
             android:id="@+id/seekPartLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <TextView
                 android:text="@string/enter_distance"
@@ -44,7 +45,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:max="2000"/>
+                android:max="5000"/>
 
             <TextView
                 android:id="@+id/distanceTxt"

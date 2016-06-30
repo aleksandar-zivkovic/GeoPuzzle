@@ -34,6 +34,7 @@ public class Cons {
     public static final String KEY_KEY_VALUE = "value";
     public static final String KEY_LOGGED_IN = "loggedIn";
     public static final String KEY_KEEP_LOGGED_IN = "keepLoggedIn";
+    public static final String KEY_REG_ID = "regId";
 
     public static final int KEY_RESULT_LOAD_IMAGE = 11;
 
@@ -49,4 +50,6 @@ public class Cons {
     public static final int DATA_RESPONSE = 600;
     public static final int DATA_ACCEPTED = 700;
     public static final int DATA_DECLINED = 800;
+
+    public static final String SERVER_URL = "http://vasic.ddns.net/geopuzzle_login_api/";
 }

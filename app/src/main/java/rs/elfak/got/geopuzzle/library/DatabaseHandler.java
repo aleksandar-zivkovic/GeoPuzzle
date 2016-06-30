@@ -40,7 +40,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + Cons.KEY_KEY_VALUE + " TEXT" + ")";
         db.execSQL(CREATE_KEY_VALUE_TABLE);
 
-        db.execSQL("INSERT INTO " + TABLE_VALUES + " VALUES(null, 'loggedIn', 'false')");
+        db.execSQL("INSERT INTO " + TABLE_VALUES + " VALUES(null, '" + Cons.KEY_LOGGED_IN + "', 'false')");
+        db.execSQL("INSERT INTO " + TABLE_VALUES + " VALUES(null, '" + Cons.KEY_LATITUDE + "', '0.0')");
+        db.execSQL("INSERT INTO " + TABLE_VALUES + " VALUES(null, '" + Cons.KEY_LONGITUDE + "', '0.0')");
     }
 
     @Override

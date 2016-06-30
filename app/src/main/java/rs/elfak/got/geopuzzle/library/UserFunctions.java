@@ -190,6 +190,9 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("latitude", String.valueOf(location.getLatitude())));
         params.add(new BasicNameValuePair("longitude", String.valueOf(location.getLongitude())));
 
+        db.setValue(Cons.KEY_LATITUDE, String.valueOf(location.getLatitude()));
+        db.setValue(Cons.KEY_LONGITUDE, String.valueOf(location.getLongitude()));
+
         JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
         return json;
     }

@@ -693,6 +693,12 @@ public class MapActivity extends AppCompatActivity {
                         myLatitude = Double.valueOf(latitude);
                         myLongitude = Double.valueOf(longitude);
 
+                        CameraPosition cameraPosition = new CameraPosition.Builder()
+                                .target(new LatLng(myLatitude, myLongitude))      // Sets the center of the map to Mountain View
+                                .zoom(13)                   // Sets the zoom
+                                .build();                   // Creates a CameraPosition from the builder
+                        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
                         // check if you are near the puzzle --> if close: collect puzzle, else : toast -> you cannot collect that puzzle, you are not nearby
                         Location chunkLocation = new Location("point A");
                         chunkLocation.setLatitude(Double.parseDouble(chunkLatitude));
