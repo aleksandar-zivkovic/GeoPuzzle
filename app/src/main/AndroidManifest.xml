@@ -124,6 +124,8 @@
         <activity android:name=".LeaderboardActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".SearchByDistanceActivity"></activity>
+        <activity android:name=".SearchFriendsActivity"></activity>
+        <activity android:name=".SearchPuzzlesActivity"></activity>
     </application>
 
 </manifest>

@@ -28,8 +28,10 @@ public class UserFunctions {
     private static String forpass_tag = "forpass";
     private static String chgpass_tag = "chgpass";
     private static String fetchfriends_tag = "fetchfriends";
+    private static String fetchsearchfriends_tag = "fetchsearchfriends";
     private static String fetchuser_tag = "fetchuser";
     private static String fetchpuzzles_tag = "fetchpuzzles";
+    private static String fetchsearchpuzzles_tag = "fetchsearchpuzzles";
     private static String fetchpuzzlechunks_tag = "fetchpuzzlechunks";
     private static String fetchpuzzlechunk_tag = "fetchpuzzlechunk";
     private static String fetchscores_tag = "fetchscores";
@@ -114,6 +116,21 @@ public class UserFunctions {
         return json;
     }
 
+    // Function for friends fetching
+    public JSONObject fetchSearchedFriends(Context context, String searchText) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        HashMap user = db.getUserDetails();
+        String email = user.get(Cons.KEY_EMAIL).toString();
+
+        // Building Parameters
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", fetchsearchfriends_tag));
+        params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("searchText", searchText));
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
+        return json;
+    }
+
     // Function for fetching of user
     public JSONObject fetchUser(String email) {
         // Building Parameters
@@ -134,6 +151,21 @@ public class UserFunctions {
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", fetchpuzzles_tag));
         params.add(new BasicNameValuePair("email", email));
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
+        return json;
+    }
+
+    // Function for puzzle fetching
+    public JSONObject fetchSearchPuzzles(Context context, String searchText) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        HashMap user = db.getUserDetails();
+        String email = user.get(Cons.KEY_EMAIL).toString();
+
+        // Building Parameters
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", fetchsearchpuzzles_tag));
+        params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("searchText", searchText));
         JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
         return json;
     }
