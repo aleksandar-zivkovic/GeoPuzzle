@@ -48,10 +48,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <receiver
             android:name=".GCMBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
 
                 <!-- Receives the actual messages. -->
@@ -123,9 +122,10 @@
         <activity android:name=".MyPuzzlesActivity" />
         <activity android:name=".LeaderboardActivity" />
         <activity android:name=".SearchActivity" />
-        <activity android:name=".SearchByDistanceActivity"></activity>
-        <activity android:name=".SearchFriendsActivity"></activity>
-        <activity android:name=".SearchPuzzlesActivity"></activity>
+        <activity android:name=".SearchByDistanceActivity" />
+        <activity android:name=".SearchFriendsActivity" />
+        <activity android:name=".SearchPuzzlesActivity" />
+        <activity android:name=".PuzzleSolvedActivity"></activity>
     </application>
 
 </manifest>

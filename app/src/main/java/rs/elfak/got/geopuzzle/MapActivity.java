@@ -84,6 +84,8 @@ public class MapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         markerLayout = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
         markerImageView = (ImageView) markerLayout.findViewById(R.id.markerImage);
@@ -786,13 +788,18 @@ public class MapActivity extends AppCompatActivity {
                         if (solved == 1) {
                             // puzzle with puzzleTitle is solved!
                             Toast.makeText(getApplicationContext(),"You have solved " + puzzleTitle + " puzzle!", Toast.LENGTH_SHORT).show();
-                            // start a fragment which contains puzzle image, congratulations message and button to return back to map
 
                             // increment puzzles solved
                             ProcessPuzzleSolved processPuzzleSolved = new ProcessPuzzleSolved();
                             Object[] params = new Object[1];
                             params[0] = email;
                             processPuzzleSolved.execute(params);
+
+                            // start an activity (fragment in future?) which contains puzzle image, congratulations message and button to return back to map
+                            Intent puzzleSolvedIntent = new Intent(getApplicationContext(), PuzzleSolvedActivity.class);
+                            puzzleSolvedIntent.putExtra("puzzleTitle", puzzleTitle);
+                            startActivity(puzzleSolvedIntent);
+
                         }
                         pDialog.dismiss();
                     }

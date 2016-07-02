@@ -39,6 +39,8 @@ public class ChunkedImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chunked_image);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         // Getting the image chunks sent from the previous activity
         puzzleTitle = getIntent().getStringExtra("puzzleTitle");

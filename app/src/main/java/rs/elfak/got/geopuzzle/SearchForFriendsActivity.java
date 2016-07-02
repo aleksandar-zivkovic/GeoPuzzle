@@ -78,6 +78,8 @@ public class SearchForFriendsActivity extends AppCompatActivity {
     protected void onCreate(@org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_for_friends);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         // Find Views by Id
         mListView = (ListView) findViewById(R.id.userListView);

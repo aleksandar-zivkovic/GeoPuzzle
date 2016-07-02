@@ -56,6 +56,8 @@ public class CreatePuzzleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_puzzle);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.logo);
 
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         mUser = db.getUserDetails();
@@ -304,6 +306,10 @@ public class CreatePuzzleActivity extends AppCompatActivity {
                         processChunkedImageUpload.execute();
 
                         pDialog.dismiss();
+
+                        //start My Puzzles Activity
+                        Intent myPuzzles = new Intent(getApplicationContext(), MyPuzzlesActivity.class);
+                        startActivity(myPuzzles);
                     }
                     else {
                         pDialog.dismiss();
