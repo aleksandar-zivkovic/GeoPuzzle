@@ -1,17 +1,35 @@
 package rs.elfak.got.geopuzzle.library;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
+
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
+import rs.elfak.got.geopuzzle.LoginActivity;
+import rs.elfak.got.geopuzzle.R;
 
 /**
  * Created by Milan on 14.5.2016..
@@ -98,8 +116,81 @@ public class UserFunctions {
     // Function for user logout
     public boolean logoutUser(Context context) {
         DatabaseHandler db = new DatabaseHandler(context);
+        HashMap user = db.getUserDetails();
+        String email = user.get(Cons.KEY_EMAIL) != null ? user.get(Cons.KEY_EMAIL).toString() : "";
+
+        if(!email.equals(""))
+            new UnregisterApp(context, email).execute();
+
         db.resetTables();
         return true;
+    }
+
+    // Async Task to check whether internet connection is working
+    public class UnregisterApp extends AsyncTask {
+        Context context;
+        String email;
+
+        public UnregisterApp(Context context, String email){
+            this.context = context;
+            this.email = email;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            // Gets current device state and checks for working internet connection by trying Google
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()) {
+                try {
+                    URL url = new URL("http://www.google.com");
+                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                    urlc.setConnectTimeout(3000);
+                    urlc.connect();
+                    if (urlc.getResponseCode() == 200) {
+                        URI url2 = null;
+
+                        try {
+                            url2 = new URI(Cons.SERVER_URL + "unregister.php?email=" + email);
+                        } catch (URISyntaxException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        HttpClient httpclient = new DefaultHttpClient();
+                        HttpGet request = new HttpGet();
+                        request.setURI(url2);
+                        try {
+                            httpclient.execute(request);
+                        } catch (ClientProtocolException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                        return true;
+                    }
+                }
+                catch (MalformedURLException e1) {
+                    e1.printStackTrace();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+        }
     }
 
     // Function for friends fetching

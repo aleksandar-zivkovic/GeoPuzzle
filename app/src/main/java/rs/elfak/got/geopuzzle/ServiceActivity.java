@@ -1,5 +1,6 @@
 package rs.elfak.got.geopuzzle;
 
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -41,10 +42,10 @@ public class ServiceActivity extends AppCompatActivity {
                     mStartServiceBtn.setText(R.string.stop_service);
                     Toast.makeText(getApplicationContext(), "Service started!", Toast.LENGTH_SHORT).show();
 
-                    DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+                    /*DatabaseHandler db = new DatabaseHandler(getApplicationContext());
                     HashMap regId = db.getKeyValue(Cons.KEY_REG_ID);
                     if(!regId.containsKey(Cons.KEY_REG_ID))
-                        new RegisterApp(getApplicationContext()).execute();
+                        new RegisterApp(getApplicationContext(), null).execute();*/
                 }
                 else {
                     stopService(new Intent(getApplicationContext(), GeoPuzzleService.class));

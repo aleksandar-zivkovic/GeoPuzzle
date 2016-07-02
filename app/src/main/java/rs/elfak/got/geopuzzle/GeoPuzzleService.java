@@ -57,7 +57,7 @@ public class GeoPuzzleService extends Service {
             loc = location;
             new UpdateLocation().execute();
 
-            NotificationManager notificationManager =
+            /*NotificationManager notificationManager =
                     (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             int icon = R.mipmap.logo;
             CharSequence notiText = "Your notification from the service";
@@ -81,7 +81,7 @@ public class GeoPuzzleService extends Service {
 
 
             int SERVER_DATA_RECEIVED = 1;
-            notificationManager.notify(SERVER_DATA_RECEIVED, notification);
+            notificationManager.notify(SERVER_DATA_RECEIVED, notification);*/
         }
 
         @Override

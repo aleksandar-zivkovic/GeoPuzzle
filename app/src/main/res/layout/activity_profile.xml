@@ -52,6 +52,36 @@
                 android:textSize="25sp"/>
 
             <LinearLayout
+                android:id="@+id/friendDetailsLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:paddingBottom="50dp">
+
+                <TextView
+                    android:background="@drawable/rounded_corner"
+                    android:id="@+id/emailText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:layout_marginBottom="5dp"/>
+
+                <TextView
+                    android:background="@drawable/rounded_corner"
+                    android:id="@+id/phoneNumberText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/profileActionsLayout"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

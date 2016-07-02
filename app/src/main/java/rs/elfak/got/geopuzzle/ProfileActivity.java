@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -38,6 +39,8 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int STATE_USER_PROFILE = 0;
     private static final int STATE_FRIEND_PROFILE = 1;
 
+    private LinearLayout profileActionsLayout;
+    private LinearLayout friendDetailsLayout;
     private Button mLogoutBtn;
     private Button mChangePasswordBtn;
     private Button mViewMyFriendsBtn;
@@ -86,6 +89,10 @@ public class ProfileActivity extends AppCompatActivity {
         mSearchForFriendsBtn = (Button) findViewById(R.id.searchForFriendsBtn);
         mViewMyPuzzlesBtn = (Button) findViewById(R.id.viewMyPuzzlesBtn);
         TextView titleText = (TextView) findViewById(R.id.titleText);
+        TextView phoneNumberText = (TextView)findViewById(R.id.phoneNumberText);
+
+        profileActionsLayout = (LinearLayout)findViewById(R.id.profileActionsLayout);
+        friendDetailsLayout = (LinearLayout)findViewById(R.id.friendDetailsLayout);
 
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 
@@ -97,16 +104,31 @@ public class ProfileActivity extends AppCompatActivity {
             state = STATE_FRIEND_PROFILE;
             this.setTitle(R.string.title_activity_friend);
 
-            mLogoutBtn.setVisibility(View.INVISIBLE);
+            /*mLogoutBtn.setVisibility(View.INVISIBLE);
             mChangePasswordBtn.setVisibility(View.INVISIBLE);
             mViewMyFriendsBtn.setVisibility(View.INVISIBLE);
             mViewMyPuzzlesBtn.setVisibility(View.INVISIBLE);
             mSearchForFriendsBtn.setVisibility(View.INVISIBLE);
-            mChangeImageView.setVisibility(View.INVISIBLE);
+            mChangeImageView.setVisibility(View.INVISIBLE);*/
+
+            profileActionsLayout.setVisibility(View.GONE);
+            friendDetailsLayout.setVisibility(View.VISIBLE);
 
             // Sets user first name and last name in text view
             titleText.setText(bundle.getString(Cons.KEY_FULLNAME));
             mEmail = bundle.getString(Cons.KEY_EMAIL);
+            ((TextView)findViewById(R.id.emailText)).setText(mEmail);
+            phoneNumberText.setText(bundle.getString(Cons.KEY_PHONE_NUMBER));
+            final String phoneNumber = bundle.getString(Cons.KEY_PHONE_NUMBER);
+            phoneNumberText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String uri = "tel:" + phoneNumber.trim() ;
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(uri));
+                    startActivity(intent);
+                }
+            });
         }
         else {
             state = STATE_USER_PROFILE;
@@ -207,6 +229,9 @@ public class ProfileActivity extends AppCompatActivity {
                     builder.show();
                 }
             });
+
+            profileActionsLayout.setVisibility(View.VISIBLE);
+            friendDetailsLayout.setVisibility(View.GONE);
 
             // Sets user first name and last name in text view
             titleText.setText(user.get(Cons.KEY_FIRSTNAME) + " " + user.get(Cons.KEY_LASTNAME));

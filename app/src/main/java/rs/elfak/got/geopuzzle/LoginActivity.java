@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.os.Bundle;
@@ -195,6 +197,9 @@ public class LoginActivity extends AppCompatActivity {
                         else
                             db.setValue(Cons.KEY_KEEP_LOGGED_IN, "false");
                         db.setValue(Cons.KEY_LOGGED_IN, "true");
+
+                        //  Register app on GCM service
+                        new RegisterApp(getApplicationContext(), pDialog).execute();
 
                         // If JSON array details are stored in SQlite it launches the User Panel.
                         Intent home = new Intent(getApplicationContext(), HomeActivity.class);

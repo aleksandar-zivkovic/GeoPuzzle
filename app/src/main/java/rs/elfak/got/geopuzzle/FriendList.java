@@ -24,12 +24,14 @@ public class FriendList extends ArrayAdapter<String> {
     private final Activity context;
     private final String[] names;
     private final String[] emails;
+    private final String[] phoneNumbers;
 
-    public FriendList(Activity context, String[] names, String[] emails) {
+    public FriendList(Activity context, String[] names, String[] emails, String[] phoneNumbers) {
         super(context, R.layout.list_friend_item, names);
         this.context = context;
         this.names = names;
         this.emails = emails;
+        this.phoneNumbers = phoneNumbers;
     }
 
     @Override
@@ -52,6 +54,7 @@ public class FriendList extends ArrayAdapter<String> {
                 Intent friendProfile = new Intent(view.getContext(), ProfileActivity.class);
                 friendProfile.putExtra(Cons.KEY_FULLNAME, names[position]);
                 friendProfile.putExtra(Cons.KEY_EMAIL, emails[position]);
+                friendProfile.putExtra(Cons.KEY_PHONE_NUMBER, phoneNumbers[position]);
                 view.getContext().startActivity(friendProfile);
             }
         });

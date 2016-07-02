@@ -317,7 +317,7 @@ public class RegisterActivity extends AppCompatActivity {
                 pDialog.setTitle(R.string.msg_contacting_servers);
                 pDialog.setMessage("Registering...");
                 pDialog.setIndeterminate(false);
-                pDialog.setCancelable(true);
+                pDialog.setCancelable(false);
                 pDialog.show();
             }
 

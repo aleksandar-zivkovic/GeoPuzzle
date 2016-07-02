@@ -41,7 +41,7 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver  {
         // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
 
-        if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
+        if (!extras.isEmpty() && extras.getString("title") != null) {  // has effect of unparcelling Bundle
             sendNotification(/*"Deleted messages on server: " +*/ extras.getString("title"), extras.getString("message"));
             /*
              * Filter messages based on message type. Since it is likely that GCM

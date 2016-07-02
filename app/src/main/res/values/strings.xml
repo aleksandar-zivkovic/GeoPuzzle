@@ -98,4 +98,5 @@
     <string name="search_by_distance">Search by Distance</string>
     <string name="enter_search_criterium">Enter search criterium</string>
     <string name="enter_distance">Enter distance</string>
+    <string name="enter_email_or_username">Enter email or username</string>
 </resources>

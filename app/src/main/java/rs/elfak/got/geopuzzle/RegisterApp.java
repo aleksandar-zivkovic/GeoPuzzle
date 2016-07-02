@@ -10,6 +10,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -24,19 +26,27 @@ import rs.elfak.got.geopuzzle.library.DatabaseHandler;
  */
 public class RegisterApp extends AsyncTask<Void, Void, String> {
 
+    private ProgressDialog pDialog;
     private static final String TAG = "GCMRelated";
     Context ctx;
     GoogleCloudMessaging gcm;
     String SENDER_ID = "613497862690";
     String regid = null;
 
-    public RegisterApp(Context ctx) {
+    public RegisterApp(Context ctx, ProgressDialog pDialog) {
         this.ctx = ctx;
+        this.pDialog = pDialog;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        if(pDialog != null)
+        {
+            pDialog.setMessage("Registering on Google Cloud Messaging service...");
+            pDialog.show();
+        }
     }
 
     @Override
@@ -105,7 +115,10 @@ public class RegisterApp extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        Toast.makeText(ctx, "Registration Completed. Now you can see the notifications", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ctx, "Registration Completed. Now you can see the notifications", Toast.LENGTH_SHORT).show();
         Log.v(TAG, result);
+
+        if(pDialog != null)
+            pDialog.dismiss();
     }
 }

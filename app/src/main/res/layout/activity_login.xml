@@ -56,7 +56,7 @@
                     android:textColor="#000000"
                     android:textSize="15sp"
                     android:inputType="textEmailAddress"
-                    android:hint="@string/enter_email"/>
+                    android:hint="@string/enter_email_or_username" />
             </LinearLayout>
 
             <LinearLayout
@@ -80,8 +80,8 @@
                     android:layout_height="40dp"
                     android:textColor="#000000"
                     android:textSize="15sp"
-                    android:inputType="textPassword"
-                    android:hint="@string/enter_password"/>
+                    android:hint="@string/enter_password"
+                    android:inputType="textPassword" />
             </LinearLayout>
 
             <CheckBox
