@@ -129,8 +129,8 @@ public class ProfileActivity extends AppCompatActivity {
             // Start My Puzzles Activity
             mViewMyPuzzlesBtn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View arg0) {
-                    Intent myFriends = new Intent(getApplicationContext(), MyPuzzlesActivity.class);
-                    startActivity(myFriends);
+                    Intent myPuzzles = new Intent(getApplicationContext(), MyPuzzlesActivity.class);
+                    startActivity(myPuzzles);
                 }
             });
             // Start Change Password Activity

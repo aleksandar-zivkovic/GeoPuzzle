@@ -93,8 +93,8 @@
     <string name="server_client_id">613497862690-n2m2n77kf33slihr0s0lhbi8plcraugc.apps.googleusercontent.com</string>
     <string name="description">Description</string>
     <string name="service_description">This is GeoPuzzle Service control activity. GeoPuzzle Service is used to update your location on server so your friends can know where you are. If you don\'t want to update your location, you can turn off this service. Once you turn on this service, it stays active even if you close application.</string>
-    <string name="search_friends">Search Friends</string>
-    <string name="search_puzzles">Search Puzzles</string>
+    <string name="search_friends">Search My Friends</string>
+    <string name="search_puzzles">Search My Puzzles</string>
     <string name="search_by_distance">Search by Distance</string>
     <string name="enter_search_criterium">Enter search criterium</string>
     <string name="enter_distance">Enter distance</string>
