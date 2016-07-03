@@ -54,6 +54,7 @@ public class UserFunctions {
     private static String fetchpuzzlechunk_tag = "fetchpuzzlechunk";
     private static String fetchscores_tag = "fetchscores";
     private static String update_location_tag = "updatelocation";
+    private static String deletefriendship_tag = "deletefriendship";
     private static String addfriendship_tag = "addfriendship";
     private static String updatepuzzlecreated_tag = "updatepuzzlecreated";
     private static String updatepuzzlesolved_tag = "updatepuzzlesolved";
@@ -325,6 +326,18 @@ public class UserFunctions {
         // Building Parameters
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", addfriendship_tag));
+        params.add(new BasicNameValuePair("email1", email1));
+        params.add(new BasicNameValuePair("email2", email2));
+
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL,params);
+        return json;
+    }
+
+    // Function for friendship removal
+    public JSONObject deleteFriendship(String email1, String email2) {
+        // Building Parameters
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", deletefriendship_tag));
         params.add(new BasicNameValuePair("email1", email1));
         params.add(new BasicNameValuePair("email2", email2));
 

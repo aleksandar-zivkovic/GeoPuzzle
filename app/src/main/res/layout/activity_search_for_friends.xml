@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="rs.elfak.got.geopuzzle.SearchForFriendsActivity">
+    tools:context="rs.elfak.got.geopuzzle.SearchForFriendsActivity"
+    android:showDividers="beginning">
 
 
 
@@ -14,6 +15,22 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/buttonDiscoverDevices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Discover New Devices"
+            android:onClick="discover"
+            />
+
+        <Button
+            android:id="@+id/buttonList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="List Paired devices"
+            android:onClick="list"
+            />
 
         <TextView
             android:id="@+id/textViewPairedDevices"
@@ -40,22 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp">
-
-        <Button
-            android:id="@+id/buttonList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="List Paired devices"
-            android:onClick="list"
-            />
-
-        <Button
-            android:id="@+id/buttonDiscoverDevices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Discover New Devices"
-            android:onClick="discover"
-            />
 
         <Button
             android:id="@+id/buttonSend"
@@ -88,8 +89,8 @@
             android:id="@+id/textViewPendingFriendRequests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pending Friend Requests:"
-            android:textColor="#ff7606"
+            android:text="Pending Requests:"
+            android:textColor="#068fff"
             android:textSize="25dp"
             android:layout_marginTop="20dp"
             />

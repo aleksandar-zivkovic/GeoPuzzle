@@ -4,6 +4,4 @@
 
     <item android:id="@+id/delete_friend_item" android:title="Delete friend"
         android:orderInCategory="100" app:showAsAction="always" android:icon="@drawable/ic_action_delete"/>
-    <item android:id="@+id/about_item" android:title="About authors"
-        android:orderInCategory="100" app:showAsAction="never" android:icon="@drawable/ic_action_about"/>
 </menu>

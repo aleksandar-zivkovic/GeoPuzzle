@@ -10,12 +10,14 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,6 +35,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import rs.elfak.got.geopuzzle.library.*;
 
@@ -48,9 +60,14 @@ public class ProfileActivity extends AppCompatActivity {
     private Button mViewMyPuzzlesBtn;
     private ImageView mUserImageView;
     private ImageView mChangeImageView;
+    private TextView mEmailTextView;
+    private TextView mTitleText;
+    private TextView mPhoneNumberText;
+
     private ProgressDialog pDialog;
     private int state;
 
+    private String mPhoneNumber;
     private String mEmail;
 
     private Bitmap bitmap, bitmapRotate;
@@ -61,11 +78,11 @@ public class ProfileActivity extends AppCompatActivity {
     private Uri mImageUri;
     private String selectedImagePath;
     private String filemanagerstring;
-
     private Boolean upflag = false;
     private ConnectionDetector cd;
-
     private Bitmap bitmapToShow;
+    private DatabaseHandler db;
+    private HashMap user; // Hashmap to load data from the Sqlite database or server
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,52 +105,48 @@ public class ProfileActivity extends AppCompatActivity {
         mViewMyFriendsBtn = (Button) findViewById(R.id.viewMyFriendsBtn);
         mSearchForFriendsBtn = (Button) findViewById(R.id.searchForFriendsBtn);
         mViewMyPuzzlesBtn = (Button) findViewById(R.id.viewMyPuzzlesBtn);
-        TextView titleText = (TextView) findViewById(R.id.titleText);
-        TextView phoneNumberText = (TextView)findViewById(R.id.phoneNumberText);
+        mTitleText = (TextView) findViewById(R.id.titleText);
+        mPhoneNumberText = (TextView)findViewById(R.id.phoneNumberText);
+        mEmailTextView = (TextView) findViewById(R.id.emailText);
 
         profileActionsLayout = (LinearLayout)findViewById(R.id.profileActionsLayout);
         friendDetailsLayout = (LinearLayout)findViewById(R.id.friendDetailsLayout);
 
-        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+        db = new DatabaseHandler(getApplicationContext());
+        user = db.getUserDetails();
 
-        // Hashmap to load data from the Sqlite database or server
-        HashMap user;
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null && bundle.getString(Cons.KEY_EMAIL) != null) {
             state = STATE_FRIEND_PROFILE;
             this.setTitle(R.string.title_activity_friend);
-
-            /*mLogoutBtn.setVisibility(View.INVISIBLE);
-            mChangePasswordBtn.setVisibility(View.INVISIBLE);
-            mViewMyFriendsBtn.setVisibility(View.INVISIBLE);
-            mViewMyPuzzlesBtn.setVisibility(View.INVISIBLE);
-            mSearchForFriendsBtn.setVisibility(View.INVISIBLE);
-            mChangeImageView.setVisibility(View.INVISIBLE);*/
-
             profileActionsLayout.setVisibility(View.GONE);
             friendDetailsLayout.setVisibility(View.VISIBLE);
 
             // Sets user first name and last name in text view
-            titleText.setText(bundle.getString(Cons.KEY_FULLNAME));
+            mTitleText.setText(bundle.getString(Cons.KEY_FULLNAME));
             mEmail = bundle.getString(Cons.KEY_EMAIL);
-            ((TextView)findViewById(R.id.emailText)).setText(mEmail);
-            phoneNumberText.setText(bundle.getString(Cons.KEY_PHONE_NUMBER));
-            final String phoneNumber = bundle.getString(Cons.KEY_PHONE_NUMBER);
-            phoneNumberText.setOnClickListener(new View.OnClickListener() {
+            mEmailTextView.setText(mEmail);
+
+            FetchFriend fetchFriend = new FetchFriend();
+            fetchFriend.execute();
+
+            mEmailTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String uri = "tel:" + phoneNumber.trim() ;
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse(uri));
-                    startActivity(intent);
+                    if (mEmail != null) {
+                        String mailTo = mEmail;
+                        Intent email_intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto",mailTo, null));
+                        email_intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject text here");
+                        email_intent.putExtra(android.content.Intent.EXTRA_TEXT,"Body text here");
+
+                        startActivity(Intent.createChooser(email_intent, "Send email..."));
+                    }
                 }
             });
         }
         else {
             state = STATE_USER_PROFILE;
-            user = db.getUserDetails();
-
             // Start Search For Friends Activity
             mSearchForFriendsBtn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View arg0) {
@@ -234,7 +247,7 @@ public class ProfileActivity extends AppCompatActivity {
             friendDetailsLayout.setVisibility(View.GONE);
 
             // Sets user first name and last name in text view
-            titleText.setText(user.get(Cons.KEY_FIRSTNAME) + " " + user.get(Cons.KEY_LASTNAME));
+            mTitleText.setText(user.get(Cons.KEY_FIRSTNAME) + " " + user.get(Cons.KEY_LASTNAME));
 
             // Gets email
             mEmail = user.get(Cons.KEY_EMAIL).toString();
@@ -437,6 +450,78 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.delete_friend_item:
+                DeleteFriendShip deleteFriendShip = new DeleteFriendShip();
+                Object[] params = new Object[2];
+                String myEmail = user.get(Cons.KEY_EMAIL).toString();;
+                String myFriendsEmail = mEmail;
+                params[0] = myEmail;
+                params[1] = myFriendsEmail;
+                deleteFriendShip.execute(params);
+
+                return true;
+        }
+
+        return false;
+    }
+
+    private class DeleteFriendShip extends AsyncTask {
+        private ProgressDialog pDialog;
+        private String myEmail;
+        private String myFriendsEmail;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(ProfileActivity.this);
+            pDialog.setTitle(R.string.msg_contacting_servers);
+            pDialog.setMessage("Fetching friend...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            UserFunctions userFunction = new UserFunctions();
+            myEmail = (String) params[0];
+            myFriendsEmail = (String) params[1];
+            return userFunction.deleteFriendship(myEmail, myFriendsEmail);
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            JSONObject json = (JSONObject)o;
+            try {
+                if (json.getString(Cons.KEY_SUCCESS) != null) {
+
+                    String res = json.getString(Cons.KEY_SUCCESS);
+                    if(Integer.parseInt(res) == 1) {
+                        // success
+                        pDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Friendship deleted", Toast.LENGTH_SHORT).show();
+                        // redirect to MyFriendsActivity
+                        Intent myFriends = new Intent(getApplicationContext(), MyFriendsActivity.class);
+                        myFriends.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(myFriends);
+                    }
+                    else {
+                        // error
+                        pDialog.dismiss();
+                    }
+                }
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private class DownloadImageTask extends AsyncTask {
 
         @Override
@@ -450,6 +535,64 @@ public class ProfileActivity extends AppCompatActivity {
                 mUserImageView.setImageBitmap((Bitmap) o);
 
             pDialog.dismiss();
+        }
+    }
+
+    private class FetchFriend extends AsyncTask {
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(ProfileActivity.this);
+            pDialog.setTitle(R.string.msg_contacting_servers);
+            pDialog.setMessage("Fetching friend...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            UserFunctions userFunction = new UserFunctions();
+            return userFunction.fetchUser(mEmail);
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            JSONObject json = (JSONObject)o;
+            try {
+                if (json.getString(Cons.KEY_SUCCESS) != null) {
+
+                    String res = json.getString(Cons.KEY_SUCCESS);
+                    if(Integer.parseInt(res) == 1) {
+                        // success
+                        JSONObject selectedUser = json.getJSONObject("user");
+                        mPhoneNumber = selectedUser.getString("phonenumber");
+                        mPhoneNumberText.setText(mPhoneNumber);
+                        mPhoneNumberText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mPhoneNumber != null) {
+                                    String uri = "tel:" + mPhoneNumber.trim() ;
+                                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                                    intent.setData(Uri.parse(uri));
+                                    startActivity(intent);
+                                }
+                            }
+                        });
+                        pDialog.dismiss();
+                    }
+                    else {
+                        // error
+                        pDialog.dismiss();
+                    }
+                }
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

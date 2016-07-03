@@ -131,15 +131,13 @@ public class SearchFriendsActivity extends AppCompatActivity {
                         else {
                             ArrayList<String> friendNames = new ArrayList<String>();
                             ArrayList<String> friendEmails = new ArrayList<String>();
-                            ArrayList<String> friendPhoneNums = new ArrayList<String>();
                             for(int i = 1; i <= friendsNum; i++) {
                                 JSONObject friend = json.getJSONObject("friend" + i);
                                 friendNames.add(friend.getString(Cons.KEY_FIRSTNAME) + " " + friend.getString(Cons.KEY_LASTNAME));
                                 friendEmails.add(friend.getString(Cons.KEY_EMAIL));
-                                friendPhoneNums.add(friend.getString(Cons.KEY_PHONE_NUMBER));
                             }
 
-                            FriendList adapter = new FriendList(SearchFriendsActivity.this, friendNames.toArray(new String[friendNames.size()]), friendEmails.toArray(new String[friendEmails.size()]), friendPhoneNums.toArray(new String[friendEmails.size()]));
+                            FriendList adapter = new FriendList(SearchFriendsActivity.this, friendNames.toArray(new String[friendNames.size()]), friendEmails.toArray(new String[friendEmails.size()]));
                             mFriendsList.setAdapter(adapter);
                         }
 

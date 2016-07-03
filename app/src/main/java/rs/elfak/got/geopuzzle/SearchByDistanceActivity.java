@@ -99,7 +99,7 @@ public class SearchByDistanceActivity extends AppCompatActivity {
 
         mShowSeekImg = (ImageView) findViewById(R.id.showSeekImg);
         mShowSeekImg.bringToFront();
-        mShowSeekImg.setRotation(0);
+        mShowSeekImg.setRotation(180);
         mShowSeekImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

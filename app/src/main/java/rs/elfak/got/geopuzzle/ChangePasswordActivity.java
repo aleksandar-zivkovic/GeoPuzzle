@@ -79,8 +79,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         mCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-//                Intent login = new Intent(getApplicationContext(), ProfileActivity.class);
-//                startActivity(login);
                 finish();
             }
         });

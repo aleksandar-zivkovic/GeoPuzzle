@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -72,6 +73,11 @@ public class MapActivity extends AppCompatActivity {
     private Double myLatitude = 0.0;
     private Double myLongitude = 0.0;
 
+    private String mPuzzleChunkLat;
+    private String mPuzzleChunkLon;
+    private Marker mMarker;
+
+
     private GoogleMap mMap;
     private Marker customMarker;
     private LatLng markerLatLng;
@@ -79,6 +85,7 @@ public class MapActivity extends AppCompatActivity {
     private ImageView markerImageView;
     private ImageView frameImageView;
     private View markerLayout;
+    private Button mPlaceChunkButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +97,26 @@ public class MapActivity extends AppCompatActivity {
         markerLayout = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
         markerImageView = (ImageView) markerLayout.findViewById(R.id.markerImage);
         frameImageView = (ImageView) markerLayout.findViewById(R.id.frame);
+
+        mPlaceChunkButton = (Button) findViewById(R.id.placeChunkButton);
+        mPlaceChunkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                chunkToPlaceEnabled = false;
+                // add chunk coordinates to database
+                markerChunkTitleMap.put(mMarker, puzzleTitle);
+
+                mPlaceChunkButton.setVisibility(View.INVISIBLE);
+
+                ProcessPuzzleChunkImageUpload processPuzzleChunkImageUpload = new ProcessPuzzleChunkImageUpload();
+                Object[] params = new Object[3];
+                params[0] = puzzleTitle;
+                params[1] = mPuzzleChunkLat;
+                params[2] = mPuzzleChunkLon;
+                processPuzzleChunkImageUpload.execute(params);
+
+            }
+        });
 
         try {
             Intent mapIntent = getIntent();
@@ -160,11 +187,13 @@ public class MapActivity extends AppCompatActivity {
                 @Override
                 public void onMapClick(LatLng latLng) {
                     if (state == SELECT_COORDINATES && selCoordsEnabled) {
-                        String lon = Double.toString(latLng.longitude);
+
                         String lat = Double.toString(latLng.latitude);
+                        String lon = Double.toString(latLng.longitude);
+
                         Intent locationIntent = new Intent();
-                        locationIntent.putExtra("lon", lon);
                         locationIntent.putExtra("lat", lat);
+                        locationIntent.putExtra("lon", lon);
                         setResult(Activity.RESULT_OK, locationIntent);
                         finish();
                     }
@@ -177,8 +206,14 @@ public class MapActivity extends AppCompatActivity {
                 public void onMapClick(LatLng latLng) {
                     if (state == PLACE_CHUNK_ON_MAP && chunkToPlaceEnabled) {
 
-                        String lat = Double.toString(latLng.latitude);
-                        String lon = Double.toString(latLng.longitude);
+                        if (mMarker != null) {
+                            mMarker.remove();
+                        }
+
+                        mPlaceChunkButton.setVisibility(View.VISIBLE);
+
+                        mPuzzleChunkLat = Double.toString(latLng.latitude);
+                        mPuzzleChunkLon = Double.toString(latLng.longitude);
 
                         frameImageView.setImageResource(R.drawable.custom_marker);
                         MarkerOptions markerOptions = new MarkerOptions();
@@ -192,18 +227,7 @@ public class MapActivity extends AppCompatActivity {
                         markerOptions.title("Puzzle");
                         markerOptions.snippet("Collect me!");
 
-                        Marker marker = map.addMarker(markerOptions);
-                        markerChunkTitleMap.put(marker, puzzleTitle);
-
-                        chunkToPlaceEnabled = false;
-
-                        // add chunk coordinates to database
-                        ProcessPuzzleChunkImageUpload processPuzzleChunkImageUpload = new ProcessPuzzleChunkImageUpload();
-                        Object[] params = new Object[3];
-                        params[0] = puzzleTitle;
-                        params[1] = lat;
-                        params[2] = lon;
-                        processPuzzleChunkImageUpload.execute(params);
+                        mMarker = map.addMarker(markerOptions);
                     }
                 }
             });
@@ -229,10 +253,8 @@ public class MapActivity extends AppCompatActivity {
                 else {
                     Intent friendProfile = new Intent(getApplicationContext(), ProfileActivity.class);
                     friendProfile.putExtra(Cons.KEY_FULLNAME, marker.getTitle());
-
                     String email = markerFriendEmailMap.get(marker);
                     friendProfile.putExtra(Cons.KEY_EMAIL, email);
-
                     startActivity(friendProfile);
                 }
 
