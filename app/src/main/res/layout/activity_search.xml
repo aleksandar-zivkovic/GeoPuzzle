@@ -53,6 +53,16 @@
             android:text="@string/search_puzzles"
             android:gravity="center_vertical|center"/>
 
+        <TextView
+            android:text="See if someone from your friend list is nearby!"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="10dp"/>
+
         <Button
             android:id="@+id/searchByDistanceBtn"
             android:layout_width="match_parent"

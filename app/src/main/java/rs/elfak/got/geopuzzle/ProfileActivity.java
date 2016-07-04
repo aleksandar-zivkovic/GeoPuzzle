@@ -69,6 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private String mPhoneNumber;
     private String mEmail;
+    private String mName;
 
     private Bitmap bitmap, bitmapRotate;
     private File photo;
@@ -124,9 +125,12 @@ public class ProfileActivity extends AppCompatActivity {
             friendDetailsLayout.setVisibility(View.VISIBLE);
 
             // Sets user first name and last name in text view
-            mTitleText.setText(bundle.getString(Cons.KEY_FULLNAME));
-            mEmail = bundle.getString(Cons.KEY_EMAIL);
-            mEmailTextView.setText(mEmail);
+            if (bundle.getString(Cons.KEY_FULLNAME) != null)
+                mTitleText.setText(bundle.getString(Cons.KEY_FULLNAME));
+            if (bundle.getString(Cons.KEY_EMAIL) != null) {
+                mEmail = bundle.getString(Cons.KEY_EMAIL);
+                mEmailTextView.setText(mEmail);
+            }
 
             FetchFriend fetchFriend = new FetchFriend();
             fetchFriend.execute();
@@ -569,6 +573,10 @@ public class ProfileActivity extends AppCompatActivity {
                     if(Integer.parseInt(res) == 1) {
                         // success
                         JSONObject selectedUser = json.getJSONObject("user");
+
+                        mName = selectedUser.getString("firstname") + " " + selectedUser.getString("lastname");
+                        mTitleText.setText(mName);
+
                         mPhoneNumber = selectedUser.getString("phonenumber");
                         mPhoneNumberText.setText(mPhoneNumber);
                         mPhoneNumberText.setOnClickListener(new View.OnClickListener() {

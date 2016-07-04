@@ -15,6 +15,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import rs.elfak.got.geopuzzle.library.Cons;
+
 /**
  * Created by Milan on 30.6.2016..
  */
@@ -84,8 +86,13 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver  {
         mNotificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                new Intent(context, HomeActivity.class), 0);
+        String[] strings = msg.split(" ");
+        String friendsEmail = strings[2];
+
+        Intent friendProfileIntent = new Intent(this.context, ProfileActivity.class);
+        friendProfileIntent.putExtra(Cons.KEY_EMAIL, friendsEmail);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, friendProfileIntent, 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
