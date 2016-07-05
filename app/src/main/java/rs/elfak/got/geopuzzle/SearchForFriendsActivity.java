@@ -566,7 +566,7 @@ public class SearchForFriendsActivity extends AppCompatActivity {
                             String responseAnswer;
                             alreadyFriends = false;
 
-                            for(int i = 0; i <= friendsNum; i++) {
+                            for(int i = 0; i < friendsNum; i++) {
                                 JSONObject friend = json.getJSONObject("friend" + (i+1) );
                                 String friendsEmail = friend.getString(Cons.KEY_EMAIL);
 
