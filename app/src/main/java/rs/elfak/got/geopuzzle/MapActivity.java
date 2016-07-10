@@ -781,7 +781,7 @@ public class MapActivity extends AppCompatActivity {
 
             pDialog = new ProgressDialog(MapActivity.this);
             pDialog.setTitle(R.string.msg_contacting_servers);
-            pDialog.setMessage("Seding collected chunk to server...");
+            pDialog.setMessage("Sending collected chunk to server...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();

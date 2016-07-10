@@ -13,6 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by Milan on 2.7.2016..
+ * Created by Aleksandar on 2.7.2016..
  */
 

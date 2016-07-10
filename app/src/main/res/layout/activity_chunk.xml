@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="38dp"
-    android:orientation="vertical"
-    tools:context="rs.elfak.got.geopuzzle.PuzzleSolvedActivity">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="rs.elfak.got.geopuzzle.ChunkActivity">
 
     <TextView
+        android:id="@+id/puzzleTitle"
         android:layout_width="match_parent"
         android:layout_height="50sp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Congratulations"
+        android:text="Puzzle title"
         android:textSize="30sp"/>
 
     <TextView
+        android:id="@+id/puzzleChunkTitle"
         android:layout_width="match_parent"
         android:layout_height="50sp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="You have solved this puzzle!"
+        android:text="Puzzle chunk title"
         android:textSize="20sp"/>
 
     <RelativeLayout
@@ -34,7 +36,7 @@
 
 
         <ImageView
-            android:id="@+id/solvedPuzzleImage"
+            android:id="@+id/puzzleChunkImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -43,10 +45,10 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/backToMapBtn"
+        android:id="@+id/shareWithFriendsBtn"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:text="Back to Map"
+        android:text="Share with friends"
         android:layout_gravity="center"
 
         android:background="@drawable/buttonshape"

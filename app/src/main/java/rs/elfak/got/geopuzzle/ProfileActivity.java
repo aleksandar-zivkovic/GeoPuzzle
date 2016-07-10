@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,11 +59,14 @@ public class ProfileActivity extends AppCompatActivity {
     private Button mViewMyFriendsBtn;
     private Button mSearchForFriendsBtn;
     private Button mViewMyPuzzlesBtn;
+    private Button mViewMyPuzzleChunksBtn;
+    private Button mSendSnapMessageBtn;
     private ImageView mUserImageView;
     private ImageView mChangeImageView;
     private TextView mEmailTextView;
     private TextView mTitleText;
     private TextView mPhoneNumberText;
+    private EditText mSendSnapMessageEditText;
 
     private ProgressDialog pDialog;
     private int state;
@@ -106,9 +110,12 @@ public class ProfileActivity extends AppCompatActivity {
         mViewMyFriendsBtn = (Button) findViewById(R.id.viewMyFriendsBtn);
         mSearchForFriendsBtn = (Button) findViewById(R.id.searchForFriendsBtn);
         mViewMyPuzzlesBtn = (Button) findViewById(R.id.viewMyPuzzlesBtn);
+        mViewMyPuzzleChunksBtn = (Button) findViewById(R.id.myChunksBtn);
+        mSendSnapMessageBtn = (Button) findViewById(R.id.sendSnapMessageBtn);
         mTitleText = (TextView) findViewById(R.id.titleText);
         mPhoneNumberText = (TextView)findViewById(R.id.phoneNumberText);
         mEmailTextView = (TextView) findViewById(R.id.emailText);
+        mSendSnapMessageEditText = (EditText) findViewById(R.id.sendSnapMessageEditText);
 
         profileActionsLayout = (LinearLayout)findViewById(R.id.profileActionsLayout);
         friendDetailsLayout = (LinearLayout)findViewById(R.id.friendDetailsLayout);
@@ -148,6 +155,22 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            mSendSnapMessageBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    String textToSend = mSendSnapMessageEditText.getText().toString();
+                    if (!textToSend.equalsIgnoreCase("")) {
+                        SendSnapMessage sendSnapMessage = new SendSnapMessage();
+                        Object[] params = new Object[3];
+                        String myEmail = user.get(Cons.KEY_EMAIL).toString();;
+                        String myFriendsEmail = mEmail;
+                        params[0] = myEmail;
+                        params[1] = myFriendsEmail;
+                        params[2] = textToSend;
+                        sendSnapMessage.execute(params);
+                    }
+                }
+            });
         }
         else {
             state = STATE_USER_PROFILE;
@@ -170,6 +193,13 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onClick(View arg0) {
                     Intent myPuzzles = new Intent(getApplicationContext(), MyPuzzlesActivity.class);
                     startActivity(myPuzzles);
+                }
+            });
+            // Start My Puzzle Chunks Activity
+            mViewMyPuzzleChunksBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    Intent myPuzzleChunks = new Intent(getApplicationContext(), MyPuzzleChunksActivity.class);
+                    startActivity(myPuzzleChunks);
                 }
             });
             // Start Change Password Activity
@@ -523,6 +553,39 @@ public class ProfileActivity extends AppCompatActivity {
             catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private class SendSnapMessage extends AsyncTask {
+        private ProgressDialog pDialog;
+        private String myEmail;
+        private String myFriendsEmail;
+        private String snapMessageToSend;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(ProfileActivity.this);
+            pDialog.setTitle(R.string.msg_contacting_servers);
+            pDialog.setMessage("Sending snap message...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            UserFunctions userFunction = new UserFunctions();
+            myEmail = (String) params[0];
+            myFriendsEmail = (String) params[1];
+            snapMessageToSend = (String) params[2];
+            return userFunction.sendSnapMessage(myEmail, myFriendsEmail, snapMessageToSend);
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            pDialog.dismiss();
         }
     }
 

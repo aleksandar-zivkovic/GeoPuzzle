@@ -78,6 +78,27 @@
                     android:gravity="center"
                     android:textColor="#000000"
                     android:textSize="15sp"/>
+                
+                <EditText
+                    android:id="@+id/sendSnapMessageEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:inputType="text"
+                    android:gravity="center_horizontal"
+                    android:hint="Enter snap message here..." />
+
+                <Button
+                    android:id="@+id/sendSnapMessageBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Send snap message"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -93,31 +114,69 @@
                     android:id="@+id/viewMyFriendsBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_activity_friends"/>
+                    android:text="@string/title_activity_friends"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/viewMyPuzzlesBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_activity_puzzles"/>
+                    android:text="@string/title_activity_puzzles"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
+
+                <Button
+                    android:id="@+id/myChunksBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Collected puzzle chunks"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/searchForFriendsBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/search_for_friends"/>
+                    android:text="@string/search_for_friends"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/changePasswordBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_activity_change_password"/>
+                    android:text="@string/title_activity_change_password"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/logoutBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/logout"/>
+                    android:text="@string/logout"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
+
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

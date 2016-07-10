@@ -21,6 +21,10 @@
         android:text="Place puzzle chunk"
         android:layout_marginBottom="20dp"
         android:visibility="gone"
+
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#1B29A8"
+        android:textColor="#FFFFFF"
         />
 
     </fragment>

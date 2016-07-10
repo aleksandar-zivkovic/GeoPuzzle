@@ -43,7 +43,12 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:text="@string/search_friends"
-            android:gravity="center_vertical|center"/>
+            android:gravity="center_vertical|center"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#1B29A8"
+            android:textColor="#FFFFFF"
+            />
 
         <Button
             android:id="@+id/searchPuzzlesBtn"
@@ -51,7 +56,12 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:text="@string/search_puzzles"
-            android:gravity="center_vertical|center"/>
+            android:gravity="center_vertical|center"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#1B29A8"
+            android:textColor="#FFFFFF"
+            />
 
         <TextView
             android:text="See if someone from your friend list is nearby!"
@@ -69,6 +79,12 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:text="@string/search_by_distance"
-            android:gravity="center_vertical|center"/>
+            android:gravity="center_vertical|center"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#1B29A8"
+            android:textColor="#FFFFFF"
+            />
+
     </LinearLayout>
 </LinearLayout>

@@ -18,18 +18,26 @@
 
         <Button
             android:id="@+id/buttonDiscoverDevices"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:text="Discover New Devices"
             android:onClick="discover"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#1B29A8"
+            android:textColor="#FFFFFF"
             />
 
         <Button
             android:id="@+id/buttonList"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:text="List Paired devices"
             android:onClick="list"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#1B29A8"
+            android:textColor="#FFFFFF"
             />
 
         <TextView
@@ -65,6 +73,10 @@
             android:text="Send Friend Request"
             android:onClick="send"
             android:enabled="false"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#1B29A8"
+            android:textColor="#FFFFFF"
             />
 
         <Button
@@ -74,6 +86,10 @@
             android:text="Accept Friend Request"
             android:onClick="acceptFriendRequest"
             android:enabled="false"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#1B29A8"
+            android:textColor="#FFFFFF"
             />
 
         <Button
@@ -83,6 +99,10 @@
             android:text="Decline Friend Request"
             android:onClick="declineFriendRequest"
             android:enabled="false"
+
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#1B29A8"
+            android:textColor="#FFFFFF"
             />
 
         <TextView

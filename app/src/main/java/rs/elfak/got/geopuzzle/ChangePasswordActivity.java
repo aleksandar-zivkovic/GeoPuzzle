@@ -93,7 +93,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             super.onPreExecute();
             nDialog = new ProgressDialog(ChangePasswordActivity.this);
             nDialog.setTitle(R.string.msg_checking_network);
-            nDialog.setMessage("Loading...");   //TODO: check why this does not accept constant
+            nDialog.setMessage("Loading...");
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(true);
             nDialog.show();

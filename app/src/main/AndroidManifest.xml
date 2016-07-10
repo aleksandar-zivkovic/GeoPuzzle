@@ -125,7 +125,11 @@
         <activity android:name=".SearchByDistanceActivity" />
         <activity android:name=".SearchFriendsActivity" />
         <activity android:name=".SearchPuzzlesActivity" />
-        <activity android:name=".PuzzleSolvedActivity"></activity>
+        <activity android:name=".PuzzleSolvedActivity" />
+        <activity android:name=".MyPuzzleChunksActivity" />
+        <activity android:name=".ChunkActivity" />
+        <activity android:name=".ReceivedPuzzleChunkActivity" />
+        <activity android:name=".SnapMessageActivity"></activity>
     </application>
 
 </manifest>

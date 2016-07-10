@@ -32,14 +32,14 @@ import rs.elfak.got.geopuzzle.LoginActivity;
 import rs.elfak.got.geopuzzle.R;
 
 /**
- * Created by Milan on 14.5.2016..
+ * Created by Aleksandar on 14.5.2016..
  */
 @SuppressWarnings("deprecation")
 public class UserFunctions {
     private JSONParser jsonParser;
 
     //URL of the PHP API
-    private static String serverURL = "http://vasic.ddns.net/geopuzzle_login_api/";
+    private static String serverURL = Cons.SERVER_URL;
 
     private static String login_tag = "login";
     private static String register_tag = "register";
@@ -49,6 +49,7 @@ public class UserFunctions {
     private static String fetchsearchfriends_tag = "fetchsearchfriends";
     private static String fetchuser_tag = "fetchuser";
     private static String fetchpuzzles_tag = "fetchpuzzles";
+    private static String fetchmypuzzleschunks_tag = "fetchmypuzzlechunks";
     private static String fetchsearchpuzzles_tag = "fetchsearchpuzzles";
     private static String fetchpuzzlechunks_tag = "fetchpuzzlechunks";
     private static String fetchpuzzlechunk_tag = "fetchpuzzlechunk";
@@ -61,6 +62,8 @@ public class UserFunctions {
     private static String uploadpuzzle_tag = "uploadpuzzle";
     private static String uploadpuzzlechunk_tag = "uploadpuzzlechunk";
     private static String collectpuzzlechunk_tag = "collectpuzzlechunk";
+    private static String sendpuzzlechunk_tag = "sendpuzzlechunk";
+    private static String sendsnapmessage_tag = "sendsnapmessage";
 
     public UserFunctions() {
         jsonParser = new JSONParser();
@@ -233,7 +236,7 @@ public class UserFunctions {
         return json;
     }
 
-    // Function for puzzle fetching
+    // Function for puzzle chunks fetching
     public JSONObject fetchPuzzles(Context context) {
         DatabaseHandler db = new DatabaseHandler(context);
         HashMap user = db.getUserDetails();
@@ -243,6 +246,49 @@ public class UserFunctions {
         List params = new ArrayList();
         params.add(new BasicNameValuePair("tag", fetchpuzzles_tag));
         params.add(new BasicNameValuePair("email", email));
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
+        return json;
+    }
+
+    // Function for collected puzzle chunks fetching
+    public JSONObject fetchMyPuzzlesChunks(Context context) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        HashMap user = db.getUserDetails();
+        String email = user.get(Cons.KEY_EMAIL).toString();
+
+        // Building Parameters
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", fetchmypuzzleschunks_tag));
+        params.add(new BasicNameValuePair("email", email));
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
+        return json;
+    }
+
+    // Function for sending puzzle chunk
+    public JSONObject sendPuzzleChunk(Context context, String receiverEmail, String puzzleChunkTitle) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        HashMap user = db.getUserDetails();
+        String senderEmail = user.get(Cons.KEY_EMAIL).toString();
+
+        // Building Parameters
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", sendpuzzlechunk_tag));
+        params.add(new BasicNameValuePair("senderEmail", senderEmail));
+        params.add(new BasicNameValuePair("receiverEmail", receiverEmail));
+        params.add(new BasicNameValuePair("puzzleChunkTitle", puzzleChunkTitle));
+        JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
+        return json;
+    }
+
+    // Function for sending snap message
+    public JSONObject sendSnapMessage(String myEmail, String friendsEmail, String snapMessageToSend) {
+
+        // Building Parameters
+        List params = new ArrayList();
+        params.add(new BasicNameValuePair("tag", sendsnapmessage_tag));
+        params.add(new BasicNameValuePair("myEmail", myEmail));
+        params.add(new BasicNameValuePair("friendsEmail", friendsEmail));
+        params.add(new BasicNameValuePair("snapMessageToSend", snapMessageToSend));
         JSONObject json = jsonParser.getJSONFromUrl(serverURL, params);
         return json;
     }

@@ -461,7 +461,6 @@ public class SearchForFriendsActivity extends AppCompatActivity {
                         e.getMessage();
                     }
                     break;
-                    // TODO: RAZMOTRI SUTRA OVO ZATVARANJE SOKETA I OVAJ BREAK -> DEBUG-UJ
                 }
             }
         }

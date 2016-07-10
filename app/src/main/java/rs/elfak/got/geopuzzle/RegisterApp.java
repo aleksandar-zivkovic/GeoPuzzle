@@ -22,7 +22,7 @@ import rs.elfak.got.geopuzzle.library.Cons;
 import rs.elfak.got.geopuzzle.library.DatabaseHandler;
 
 /**
- * Created by Milan on 30.6.2016..
+ * Created by Aleksandar on 30.6.2016..
  */
 public class RegisterApp extends AsyncTask<Void, Void, String> {
 

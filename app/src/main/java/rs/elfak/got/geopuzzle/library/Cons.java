@@ -1,7 +1,7 @@
 package rs.elfak.got.geopuzzle.library;
 
 /**
- * Created by Milan on 15.5.2016..
+ * Created by Aleksandar on 15.5.2016..
  */
 public class Cons {
     public static final String KEY_SUCCESS = "success";
@@ -22,7 +22,8 @@ public class Cons {
     public static final String KEY_FRIENDS_NUM = "friendsNum";
     public static final String KEY_PUZZLE_NUM = "puzzleNum";
     public static final String KEY_PUZZLE_CHUNK_NUM = "puzzleChunkNum";
-    public static final String KEY_PUZZLE_TITLE= "title";
+    public static final String KEY_PUZZLE_TITLE = "title";
+    public static final String KEY_CHUNK_TITLE = "chunkTitle";
     public static final String KEY_PUZZLE_CHUNKS= "chunks";
 
     public static final String KEY_PUZZLE_CHUNK_TITLE= "puzzle_chunk_title";
@@ -40,9 +41,13 @@ public class Cons {
 
     public static final int KEY_MAX_WIDTH = 600;
 
-    public static final String KEY_UPLOADS_URL = "http://vasic.ddns.net/geopuzzle_login_api/uploads/";
-    public static final String KEY_PUZZLES_URL = "http://vasic.ddns.net/geopuzzle_login_api/puzzles/";
-    public static final String KEY_CHUNKS_URL = "http://vasic.ddns.net/geopuzzle_login_api/chunks/";
+    public static final String SERVER_URL = "http://vasic.ddns.net/geopuzzle_login_api/";
+    // http://vasic.ddns.net/ -> vasic server
+    //192.168.0.102/
+
+    public static final String KEY_UPLOADS_URL = SERVER_URL + "/uploads/";
+    public static final String KEY_PUZZLES_URL = SERVER_URL + "/puzzles/";
+    public static final String KEY_CHUNKS_URL = SERVER_URL + "/chunks/";
 
     public static final int REQUEST_ENABLE_BT = 100;
     public static final int SELECT_SERVER = 200;
@@ -51,5 +56,5 @@ public class Cons {
     public static final int DATA_ACCEPTED = 700;
     public static final int DATA_DECLINED = 800;
 
-    public static final String SERVER_URL = "http://vasic.ddns.net/geopuzzle_login_api/";
+
 }

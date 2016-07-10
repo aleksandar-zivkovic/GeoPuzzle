@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 /**
- * Created by Milan on 14.5.2016..
+ * Created by Aleksandar on 14.5.2016..
  */
 @SuppressWarnings("deprecation")
 public class JSONParser {

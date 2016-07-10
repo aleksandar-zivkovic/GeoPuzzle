@@ -13,7 +13,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 /**
- * Created by Milan on 30.6.2016..
+ * Created by Aleksandar on 30.6.2016..
  */
 public class GCMIntentService extends IntentService {
 

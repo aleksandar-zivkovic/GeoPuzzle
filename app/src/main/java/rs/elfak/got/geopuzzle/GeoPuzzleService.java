@@ -32,7 +32,7 @@ import java.util.TimerTask;
 import rs.elfak.got.geopuzzle.library.UserFunctions;
 
 /**
- * Created by Milan on 24.5.2016..
+ * Created by Aleksandar on 24.5.2016..
  */
 public class GeoPuzzleService extends Service {
     private static final int LOCATION_REFRESH_TIME = 5; //5*60*1000; // 5 mins

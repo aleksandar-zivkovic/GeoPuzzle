@@ -2,17 +2,11 @@ package rs.elfak.got.geopuzzle;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,29 +20,20 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import rs.elfak.got.geopuzzle.library.Cons;
-import rs.elfak.got.geopuzzle.library.DatabaseHandler;
 import rs.elfak.got.geopuzzle.library.UserFunctions;
 
-public class MyFriendsActivity extends AppCompatActivity {
+public class MyPuzzleChunksActivity extends AppCompatActivity {
 
-    private ListView mFriendsList;
-    private String mPuzzleChunkToSend;
+    private ListView mPuzzleChunkList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_friends);
+        setContentView(R.layout.activity_my_puzzle_chunks);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.logo);
 
-        mFriendsList = (ListView) findViewById(R.id.friendsListView);
-
-        mPuzzleChunkToSend = "";
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null && bundle.getString("puzzleChunkTitle") != null) {
-            mPuzzleChunkToSend = bundle.getString("puzzleChunkTitle");
-        }
-
+        mPuzzleChunkList = (ListView) findViewById(R.id.puzzleChunksListView);
         NetAsync();
     }
 
@@ -59,7 +44,7 @@ public class MyFriendsActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            nDialog = new ProgressDialog(MyFriendsActivity.this);
+            nDialog = new ProgressDialog(MyPuzzleChunksActivity.this);
             nDialog.setTitle(R.string.msg_checking_network);
             nDialog.setMessage("Loading...");
             nDialog.setIndeterminate(false);
@@ -96,7 +81,7 @@ public class MyFriendsActivity extends AppCompatActivity {
         protected void onPostExecute(Object o) {
             if((Boolean)o == true){
                 nDialog.dismiss();
-                new ProcessMyFriends().execute();
+                new ProcessMyPuzzleChunks().execute();
             }
             else {
                 nDialog.dismiss();
@@ -106,17 +91,16 @@ public class MyFriendsActivity extends AppCompatActivity {
     }
 
     // Async Task to get and send data to My Sql database through JSON response
-    private class ProcessMyFriends extends AsyncTask {
+    private class ProcessMyPuzzleChunks extends AsyncTask {
         private ProgressDialog pDialog;
-        String email, password;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog = new ProgressDialog(MyFriendsActivity.this);
+            pDialog = new ProgressDialog(MyPuzzleChunksActivity.this);
             pDialog.setTitle(R.string.msg_contacting_servers);
-            pDialog.setMessage("Fetching friends...");
+            pDialog.setMessage("Fetching puzzle chunks...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
@@ -125,7 +109,7 @@ public class MyFriendsActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             UserFunctions userFunction = new UserFunctions();
-            return userFunction.fetchFriends(getApplicationContext());
+            return userFunction.fetchMyPuzzlesChunks(getApplicationContext());
         }
 
         @Override
@@ -137,22 +121,21 @@ public class MyFriendsActivity extends AppCompatActivity {
 
                     if(Integer.parseInt(res) == 1) {
                         pDialog.setTitle(R.string.msg_getting_data);
-                        pDialog.setMessage("Loading friends list...");
+                        pDialog.setMessage("Loading puzzle chunk list...");
 
-                        int friendsNum = json.getInt(Cons.KEY_FRIENDS_NUM);
-                        if(friendsNum == 0)
-                            Toast.makeText(getApplicationContext(), R.string.msg_friends_list_empty, Toast.LENGTH_SHORT).show();
+                        int puzzleChunkNum = json.getInt(Cons.KEY_PUZZLE_CHUNK_NUM);
+                        if(puzzleChunkNum == 0) {
+                            Toast.makeText(getApplicationContext(), R.string.msg_puzzle_list_empty, Toast.LENGTH_SHORT).show();
+                        }
                         else {
-                            ArrayList<String> friendNames = new ArrayList<String>();
-                            ArrayList<String> friendEmails = new ArrayList<String>();
-                            for(int i = 1; i <= friendsNum; i++) {
-                                JSONObject friend = json.getJSONObject("friend" + i);
-                                friendNames.add(friend.getString(Cons.KEY_FIRSTNAME) + " " + friend.getString(Cons.KEY_LASTNAME));
-                                friendEmails.add(friend.getString(Cons.KEY_EMAIL));
+                            ArrayList<String> chunkTitles = new ArrayList<String>();
+                            for(int i = 1; i <= puzzleChunkNum; i++) {
+                                JSONObject chunk = json.getJSONObject("puzzleChunk" + i);
+                                chunkTitles.add(chunk.getString("puzzleChunkTitle"));
                             }
 
-                            FriendList adapter = new FriendList(MyFriendsActivity.this, friendNames.toArray(new String[friendNames.size()]), friendEmails.toArray(new String[friendEmails.size()]), mPuzzleChunkToSend);
-                            mFriendsList.setAdapter(adapter);
+                            PuzzleChunkList adapter = new PuzzleChunkList(MyPuzzleChunksActivity.this, chunkTitles.toArray(new String[chunkTitles.size()]));
+                            mPuzzleChunkList.setAdapter(adapter);
                         }
 
                         pDialog.dismiss();
@@ -167,6 +150,8 @@ public class MyFriendsActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     public void NetAsync(){
         new NetCheck().execute();

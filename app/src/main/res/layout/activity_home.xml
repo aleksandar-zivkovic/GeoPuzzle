@@ -17,12 +17,12 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="190dp"
+                android:layout_height="190dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/geopuzzle"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,7 +38,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:text="@string/my_profile"
-                    android:gravity="center_vertical|center"/>
+                    android:gravity="center_vertical|center"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/showMapBtn"
@@ -46,7 +51,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:text="@string/show_map"
-                    android:gravity="center_vertical|center"/>
+                    android:gravity="center_vertical|center"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/uploadPuzzleBtn"
@@ -54,7 +64,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:text="@string/title_activity_create_puzzle"
-                    android:gravity="center_vertical|center"/>
+                    android:gravity="center_vertical|center"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/geoPuzzleServiceBtn"
@@ -62,7 +77,13 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:text="GeoPuzzle Service"
-                    android:gravity="center_vertical|center"/>
+                    android:gravity="center_vertical|center"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+
+                    />
 
                 <Button
                     android:id="@+id/leaderBoardBtn"
@@ -70,7 +91,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:text="@string/leaderboard"
-                    android:gravity="center_vertical|center"/>
+                    android:gravity="center_vertical|center"
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
 
                 <Button
                     android:id="@+id/searchBtn"
@@ -78,7 +104,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:text="@string/search"
-                    android:gravity="center_vertical|center"/>
+
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="#1B29A8"
+                    android:textColor="#FFFFFF"
+                    />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

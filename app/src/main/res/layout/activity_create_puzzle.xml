@@ -158,7 +158,12 @@
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:text="Publish puzzle"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+
+                android:background="@drawable/buttonshape"
+                android:shadowColor="#1B29A8"
+                android:textColor="#FFFFFF"
+                />
 
         </LinearLayout>
     </ScrollView>

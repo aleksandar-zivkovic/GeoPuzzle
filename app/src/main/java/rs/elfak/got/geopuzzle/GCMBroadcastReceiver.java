@@ -18,7 +18,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import rs.elfak.got.geopuzzle.library.Cons;
 
 /**
- * Created by Milan on 30.6.2016..
+ * Created by Aleksandar on 30.6.2016..
  */
 public class GCMBroadcastReceiver extends WakefulBroadcastReceiver  {
     public static final int NOTIFICATION_ID = 1;
@@ -39,64 +39,53 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver  {
 
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
-        // The getMessageType() intent parameter must be the intent you received
-        // in your BroadcastReceiver.
+        // The getMessageType() intent parameter must be the intent you received in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
 
         if (!extras.isEmpty() && extras.getString("title") != null) {  // has effect of unparcelling Bundle
-            sendNotification(/*"Deleted messages on server: " +*/ extras.getString("title"), extras.getString("message"));
-            /*
-             * Filter messages based on message type. Since it is likely that GCM
-             * will be extended in the future with new message types, just ignore
-             * any message types you're not interested in, or that you don't
-             * recognize.
-             */
-            /*if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
-            } else if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " +
-                        extras.toString());
-                // If it's a regular GCM message, do some work.
-            } else if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                // This loop represents the service doing some work.
-                for (int i=0; i<5; i++) {
-                    Log.i(TAG, "Working... " + (i+1)
-                            + "/5 @ " + SystemClock.elapsedRealtime());
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                    }
-                }
-                Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
-                // Post notification of received message.
-                sendNotification(extras.getString("Notice"));
-                Log.i(TAG, "Received: " + extras.toString());
-            }*/
+            sendNotification(extras.getString("title"), extras.getString("message"));
         }
     }
 
-
-    // Put the message into a notification and post it.
-    // This is just one simple example of what you might choose to do with
-    // a GCM message.
     private void sendNotification(String title, String msg) {
-        mNotificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        PendingIntent contentIntent;
 
-        String[] strings = msg.split(" ");
-        String friendsEmail = strings[2];
+        if (title.contains("Snap")) {
 
-        Intent friendProfileIntent = new Intent(this.context, ProfileActivity.class);
-        friendProfileIntent.putExtra(Cons.KEY_EMAIL, friendsEmail);
+            String snapMessage = msg;
+            // Message aleksandar@elfak.rs
+            String[] strings = title.split(" ");
+            String senderEmail = strings[1];
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, friendProfileIntent, 0);
+            Intent snapMessageIntent = new Intent(this.context, SnapMessageActivity.class);
+            snapMessageIntent.putExtra("senderEmail", senderEmail);
+            snapMessageIntent.putExtra("snapMessage", snapMessage);
+            snapMessageIntent.setAction(Long.toString(System.currentTimeMillis()));
+            contentIntent = PendingIntent.getActivity(context, 0, snapMessageIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        else if (title.contains("Chunk")) {
+            String[] strings = msg.split(" ");
+            String friendsEmail = strings[2];
+            String sentPuzzleChunk = strings[5];
+
+            Intent receivedPuzzleChunkIntent = new Intent(this.context, ReceivedPuzzleChunkActivity.class);
+            receivedPuzzleChunkIntent.putExtra(Cons.KEY_EMAIL, friendsEmail);
+            receivedPuzzleChunkIntent.putExtra("sentPuzzleChunk", sentPuzzleChunk);
+            receivedPuzzleChunkIntent.setAction(Long.toString(System.currentTimeMillis()));
+            contentIntent = PendingIntent.getActivity(context, 0, receivedPuzzleChunkIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        else {
+            String[] strings = msg.split(" ");
+            String friendsEmail = strings[2];
+            Intent friendProfileIntent = new Intent(this.context, ProfileActivity.class);
+            friendProfileIntent.putExtra(Cons.KEY_EMAIL, friendsEmail);
+            friendProfileIntent.setAction(Long.toString(System.currentTimeMillis()));
+            contentIntent = PendingIntent.getActivity(context, 0, friendProfileIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
-                        // .setSmallIcon(R.drawable.ic_stat_gcm)
                         .setContentTitle("GeoPuzzle: " + title)
                         .setSmallIcon(R.drawable.geopuzzle)
                         .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.geopuzzle))
